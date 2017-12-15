@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zut.dao.persistence.LoginInfoMapper">
+
+    <resultMap id="loginInfoEntityMap" type="cn.zut.dao.entity.LoginInfoEntity">
+        <result column="MEMBER_ID" property="memberId"/>
+        <result column="SALT" property="salt"/>
+        <result column="PASSWORD" property="password"/>
+        <result column="ERROR_COUNT" property="errorCount"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="LAST_LOGIN_TIME" property="lastLoginTime"/>
+    </resultMap>
+
+    <sql id="tableName">LOGIN_INFO</sql>
+
+    <sql id="columns">
+        MEMBER_ID,
+        SALT,
+        PASSWORD,
+        ERROR_COUNT,
+        CREATE_TIME,
+        LAST_LOGIN_TIME
+    </sql>
+
+    <select id="selectById" resultMap="loginInfoEntityMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE MEMBER_ID = #{memberId}
+    </select>
+
+    <update id="update" parameterType="cn.zut.dao.entity.LoginInfoEntity">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="salt != null">
+                SALT = #{salt},
+            </if>
+            <if test="password != null">
+                PASSWORD = #{password},
+            </if>
+            <if test="errorCount != null">
+                ERROR_COUNT = #{errorCount},
+            </if>
+            <if test="lastLoginTime != null">
+                LAST_LOGIN_TIME = #{lastLoginTime},
+            </if>
+        </set>
+        WHERE MEMBER_ID = #{memberId}
+    </update>
+
+    <insert id="insert">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="columns"/>
+        )
+        VALUES
+        (
+        #{memberId},
+        #{salt},
+        #{password},
+        #{errorCount},
+        #{createTime},
+        #{lastLoginTime}
+        )
+    </insert>
+
+</mapper>

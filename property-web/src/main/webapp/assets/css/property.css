@@ -1,0 +1,86 @@
+body {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    /*background-color: #c0a16b;*/
+    background: url(../image/london.png) center no-repeat fixed;
+}
+
+.form-ssm {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.form-ssm .form-login-heading,
+.form-ssm .checkbox {
+    margin-bottom: 10px;
+}
+
+.form-ssm .checkbox {
+    font-weight: normal;
+}
+
+.form-ssm .form-login-heading {
+    color: white;
+}
+
+.form-ssm .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.form-ssm .form-control:focus {
+    z-index: 2;
+}
+
+.form-ssm input[type="tel"] {
+    margin-bottom: 5px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-ssm input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.ssm-div {
+    padding: 10px;
+}
+
+#product-login {
+    /*display: none;*/
+    display: inherit;
+}
+
+#product-logout {
+    /*display: none;*/
+    display: inherit;
+}
+
+#product-logout #user-id {
+    display: none;
+}
+
+.product-id {
+    display: none;
+}
+
+.paging {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* 以下代码设置文本不可选 */
+#product-logout, .navbar-brand {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

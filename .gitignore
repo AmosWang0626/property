@@ -1,0 +1,19 @@
+# 该文件作用,和这里边文件格式所匹配的文件不上传到github上边[因为这些文件没什么实际的作用,多是一些本地的配置]
+bin/
+/.idea/
+/CVS/
+/training/.settings
+CVS
+.settings
+.classpath
+.project
+.svn
+*.tmp
+target
+rebel.xml
+.DS_Store
+*.launch
+*.lock
+*.log.*
+*.log
+*.iml

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zut.dao.persistence.MemberMapper">
+
+    <resultMap id="memberEntityMap" type="cn.zut.dao.entity.MemberEntity">
+        <result column="MEMBER_ID" property="memberId"/>
+        <result column="PHONE_NO" property="phoneNo"/>
+        <result column="NICK_NAME" property="nickName"/>
+        <result column="ID_NO" property="idNo"/>
+        <result column="REAL_NAME" property="realName"/>
+        <result column="GENDER" property="gender"/>
+        <result column="AGE" property="age"/>
+        <result column="MARITAL_STATUS" property="maritalStatus"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+    </resultMap>
+
+    <sql id="tableName">MEMBER</sql>
+
+    <sql id="columns">
+        MEMBER_ID,
+        PHONE_NO,
+        NICK_NAME,
+        ID_NO,
+        REAL_NAME,
+        GENDER,
+        AGE,
+        MARITAL_STATUS,
+        CREATE_TIME,
+        UPDATE_TIME
+    </sql>
+
+    <sql id="condition">
+        <if test="search != null">
+            <where>
+                <if test="search.idNo != null">AND ID_NO = #{search.idNo}</if>
+                <if test="search.phoneNo != null">AND PHONE_NO = #{search.phoneNo}</if>
+                <if test="search.nickName != null">AND NICK_NAME = #{search.nickName}</if>
+            </where>
+        </if>
+    </sql>
+
+    <select id="selectById" resultMap="memberEntityMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE MEMBER_ID = #{memberId}
+    </select>
+
+    <select id="selectByExample" parameterType="cn.zut.dao.search.MemberSearch" resultMap="memberEntityMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <update id="update" parameterType="cn.zut.dao.entity.MemberEntity">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="phoneNo != null">
+                PHONE_NO = #{phoneNo},
+            </if>
+            <if test="idNo != null">
+                ID_NO = #{idNo},
+            </if>
+            <if test="nickName != null">
+                NICK_NAME = #{nickName},
+            </if>
+            <if test="realName != null">
+                REAL_NAME = #{realName},
+            </if>
+            <if test="gender != null">
+                GENDER = #{gender},
+            </if>
+            <if test="age != null">
+                AGE = #{age},
+            </if>
+            <if test="maritalStatus != null">
+                MARITAL_STATUS = #{maritalStatus},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime},
+            </if>
+        </set>
+        WHERE MEMBER_ID = #{memberId}
+    </update>
+
+    <insert id="insert">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="columns"/>
+        )
+        VALUES
+        (
+        #{memberId},
+        #{phoneNo},
+        #{nickName},
+        #{idNo},
+        #{realName},
+        #{gender},
+        #{age},
+        #{maritalStatus},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+</mapper>
