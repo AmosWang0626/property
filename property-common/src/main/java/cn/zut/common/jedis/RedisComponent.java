@@ -11,7 +11,10 @@ public class RedisComponent {
 
     private RedisContainer redisContainer;
 
-    public static final int PROPERTY_DB_INDEX = 1;
+    /**
+     * 设置默认Redis数据库
+     */
+    public static final int PROPERTY_DB_INDEX = 10;
 
     public RedisContainer getRedisContainer() {
         return redisContainer;
@@ -24,8 +27,9 @@ public class RedisComponent {
     /**
      * 保存参数信息
      *
-     * @param key   key
-     * @param value value
+     * @param key   KEY
+     * @param value VALUE
+     * @param time  缓存时间
      */
     public void save(String key, Object value, Integer time) {
         String valStr;
@@ -66,7 +70,7 @@ public class RedisComponent {
     /**
      * 获取参数信息重载方法
      *
-     * @param key key
+     * @param key KEY
      * @return String
      */
     public synchronized String get(String key, Integer dbIndex) {
@@ -92,7 +96,7 @@ public class RedisComponent {
     /**
      * 删除KEY对应的内容重载方法
      *
-     * @param key key
+     * @param key KEY
      */
     public void del(String key) {
         redisContainer.delKey(key);

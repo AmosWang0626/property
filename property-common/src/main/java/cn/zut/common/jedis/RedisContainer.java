@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import static cn.zut.common.jedis.RedisComponent.PROPERTY_DB_INDEX;
+
 /**
  * @author DaoyuanWang
  */
@@ -20,28 +22,54 @@ public class RedisContainer {
 
     private JedisPool jedisPool;
 
-    private int dbIndex = 0;
+    private int dbIndex = PROPERTY_DB_INDEX;
 
+    /**
+     * 初始化JedisPool
+     *
+     * @param host     HOST 117.36.57.49
+     * @param password PASSWORD root
+     * @param port     PORT 6379
+     */
     public RedisContainer(String host, String password, int port) {
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxIdle(80);
-        config.setMinIdle(80);
+        config.setMinIdle(10);
         config.setTestOnBorrow(false);
         config.setTestOnReturn(false);
         jedisPool = new JedisPool(config, host, port, Protocol.DEFAULT_TIMEOUT, password);
     }
 
+    /**
+     * 初始化JedisPool
+     *
+     * @param host     HOST 117.36.57.49
+     * @param password PASSWORD root
+     * @param port     PORT 6379
+     * @param dbIndex  数据库 0 --- 15
+     */
     public RedisContainer(String host, String password, int port, int dbIndex) {
         this(host, password, port);
         this.dbIndex = dbIndex;
     }
 
+    /**
+     * 获取jedis连接
+     *
+     * @return JEDIS
+     * @throws JedisException EXCEPTION
+     */
     private Jedis getJedis() throws JedisException {
         Jedis jedis = jedisPool.getResource();
         jedis.select(dbIndex);
         return jedis;
     }
 
+    /**
+     * 关闭连接
+     *
+     * @param jedis JEDIS
+     */
     private void release(Jedis jedis) {
         if (jedis != null) {
             jedis.close();
@@ -60,7 +88,7 @@ public class RedisContainer {
     /**
      * 返回REDIS数据库
      *
-     * @return int
+     * @return dbIndex
      */
     public int getDbIndex() {
         return dbIndex;
@@ -69,9 +97,9 @@ public class RedisContainer {
     /**
      * 设置KEY的内容，并且返回原来的值，KEY没有时间限制
      *
-     * @param key   key
-     * @param value value
-     * @return String
+     * @param key   KEY
+     * @param value VALUE
+     * @return 原来的值
      */
     public String addString(String key, String value) {
         Jedis jedis = null;
@@ -86,12 +114,12 @@ public class RedisContainer {
     }
 
     /**
-     * 设置KEY的内容，并且返回原来的值
+     * 设置KEY的内容，并且返回原来的值，并设置KEY过期时间
      *
-     * @param key          key
-     * @param value        value
-     * @param cacheSeconds cacheSeconds
-     * @return String
+     * @param key          KEY
+     * @param value        VALUE
+     * @param cacheSeconds CACHE_SECONDS
+     * @return 原来的值
      */
     public String addString(String key, String value, int cacheSeconds) {
         Jedis jedis = null;
@@ -111,9 +139,9 @@ public class RedisContainer {
     /**
      * 根据key设置新的key过期时间
      *
-     * @param key          key
-     * @param cacheSeconds cacheSeconds
-     * @return String
+     * @param key          KEY
+     * @param cacheSeconds CACHE_SECONDS
+     * @return VALUE
      */
     public String setNewTime(String key, int cacheSeconds) {
         Jedis jedis = null;
@@ -133,8 +161,8 @@ public class RedisContainer {
     /**
      * 根据KEY得到内容
      *
-     * @param key key
-     * @return String
+     * @param key KEY
+     * @return VALUE
      */
     public String getString(String key) {
         Jedis jedis = null;
@@ -156,8 +184,8 @@ public class RedisContainer {
     /**
      * 删除KEY
      *
-     * @param key key
-     * @return String
+     * @param key KEY
+     * @return true: 删除成功; false: 删除失败
      */
     public boolean delKey(String key) {
         Jedis jedis = null;
@@ -178,8 +206,8 @@ public class RedisContainer {
     /**
      * 得到KEY列表
      *
-     * @param pattern pattern
-     * @return String
+     * @param pattern PATTERN
+     * @return Set<String>
      */
     public Set<String> keys(String pattern) {
         Set<String> list = null;
@@ -246,7 +274,7 @@ public class RedisContainer {
      * @param maxLen     最大长度
      * @param fixed      是否固定长度
      * @param padStr     位数不足时填充字符,仅对固定的id有效
-     * @return String
+     * @return ID
      */
     public String generateId(String prefix, String timePrefix, int maxLen, boolean fixed, char padStr) {
         StringBuilder sb = new StringBuilder(prefix);
@@ -254,14 +282,13 @@ public class RedisContainer {
         if (fixed && sb.length() > maxLen) {
             return "";
         }
-        // 从redis中获取自增的id
-        String key = prefix;
-        Long id = increment(key);
+        // 从REDIS中获取自增的ID
+        Long id = increment(prefix);
         String idStr = id.toString();
         if (fixed) {
             if (maxLen - sb.length() < idStr.length()) {
                 // 重新开始计数
-                addString(key, "1");
+                addString(prefix, "1");
                 return sb.append(StringUtils.leftPad("1", maxLen - sb.length(), padStr)).toString();
             } else {
                 return sb.append(StringUtils.leftPad(idStr, maxLen - sb.length(), padStr)).toString();
@@ -277,7 +304,7 @@ public class RedisContainer {
      * @param key         key
      * @param waitTimeout 获取锁的等待时间
      * @param lockTimeout 设置锁的有效时间
-     * @return String
+     * @return 随机UUID
      */
     public String getLockWithWait(String key, long waitTimeout, long lockTimeout) {
         Jedis jedis = null;
@@ -321,7 +348,7 @@ public class RedisContainer {
      * 判断某个key是否存在
      *
      * @param key key
-     * @return boolean
+     * @return true: 存在; false: 不存在
      */
     public boolean isExistKey(String key) {
         Jedis jedis = null;
@@ -344,9 +371,9 @@ public class RedisContainer {
     /**
      * 释放锁
      *
-     * @param key   锁的key
-     * @param value 锁的value
-     * @return boolean
+     * @param key   锁的KEY
+     * @param value 锁的VALUE
+     * @return true: 释放成功; false: 释放失败
      */
     public boolean releaseLock(String key, String value) {
         Jedis jedis = null;

@@ -10,10 +10,10 @@
         <constructor-arg name="password" value="${redis.password}"/>
         <constructor-arg name="port" value="${redis.port}"/>
         <!-- 默认DB，业务系统自己定义 -->
-        <constructor-arg name="dbIndex" value="3"/>
+        <constructor-arg name="dbIndex" value="10"/>
     </bean>
 
-    <bean id="jedisComponent" class="cn.zut.common.jedis.RedisComponent">
+    <bean id="redisComponent" class="cn.zut.common.jedis.RedisComponent">
         <property name="redisContainer" ref="redisContainer"/>
     </bean>
 

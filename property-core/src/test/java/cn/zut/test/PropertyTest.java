@@ -1,6 +1,7 @@
 package cn.zut.test;
 
 import cn.zut.common.enums.BankEnum;
+import cn.zut.common.jedis.RedisComponent;
 import cn.zut.common.util.GenericIdUtil;
 import cn.zut.core.business.HttpBusiness;
 import cn.zut.dao.entity.MemberEntity;
@@ -31,6 +32,15 @@ public class PropertyTest {
     private MemberMapper memberMapper;
     @Resource
     private HttpBusiness httpBusiness;
+    @Resource
+    private RedisComponent redisComponent;
+
+    @Test
+    public void checkConfig(){
+        redisComponent.save("hello", "Mr.Wang Test Set Key");
+        String hello = redisComponent.get("hello");
+        LOGGER.info("***********PRINT************[{}]", hello);
+    }
 
     @Test
     public void addMember() {

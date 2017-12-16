@@ -1,14 +1,14 @@
 <configuration>
     <jmxConfigurator/>
     <!--输出格式-->
-    <property nickName="log.content" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%p][%t]%c: %m%n"/>
+    <property name="log.content" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%p][%t]%c: %m%n"/>
     <!-- 日志文件后缀名 -->
-    <property nickName="log.fileSuffix" value="%d{yyyy-MM-dd}-%i.log"/>
+    <property name="log.fileSuffix" value="%d{yyyy-MM-dd}-%i.log"/>
     <!-- 最大日志大小 -->
-    <property nickName="maxFileSize" value="10MB"/>
+    <property name="maxFileSize" value="10MB"/>
 
     <!-- 控制台输出 -->
-    <appender nickName="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <Encoding>UTF-8</Encoding>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>${log.content}</pattern>
@@ -16,7 +16,7 @@
     </appender>
 
     <!-- 公共日志 按照每天生成日志文件 -->
-    <appender nickName="DEFAULT-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="DEFAULT-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <Encoding>UTF-8</Encoding>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名 -->
@@ -32,7 +32,7 @@
         </encoder>
     </appender>
 
-    <appender nickName="ERROR-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="ERROR-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <Encoding>UTF-8</Encoding>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
