@@ -6,14 +6,16 @@
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd ">
 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
         <property name="url"
                   value="jdbc:mysql://112.74.57.49:3306/zut_property?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=true"/>
         <property name="username" value="root"/>
         <property name="password" value="HelloZut!-"/>
-        <property name="maxActive" value="40"/>
-        <property name="maxWait" value="2000"/>
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="1"/>
+        <property name="minIdle" value="1"/>
+        <property name="maxActive" value="20"/>
     </bean>
 
     <import resource="classpath*:applicationContext.xml"/>

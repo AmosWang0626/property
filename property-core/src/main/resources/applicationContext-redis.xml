@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="redisContainer" class="cn.zut.common.jedis.RedisContainer">
+        <constructor-arg name="host" value="${redis.host}"/>
+        <constructor-arg name="password" value="${redis.password}"/>
+        <constructor-arg name="port" value="${redis.port}"/>
+        <!-- 默认DB，业务系统自己定义 -->
+        <constructor-arg name="dbIndex" value="3"/>
+    </bean>
+
+    <bean id="jedisComponent" class="cn.zut.common.jedis.RedisComponent">
+        <property name="redisContainer" ref="redisContainer"/>
+    </bean>
+
+</beans>
