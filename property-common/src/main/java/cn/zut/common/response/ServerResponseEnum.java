@@ -1,7 +1,7 @@
 package cn.zut.common.response;
 
 /**
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/11/19
  *
  * @author DaoyuanWang

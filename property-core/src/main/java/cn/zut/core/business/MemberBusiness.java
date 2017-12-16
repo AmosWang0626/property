@@ -7,7 +7,7 @@ import cn.zut.facade.request.RegisterForm;
 import cn.zut.facade.response.LoginVO;
 
 /**
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/11/21
  *
  * @author DaoYuanWang

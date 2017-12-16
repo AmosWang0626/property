@@ -8,7 +8,7 @@ import cn.zut.dao.entity.LoginInfoEntity;
 
 /**
  * DATE: 2017/11/21
- * PROJECT: catherine
+ * PROJECT: property
  *
  * @author DaoyuanWang
  */

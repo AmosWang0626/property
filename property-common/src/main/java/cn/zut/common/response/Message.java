@@ -7,7 +7,7 @@ import java.io.Serializable;
  * 各业务系统应定义一个枚举类实现该接口。
  * 约定：response code 以"1"开头的为系统级别的消息。
  * 各业务系统实现此接口时，不能使用以"1" 开头的respCode。
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/11/19
  *
  * @author DaoyuanWang

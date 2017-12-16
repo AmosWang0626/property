@@ -1,7 +1,7 @@
 package cn.zut.common.enums;
 
 /**
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/11/20
  *
  * @author DaoYuanWang

@@ -5,7 +5,7 @@ import cn.zut.common.response.GenericResponse;
 import cn.zut.facade.request.RegisterForm;
 
 /**
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/11/21
  *
  * @author DaoYuanWang

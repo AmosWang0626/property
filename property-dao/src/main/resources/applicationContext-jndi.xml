@@ -7,7 +7,7 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!--<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <property nickName="jndiName" value="java:comp/env/jndi/catherine"/>
+        <property nickName="jndiName" value="java:comp/env/jndi/property"/>
     </bean>-->
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">

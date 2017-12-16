@@ -3,7 +3,7 @@ package cn.zut.facade.request;
 import java.io.Serializable;
 
 /**
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/11/21
  *
  * @author DaoYuanWang

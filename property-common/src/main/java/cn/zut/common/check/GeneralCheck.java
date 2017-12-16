@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 /**
  * 检查手机号和身份证号
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/11/30
  *
  * @author DaoYuanWang

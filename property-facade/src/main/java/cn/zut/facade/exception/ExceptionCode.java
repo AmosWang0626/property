@@ -3,7 +3,7 @@ package cn.zut.facade.exception;
 import cn.zut.common.response.Message;
 
 /**
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/11/21
  *
  * @author DaoYuanWang

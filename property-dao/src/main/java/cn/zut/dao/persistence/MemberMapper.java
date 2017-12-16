@@ -8,7 +8,7 @@ import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.search.MemberSearch;
 
 /**
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/11/21
  *
  * @author DaoYuanWang

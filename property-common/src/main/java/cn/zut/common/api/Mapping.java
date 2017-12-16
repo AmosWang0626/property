@@ -1,7 +1,7 @@
 package cn.zut.common.api;
 
 /**
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/11/30
  *
  * @author DaoYuanWang

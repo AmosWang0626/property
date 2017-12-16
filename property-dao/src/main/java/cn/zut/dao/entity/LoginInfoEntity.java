@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * 登录信息表
  * DATE: 2017/7/25
- * PROJECT: catherine
+ * PROJECT: property
  *
  * @author DaoyuanWang
  */

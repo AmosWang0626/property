@@ -3,7 +3,7 @@ package cn.zut.common.util;
 import java.util.Date;
 
 /**
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/11/20
  *
  * @author DaoyuanWang

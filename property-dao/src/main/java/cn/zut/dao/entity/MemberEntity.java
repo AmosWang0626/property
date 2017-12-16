@@ -6,7 +6,7 @@ import cn.zut.common.enums.MaritalEnum;
 import java.util.Date;
 
 /**
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/11/20
  *
  * @author DaoyuanWang

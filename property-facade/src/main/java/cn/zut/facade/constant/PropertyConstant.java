@@ -1,11 +1,11 @@
 package cn.zut.facade.constant;
 
 /**
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/11/23
  *
  * @author DaoyuanWang
  */
-public interface CatherineConstant {
+public interface PropertyConstant {
 
 }

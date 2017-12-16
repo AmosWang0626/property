@@ -1,7 +1,7 @@
 package cn.zut.core.constant;
 
 /**
- * PROJECT: catherine
+ * PROJECT: property
  * DATE: 2017/12/11
  *
  * @author DaoYuanWang
