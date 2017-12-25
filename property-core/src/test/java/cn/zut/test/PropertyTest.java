@@ -1,7 +1,7 @@
 package cn.zut.test;
 
 import cn.zut.common.enums.BankEnum;
-import cn.zut.common.jedis.RedisComponent;
+import cn.zut.common.redis.RedisComponent;
 import cn.zut.common.util.GenericIdUtil;
 import cn.zut.core.business.HttpBusiness;
 import cn.zut.dao.entity.MemberEntity;

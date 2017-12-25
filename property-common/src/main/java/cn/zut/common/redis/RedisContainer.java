@@ -1,4 +1,4 @@
-package cn.zut.common.jedis;
+package cn.zut.common.redis;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static cn.zut.common.jedis.RedisComponent.PROPERTY_DB_INDEX;
+import static cn.zut.common.redis.RedisComponent.PROPERTY_DB_INDEX;
 
 /**
  * @author DaoyuanWang

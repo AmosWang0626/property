@@ -1,8 +1,8 @@
 package cn.zut.core.business.impl;
 
 import cn.zut.common.api.HttpApi;
-import cn.zut.common.to.CardInfoTo;
-import cn.zut.common.to.CardWarnTo;
+import cn.zut.common.to.CardInfoDTO;
+import cn.zut.common.to.CardWarnDTO;
 import cn.zut.core.business.HttpBusiness;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,8 +67,8 @@ public class HttpBusinessImpl implements HttpBusiness {
 
     @Override
     public String getBankName(String bankNo) {
-        Call<CardInfoTo> bankTo = httpApi.getBankTo(bankNo);
-        Response<CardInfoTo> response = null;
+        Call<CardInfoDTO> bankTo = httpApi.getBankTo(bankNo);
+        Response<CardInfoDTO> response = null;
         try {
             response = bankTo.execute();
         } catch (IOException e) {
@@ -80,12 +80,12 @@ public class HttpBusinessImpl implements HttpBusiness {
         if (response.isSuccess() && response.body().getBank() != null) {
             return alterByBankName(response.body().getBank());
         }
-        CardWarnTo cardWarnTo = response.body().getMessages().get(0);
-        String errorCodes = cardWarnTo.getErrorCodes();
+        CardWarnDTO cardWarnDTO = response.body().getMessages().get(0);
+        String errorCodes = cardWarnDTO.getErrorCodes();
         if (PARAM_ILLEGAL.equals(errorCodes) || CARD_BIN_NOT_MATCH.equals(errorCodes)) {
             errorCodes = "银行卡号不存在或输入有误,请检查后重新输入";
         }
-        LOGGER.error("错误类型:[{}] && 错误原因:[{}]", cardWarnTo.getName(), errorCodes);
+        LOGGER.error("错误类型:[{}] && 错误原因:[{}]", cardWarnDTO.getName(), errorCodes);
         return null;
     }
 

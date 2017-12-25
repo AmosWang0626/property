@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="redisContainer" class="cn.zut.common.jedis.RedisContainer">
+    <bean id="redisContainer" class="cn.zut.common.redis.RedisContainer">
         <constructor-arg name="host" value="${redis.host}"/>
         <constructor-arg name="password" value="${redis.password}"/>
         <constructor-arg name="port" value="${redis.port}"/>
@@ -13,7 +13,7 @@
         <constructor-arg name="dbIndex" value="10"/>
     </bean>
 
-    <bean id="redisComponent" class="cn.zut.common.jedis.RedisComponent">
+    <bean id="redisComponent" class="cn.zut.common.redis.RedisComponent">
         <property name="redisContainer" ref="redisContainer"/>
     </bean>
 

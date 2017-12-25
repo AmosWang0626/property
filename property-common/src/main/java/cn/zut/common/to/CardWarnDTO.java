@@ -8,7 +8,7 @@ import java.io.Serializable;
  *
  * @author DaoYuanWang
  */
-public class CardWarnTo implements Serializable {
+public class CardWarnDTO implements Serializable {
 
     private static final long serialVersionUID = 4112386627056371145L;
 

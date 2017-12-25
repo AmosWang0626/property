@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author DaoYuanWang
  */
-public class CardInfoTo implements Serializable {
+public class CardInfoDTO implements Serializable {
 
     private static final long serialVersionUID = -3733986900002420358L;
 
@@ -38,7 +38,7 @@ public class CardInfoTo implements Serializable {
     /**
      * 信息
      */
-    private List<CardWarnTo> messages;
+    private List<CardWarnDTO> messages;
     /**
      * 状态 ok即正常
      */
@@ -76,11 +76,11 @@ public class CardInfoTo implements Serializable {
         this.key = key;
     }
 
-    public List<CardWarnTo> getMessages() {
+    public List<CardWarnDTO> getMessages() {
         return messages;
     }
 
-    public void setMessages(List<CardWarnTo> messages) {
+    public void setMessages(List<CardWarnDTO> messages) {
         this.messages = messages;
     }
 

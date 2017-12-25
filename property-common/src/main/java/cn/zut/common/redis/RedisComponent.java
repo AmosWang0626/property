@@ -1,4 +1,4 @@
-package cn.zut.common.jedis;
+package cn.zut.common.redis;
 
 import com.alibaba.fastjson.JSON;
 

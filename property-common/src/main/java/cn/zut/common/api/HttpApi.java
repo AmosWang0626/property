@@ -1,6 +1,6 @@
 package cn.zut.common.api;
 
-import cn.zut.common.to.CardInfoTo;
+import cn.zut.common.to.CardInfoDTO;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -23,6 +23,6 @@ public interface HttpApi {
      * @return Api Trans Data
      */
     @GET("validateAndCacheCardInfo.json?_input_charset=utf-8&cardBinCheck=true")
-    Call<CardInfoTo> getBankTo(@Query("cardNo") String bankNo);
+    Call<CardInfoDTO> getBankTo(@Query("cardNo") String bankNo);
 
 }
