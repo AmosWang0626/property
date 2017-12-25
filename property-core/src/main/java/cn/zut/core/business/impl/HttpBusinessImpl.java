@@ -1,8 +1,8 @@
 package cn.zut.core.business.impl;
 
 import cn.zut.common.api.HttpApi;
-import cn.zut.common.to.CardInfoDTO;
-import cn.zut.common.to.CardWarnDTO;
+import cn.zut.common.trans.CardInfoDTO;
+import cn.zut.common.trans.CardWarnDTO;
 import cn.zut.core.business.HttpBusiness;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

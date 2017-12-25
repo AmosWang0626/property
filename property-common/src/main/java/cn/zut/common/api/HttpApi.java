@@ -1,6 +1,6 @@
 package cn.zut.common.api;
 
-import cn.zut.common.to.CardInfoDTO;
+import cn.zut.common.trans.CardInfoDTO;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

@@ -1,4 +1,4 @@
-package cn.zut.common.to;
+package cn.zut.common.trans;
 
 import java.io.Serializable;
 import java.util.List;
