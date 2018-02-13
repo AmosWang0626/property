@@ -11,15 +11,15 @@ import cn.zut.common.response.Message;
 public enum ExceptionCode implements Message {
     /**
      * Exception Code And Exception Msg
+     * 注意: 往错误码中追加参数,一定要加{0...}
      */
-    PARAM_ERROR("M2000", "参数异常[{}]"),
-    PHONE_IS_EXIST("M2001", "该手机号已注册[{}]"),
-    PHONE_NO_ERROR("M2002", "手机号格式错误[{}]"),
-    PHONE_IS_NOT_EXIST("M2003", "手机号还未注册[{}]"),
-    MEMBER_DATA_EXCEPTION("M2004", "手机号还未注册[{}]"),
+    PARAM_ERROR("M2000", "参数异常[{0}]"),
+    PHONE_IS_EXIST("M2001", "该手机号已注册[{0}]"),
+    PHONE_NO_ERROR("M2002", "手机号格式错误[{0}]"),
+    PHONE_IS_NOT_EXIST("M2003", "手机号还未注册[{0}]"),
+    MEMBER_DATA_EXCEPTION("M2004", "手机号还未注册[{0}]"),
     MEMBER_PASSWORD_ERROR("M2005", "密码错误"),
-    NICK_NAME_PHONE_NOT_NULL("M2006", "昵称和手机号不匹配"),
-    ;
+    NICK_NAME_PHONE_NOT_NULL("M2006", "昵称和手机号不匹配"),;
 
     private final String respCode;
     private final String respMsg;

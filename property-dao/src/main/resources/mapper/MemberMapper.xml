@@ -15,7 +15,7 @@
         <result column="UPDATE_TIME" property="updateTime"/>
     </resultMap>
 
-    <sql id="tableName">MEMBER</sql>
+    <sql id="tableName">member</sql>
 
     <sql id="columns">
         MEMBER_ID,

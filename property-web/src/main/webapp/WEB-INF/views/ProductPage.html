@@ -1,19 +1,13 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<%
-    String path = request.getContextPath();
-    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-%>
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>ProductPage</title>
-    <link href="<%=basePath %>assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<%=basePath %>assets/css/property.css" rel="stylesheet">
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/property.css" rel="stylesheet">
 </head>
 
 <body>
@@ -25,36 +19,31 @@
             <div class="navbar-header">
                 <div class="navbar-brand">产品管理后台</div>
             </div>
-            <c:choose>
-                <c:when test="${empty user_login}">
-                    <ul class="nav navbar-nav pull-right" id="product-login">
-                        <li><a href="login">登录</a></li>
-                    </ul>
-                </c:when>
-                <c:otherwise>
-                    <ul class="nav navbar-nav navbar-right" id="product-logout">
-                        <li><a><span id="greetings">美好的一天</span></a></li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                <span id="user-id"></span>
-                                <span id="user-name">${user_login}</span>
-                                <span class="caret"></span>
-                                <ul class="dropdown-menu">
-                                    <li role="presentation"><a href="#">修改资料</a></li>
-                                    <li role="presentation"><a href="#">修改密码</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li role="presentation"><a href="login">退出登录</a></li>
-                                </ul>
-                            </a>
-                        </li>
-                    </ul>
-                </c:otherwise>
-            </c:choose>
+            <ul th:if="${user_login} eq null" class="nav navbar-nav pull-right" id="product-login">
+                <li><a href="/passport/login">登录</a></li>
+            </ul>
+            <ul th:if="${user_login} ne null" class="nav navbar-nav navbar-right" id="product-logout">
+                <li><a><span id="greetings">美好的一天</span></a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span id="user-id"></span>
+                        <span id="user-name" th:text="${user_login}"></span>
+                        <span class="caret"></span>
+                        <ul class="dropdown-menu">
+                            <li role="presentation"><a href="#">修改资料</a></li>
+                            <li role="presentation"><a href="#">修改密码</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li role="presentation"><a href="login">退出登录</a></li>
+                        </ul>
+                    </a>
+                </li>
+            </ul>
         </div>
     </nav>
 
     <!-- 产品增加 -->
-    <button class="btn btn-default pull-right" type="button" data-toggle="modal" data-target="#modalProductAdd">新增</button>
+    <button class="btn btn-default pull-right" type="button" data-toggle="modal" data-target="#modalProductAdd">新增
+    </button>
 
     <!-- Modal 产品增加 -->
     <div class="modal fade" id="modalProductAdd" tabindex="-1" role="dialog" aria-labelledby="modalProductAddLabel">
@@ -174,8 +163,8 @@
         </ul>
     </nav>
 </div>
-<script src="<%=basePath %>assets/js/jquery-3.2.1.min.js"></script>
-<script src="<%=basePath %>assets/js/bootstrap.min.js"></script>
-<script src="<%=basePath %>assets/js/property.js"></script>
+<script src="../assets/js/jquery-3.2.1.min.js"></script>
+<script src="../assets/js/bootstrap.min.js"></script>
+<script src="../assets/js/property.js"></script>
 </body>
 </html>

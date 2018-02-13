@@ -1,9 +1,9 @@
 package cn.zut.core.business;
 
+import cn.zut.common.request.ForgetPwdRequest;
+import cn.zut.common.request.LoginRequest;
+import cn.zut.common.request.RegisterRequest;
 import cn.zut.common.response.GenericResponse;
-import cn.zut.facade.request.ForgetPwdForm;
-import cn.zut.facade.request.LoginForm;
-import cn.zut.facade.request.RegisterForm;
 import cn.zut.facade.response.LoginVO;
 
 /**
@@ -16,24 +16,24 @@ public interface MemberBusiness {
     /**
      * 用户注册
      *
-     * @param registerForm 注册表单
+     * @param registerRequest 注册表单
      * @return 通用
      */
-    GenericResponse register(RegisterForm registerForm);
+    GenericResponse register(RegisterRequest registerRequest);
 
     /**
      * 用户登录
      *
-     * @param loginForm 登录表单
+     * @param loginRequest 登录表单
      * @return 通用
      */
-    GenericResponse<LoginVO> login(LoginForm loginForm);
+    GenericResponse<LoginVO> login(LoginRequest loginRequest);
 
     /**
      * 用户忘记密码
      *
-     * @param forgetPwdForm 忘记密码表单
+     * @param forgetPwdRequest 忘记密码表单
      * @return 通用
      */
-    GenericResponse updatePwd(ForgetPwdForm forgetPwdForm);
+    GenericResponse updatePwd(ForgetPwdRequest forgetPwdRequest);
 }

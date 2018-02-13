@@ -11,7 +11,7 @@
         <result column="LAST_LOGIN_TIME" property="lastLoginTime"/>
     </resultMap>
 
-    <sql id="tableName">LOGIN_INFO</sql>
+    <sql id="tableName">login_info</sql>
 
     <sql id="columns">
         MEMBER_ID,

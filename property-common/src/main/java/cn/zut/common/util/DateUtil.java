@@ -1,5 +1,6 @@
 package cn.zut.common.util;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,6 +25,11 @@ public class DateUtil {
     public static final String TIME_BEGIN = " 00:00:00";
     public static final String MONTH_PATTERN = "MMddHHmmss";
 
+
+    private static ThreadLocal<DateFormat> simpleDateFormat(String pattern) {
+        return ThreadLocal.withInitial(() -> new SimpleDateFormat(pattern));
+    }
+
     /**
      * 格式化时间
      */
@@ -31,8 +37,7 @@ public class DateUtil {
         if (date == null) {
             return null;
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        return simpleDateFormat.format(date);
+        return simpleDateFormat(pattern).get().format(date);
     }
 
     /**
@@ -60,9 +65,8 @@ public class DateUtil {
      * 解析时间
      */
     public static Date parse(String date, String pattern) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
-            return simpleDateFormat.parse(date);
+            return simpleDateFormat(pattern).get().parse(date);
         } catch (ParseException e) {
             return null;
         }
@@ -92,9 +96,9 @@ public class DateUtil {
      * 解析时间
      */
     public static Date parse(Date date, String pattern) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        DateFormat dateFormat = simpleDateFormat(pattern).get();
         try {
-            return simpleDateFormat.parse(simpleDateFormat.format(date));
+            return dateFormat.parse(dateFormat.format(date));
         } catch (ParseException e) {
             return null;
         }
@@ -166,7 +170,7 @@ public class DateUtil {
      * @return 相差天数
      */
     public static int daysBetween(Date smdate, Date bdate) {
-        SimpleDateFormat sdf = new SimpleDateFormat(BELONG_DATE_PATTERN);
+        DateFormat sdf = simpleDateFormat(BELONG_DATE_PATTERN).get();
         try {
             smdate = sdf.parse(sdf.format(smdate));
             bdate = sdf.parse(sdf.format(bdate));
@@ -241,7 +245,7 @@ public class DateUtil {
      * @return 相差小时数
      */
     private static int hoursBetween(Date miniDate, Date bigDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.BELONG_TIME_PATTERN);
+        DateFormat sdf = simpleDateFormat(BELONG_TIME_PATTERN).get();
         try {
             miniDate = sdf.parse(sdf.format(miniDate));
             bigDate = sdf.parse(sdf.format(bigDate));

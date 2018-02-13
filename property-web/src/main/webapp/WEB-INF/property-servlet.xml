@@ -15,22 +15,15 @@
     <context:annotation-config/>
     <context:component-scan base-package="cn.zut.web.*"/>
     <!-- 访问静态资源 -->
-    <mvc:resources mapping="assets/**" location="assets/" />
+    <mvc:resources mapping="assets/**" location="assets/"/>
 
     <!-- 属性文件配置 -->
     <context:property-placeholder location="classpath*:*.properties" file-encoding="utf-8"/>
 
-    <!-- 视图解析器配置 -->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/WEB-INF/views/"/>
-        <property name="suffix" value=".jsp"/>
-    </bean>
-
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSizePerFile" value="500000000" />
-        <property name="defaultEncoding" value="UTF-8" />
-        <property name="resolveLazily" value="true" />
+        <property name="maxUploadSizePerFile" value="500000000"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="resolveLazily" value="true"/>
     </bean>
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
@@ -48,5 +41,24 @@
             <ref bean="memberInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+
+    <bean id="templateResolver" class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".html"/>
+        <property name="templateMode" value="HTML"/>
+        <property name="cacheable" value="false"/>
+        <!-- 解决页面中文乱码 -->
+        <property name="characterEncoding" value="UTF-8"/>
+    </bean>
+
+    <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver"/>
+    </bean>
+
+    <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+        <property name="templateEngine" ref="templateEngine"/>
+        <!-- 解决页面中文乱码 -->
+        <property name="characterEncoding" value="UTF-8"/>
+    </bean>
 
 </beans>

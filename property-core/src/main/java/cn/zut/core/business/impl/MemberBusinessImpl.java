@@ -1,6 +1,9 @@
 package cn.zut.core.business.impl;
 
 import cn.zut.common.check.GeneralCheck;
+import cn.zut.common.request.ForgetPwdRequest;
+import cn.zut.common.request.LoginRequest;
+import cn.zut.common.request.RegisterRequest;
 import cn.zut.common.response.GenericResponse;
 import cn.zut.common.security.DESEncryptionUtil;
 import cn.zut.common.security.EncryptionUtil;
@@ -16,12 +19,7 @@ import cn.zut.dao.persistence.MemberMapper;
 import cn.zut.dao.search.MemberSearch;
 import cn.zut.facade.exception.ExceptionCode;
 import cn.zut.facade.exception.ExceptionMessage;
-import cn.zut.facade.request.ForgetPwdForm;
-import cn.zut.facade.request.LoginForm;
-import cn.zut.facade.request.RegisterForm;
 import cn.zut.facade.response.LoginVO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,23 +35,18 @@ import java.util.Date;
 @Component("memberBusiness")
 public class MemberBusinessImpl implements MemberBusiness {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MemberBusinessImpl.class);
-
-    @SuppressWarnings("all")
     @Resource
     private MemberMapper memberMapper;
-    @SuppressWarnings("all")
     @Resource
     private LoginInfoMapper loginInfoMapper;
-
     @Resource
     private MemberService memberService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public GenericResponse register(RegisterForm registerForm) {
+    public GenericResponse register(RegisterRequest registerRequest) {
 
-        String phoneNo = registerForm.getPhoneNo();
+        String phoneNo = registerRequest.getPhoneRegister();
 
         // 校验手机号格式
         if (!GeneralCheck.isPhoneNo(phoneNo)) {
@@ -64,13 +57,13 @@ public class MemberBusinessImpl implements MemberBusiness {
             return new GenericResponse<>(new ExceptionMessage(ExceptionCode.PHONE_IS_EXIST, phoneNo));
         }
 
-        return memberService.save(registerForm);
+        return memberService.save(registerRequest);
     }
 
     @Override
-    public GenericResponse<LoginVO> login(LoginForm loginForm) {
-        String phoneNo = loginForm.getPhoneNo();
-        String password = loginForm.getPassword();
+    public GenericResponse<LoginVO> login(LoginRequest loginRequest) {
+        String phoneNo = loginRequest.getPhoneLogin();
+        String password = loginRequest.getPwdLogin();
 
         MemberEntity memberEntity = getMemberByPhoneNo(phoneNo);
         // 校验手机号码是否已经被注册
@@ -99,10 +92,10 @@ public class MemberBusinessImpl implements MemberBusiness {
     }
 
     @Override
-    public GenericResponse updatePwd(ForgetPwdForm forgetPwdForm) {
+    public GenericResponse updatePwd(ForgetPwdRequest forgetPwdRequest) {
         MemberSearch memberSearch = new MemberSearch();
-        memberSearch.setNickName(forgetPwdForm.getName());
-        memberSearch.setPhoneNo(forgetPwdForm.getPhone());
+        memberSearch.setNickName(forgetPwdRequest.getNameForgetPwd());
+        memberSearch.setPhoneNo(forgetPwdRequest.getPhoneForgetPwd());
         MemberEntity memberEntity = memberMapper.selectByExample(memberSearch);
         if (memberEntity == null) {
             return new GenericResponse<>(new ExceptionMessage(ExceptionCode.NICK_NAME_PHONE_NOT_NULL));
@@ -111,7 +104,7 @@ public class MemberBusinessImpl implements MemberBusiness {
         LoginInfoEntity loginInfoEntity = loginInfoMapper.selectById(memberId);
         // 生成密码盐
         String salt = RandomUtil.generateLetterString(PrivateConstant.SALT_LENGTH);
-        String encryptPassword = EncryptionUtil.encrypt(salt + forgetPwdForm.getPassword(), EncryptionUtil.MD5);
+        String encryptPassword = EncryptionUtil.encrypt(salt + forgetPwdRequest.getNameForgetPwd(), EncryptionUtil.MD5);
         loginInfoEntity.setSalt(salt);
         loginInfoEntity.setPassword(encryptPassword);
         loginInfoEntity.setLastLoginTime(new Date());

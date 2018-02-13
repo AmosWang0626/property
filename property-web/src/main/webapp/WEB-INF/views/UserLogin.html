@@ -1,18 +1,13 @@
-<%@ page pageEncoding="UTF-8" %>
-<%
-    String path = request.getContextPath();
-    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-%>
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>Login</title>
-    <link href="<%=basePath %>assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<%=basePath %>assets/css/property.css" rel="stylesheet">
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/property.css" rel="stylesheet">
 </head>
 
 <body>
@@ -35,7 +30,7 @@
         </div>
 
         <a data-toggle="modal" data-target="#modalForgetPwd" id="modalForgetPwdClick">忘记密码</a>
-        <div class="help-block with-errors" id="login-fail">${requestScope.user_login}</div>
+        <div th:text="${user_login}" class="help-block with-errors" id="login-fail"></div>
         <button type="submit" class="btn btn-lg btn-primary btn-block">登录</button>
         <button class="btn btn-info btn-block" type="button" data-toggle="modal" data-target="#modalRegister">
             没有账号,注册一个吧
@@ -147,9 +142,9 @@
     </div>
     <!-- other -->
 </div>
-<script src="<%=basePath %>assets/js/jquery-3.2.1.min.js"></script>
-<script src="<%=basePath %>assets/js/bootstrap.min.js"></script>
-<script src="<%=basePath %>assets/js/validator.min.js"></script>
-<script src="<%=basePath %>assets/js/property.js"></script>
+<script src="../assets/js/jquery-3.2.1.min.js"></script>
+<script src="../assets/js/bootstrap.min.js"></script>
+<script src="../assets/js/validator.min.js"></script>
+<script src="../assets/js/property.js"></script>
 </body>
 </html>

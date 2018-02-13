@@ -43,10 +43,8 @@ public class ExceptionMessage implements Message {
                     // 设为false不使用分组方式显示数据; 例如:99999 9,9999
                     NUMBER_FORMAT.setGroupingUsed(false);
                     formatParameters[i] = NUMBER_FORMAT.format(object);
-                } else if (object instanceof Long) {
-                    formatParameters[i] = String.valueOf(object);
                 } else {
-                    formatParameters[i] = object;
+                    formatParameters[i] = String.valueOf(object);
                 }
             }
             return MessageFormat.format(message.getRespMsg(), formatParameters);

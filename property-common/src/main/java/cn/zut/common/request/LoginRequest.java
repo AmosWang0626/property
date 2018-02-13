@@ -1,4 +1,4 @@
-package cn.zut.web.request;
+package cn.zut.common.request;
 
 import com.google.gson.Gson;
 import org.hibernate.validator.constraints.NotBlank;
