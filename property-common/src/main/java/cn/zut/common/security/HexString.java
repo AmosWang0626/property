@@ -30,10 +30,8 @@ public class HexString {
 			"ec", "ed", "ee", "ef", "f0", "f1", "f2", "f3", "f4", "f5", "f6",
 			"f7", "f8", "f9", "fa", "fb", "fc", "fd", "fe", "ff" };
 	
-	/*
-
+	/**
 	 * 十六进制字符串转换为字节数组
-
 	 */
 	public static byte[] hex2Byte(String paramString) {
 		int i = paramString.length() / 2;
@@ -45,24 +43,23 @@ public class HexString {
 		}
 		return arrayOfByte;
 	}
-	/*
-
+	/**
 	 * 得到相应十六进制字母的值，比如说a=10,b=11,c=12,d=13,e=14,f=15
-
 	 */
 	public static int getHexValue(char paramChar) {
-		if ((paramChar >= '0') && (paramChar <= '9'))
+		if ((paramChar >= '0') && (paramChar <= '9')) {
 			return (paramChar - '0');
-		if ((paramChar >= 'a') && (paramChar <= 'f'))
+		}
+		if ((paramChar >= 'a') && (paramChar <= 'f')) {
 			return (paramChar - 'a' + 10);
-		if ((paramChar >= 'A') && (paramChar <= 'F'))
+		}
+		if ((paramChar >= 'A') && (paramChar <= 'F')) {
 			return (paramChar - 'A' + 10);
+		}
 		throw new RuntimeException("invalid_char");
 	}
-	/*
-
+	/**
 	 * 字节数组转换为十六进制字符串
-
 	 */
 	public static String byte2Hex(byte[] paramArrayOfByte) {
 		StringBuffer localStringBuffer = new StringBuffer();
@@ -73,10 +70,8 @@ public class HexString {
 		return new String(localStringBuffer);
 	}
 	
-	/*
-
+	/**
 	 * 字节数组转换为十六进制字符串，效果与byte2Hex一样，随便选哪一个方法
-
 	 */
 	public static String bytes2HexStr(byte[] bytes) {
 		StringBuffer buffer = new StringBuffer(bytes.length * 2);

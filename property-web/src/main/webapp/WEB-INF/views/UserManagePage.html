@@ -79,34 +79,6 @@
         </div>
     </div>
 
-    <!-- 产品表格 -->
-    <table class="table table-striped table-bordered table-hover table-responsive">
-        <thead>
-        <tr>
-            <th>产品名</th>
-            <th>价格</th>
-            <th>备注</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td class="product-id"></td>
-            <td>香蕉</td>
-            <td>2.5</td>
-            <td>进口香蕉</td>
-            <td>
-                <div class="btn-group" role="group" aria-label="操作">
-                    <button class="btn btn-default btn-sm" type="button" data-toggle="modal"
-                            data-target="#modalProductModify">修改
-                    </button>
-                    <button class="btn btn-default btn-sm" type="button">删除</button>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
     <!-- Modal 产品修改 -->
     <div class="modal fade" id="modalProductModify" tabindex="-1" role="dialog"
          aria-labelledby="modalProductModifyLabel">
@@ -141,25 +113,55 @@
             </div><!-- modal-content -->
         </div>
     </div>
+    <table class="table table-bordered table-hover table-condensed">
+        <thead>
+        <tr>
+            <th>会员编号</th>
+            <th>用户名</th>
+            <th>手机号</th>
+            <th>注册时间</th>
+        </tr>
+        </thead>
+        <tbody th:each="user:${pageResult.rows}">
+        <tr>
+            <th scope="row" th:text="${user.memberId}">1</th>
+            <td th:text="${user.nickName}">aaa</td>
+            <td th:text="${user.phoneNo}">bbb</td>
+            <td th:text="${user.createTime}">ccc</td>
+        </tr>
+        </tbody>
+    </table>
 
-    <!-- 分页条 -->
-    <nav class="paging" aria-label="paging">
-        <ul class="pagination">
-            <li>
-                <a href="#" aria-label="Previous">
-                    <span>&laquo;&nbsp;上一页</span>
+    <!-- 分页导航栏 (如需重用只需修改下边的th:href链接) -->
+    <nav aria-label="Page navigation" data-th-align="center">
+        <ul class="pagination pagination-lg">
+            <li th:class="${pageResult.first}?'disabled'">
+                <a th:if="${pageResult.first}" href="javascript:void(0);">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                <!-- 这里的th:href链接 -->
+                <a th:if="${!pageResult.first}"
+                   th:href="@{/passport/page(page=${pageResult.page -1},size=${pageResult.size})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li>
-                <a href="#" aria-label="Next">
-                    <span>下一页&nbsp;&raquo;</span>
+            <li th:each="index:${#numbers.sequence(1,pageResult.totalPages)}"
+                th:classappend="${index==pageResult.page}?'active'">
+                <!-- 这里的th:href链接 -->
+                <a th:text="${index}" th:href="@{/passport/page(page=${index},size=${pageResult.size})}">1</a>
+            </li>
+            <li th:class="${pageResult.last}?'disabled'">
+                <a th:if="${pageResult.last}" href="javascript:void(0);">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                <!-- 这里的th:href链接 -->
+                <a th:if="${!pageResult.last}"
+                   th:href="@{/passport/page(page=${pageResult.page +1},size=${pageResult.size})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
+            <li><span th:text="'总记录数'+${pageResult.total}+'条'">总条数1条</span></li>
         </ul>
     </nav>
 </div>

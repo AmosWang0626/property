@@ -48,9 +48,25 @@
         WHERE MEMBER_ID = #{memberId}
     </select>
 
-    <select id="selectByExample" parameterType="cn.zut.dao.search.MemberSearch" resultMap="memberEntityMap">
+    <select id="selectByExample" resultMap="memberEntityMap">
         SELECT
         <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <select id="selectListPageByExample" resultMap="memberEntityMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT #{firstIndex}, #{rows}
+    </select>
+
+    <select id="selectCountByExample" resultType="java.lang.Integer">
+        SELECT COUNT(0)
         FROM
         <include refid="tableName"/>
         <include refid="condition"/>

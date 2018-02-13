@@ -1,11 +1,13 @@
 package cn.zut.core.business.impl;
 
 import cn.zut.common.check.GeneralCheck;
+import cn.zut.common.dao.PageModel;
 import cn.zut.common.request.ForgetPwdRequest;
 import cn.zut.common.request.LoginRequest;
 import cn.zut.common.request.RegisterRequest;
 import cn.zut.common.response.GenericResponse;
-import cn.zut.common.security.DESEncryptionUtil;
+import cn.zut.common.response.PageResult;
+import cn.zut.common.security.DesEncryptionUtil;
 import cn.zut.common.security.EncryptionUtil;
 import cn.zut.common.util.EncryptUtil;
 import cn.zut.common.util.RandomUtil;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * PROJECT: property
@@ -87,7 +90,7 @@ public class MemberBusinessImpl implements MemberBusiness {
         LoginVO loginVO = new LoginVO();
         loginVO.setPhoneNo(EncryptUtil.encryPhoneNo(phoneNo));
         loginVO.setNickName(memberEntity.getNickName());
-        loginVO.setToken(DESEncryptionUtil.encrypt(String.valueOf(memberEntity.getMemberId()), PrivateConstant.TOKEN_ENCRYPT));
+        loginVO.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberEntity.getMemberId()), PrivateConstant.TOKEN_ENCRYPT));
         return new GenericResponse<>(loginVO);
     }
 
@@ -111,6 +114,19 @@ public class MemberBusinessImpl implements MemberBusiness {
         loginInfoMapper.update(loginInfoEntity);
 
         return GenericResponse.SUCCESS;
+    }
+
+    @Override
+    public PageResult<MemberEntity> pageMemberByModel(PageModel<MemberSearch> pageModel) {
+        List<MemberEntity> applyEntities = memberMapper.selectListPageByExample(pageModel);
+        int memberCount = memberMapper.selectCountByExample(pageModel.getSearch());
+        PageResult<MemberEntity> pageResult = new PageResult<>();
+        // 总记录数量 || 当前页记录数量 || 记录数据列表
+        pageResult.setTotal(memberCount);
+        pageResult.setNumber(applyEntities.size());
+        pageResult.setRows(applyEntities);
+        pageResult.finish(pageModel.getPage(), pageModel.getRows());
+        return pageResult;
     }
 
     private MemberEntity getMemberByPhoneNo(String phoneNo) {

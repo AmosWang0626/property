@@ -1,10 +1,14 @@
 package cn.zut.web.controller;
 
+import cn.zut.common.dao.PageModel;
 import cn.zut.common.request.ForgetPwdRequest;
 import cn.zut.common.request.LoginRequest;
 import cn.zut.common.request.RegisterRequest;
 import cn.zut.common.response.GenericResponse;
+import cn.zut.common.response.PageResult;
 import cn.zut.core.business.MemberBusiness;
+import cn.zut.dao.entity.MemberEntity;
+import cn.zut.dao.search.MemberSearch;
 import cn.zut.facade.exception.ExceptionCode;
 import cn.zut.facade.exception.ExceptionMessage;
 import cn.zut.facade.response.LoginVO;
@@ -12,9 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -62,7 +64,7 @@ public class MemberController {
         if (register.success()) {
             modelAndView.addObject("user_login", registerRequest.getNameRegister());
             // redirect:product
-            modelAndView.setViewName("ProductPage");
+            modelAndView.setViewName("UserManagePage");
         } else {
             modelAndView.addObject("user_login", register.getRespMsg());
             modelAndView.setViewName("UserLogin");
@@ -90,7 +92,7 @@ public class MemberController {
             LoginVO loginVO = login.getBody();
             modelAndView.addObject("user_login", loginVO.getNickName());
             // redirect:product
-            modelAndView.setViewName("ProductPage");
+            modelAndView.setViewName("UserManagePage");
         } else {
             modelAndView.addObject("user_login", login.getRespMsg());
             modelAndView.setViewName("UserLogin");
@@ -116,5 +118,18 @@ public class MemberController {
         }
 
         return new ModelAndView("UserLogin", "user_login", updatePwd.getRespMsg());
+    }
+
+    @GetMapping("page")
+    public ModelAndView pageApply(@RequestParam(value = "page", required = false) Integer page,
+                                  @RequestParam(value = "size", required = false) Integer size) {
+        if (page == null || size == null) {
+            return new ModelAndView("UserLogin");
+        }
+        PageModel<MemberSearch> pageModel = new PageModel<>();
+        pageModel.setPage(page);
+        pageModel.setRows(size);
+        PageResult<MemberEntity> pageResult = memberBusiness.pageMemberByModel(pageModel);
+        return new ModelAndView("UserManagePage", "pageResult", pageResult);
     }
 }

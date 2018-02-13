@@ -1,9 +1,13 @@
 package cn.zut.core.business;
 
+import cn.zut.common.dao.PageModel;
 import cn.zut.common.request.ForgetPwdRequest;
 import cn.zut.common.request.LoginRequest;
 import cn.zut.common.request.RegisterRequest;
 import cn.zut.common.response.GenericResponse;
+import cn.zut.common.response.PageResult;
+import cn.zut.dao.entity.MemberEntity;
+import cn.zut.dao.search.MemberSearch;
 import cn.zut.facade.response.LoginVO;
 
 /**
@@ -36,4 +40,12 @@ public interface MemberBusiness {
      * @return 通用
      */
     GenericResponse updatePwd(ForgetPwdRequest forgetPwdRequest);
+
+    /**
+     * 获取用户信息用户
+     *
+     * @param pageModel 忘记密码表单
+     * @return 通用
+     */
+    PageResult<MemberEntity> pageMemberByModel(PageModel<MemberSearch> pageModel);
 }

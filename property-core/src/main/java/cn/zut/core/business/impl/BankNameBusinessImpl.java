@@ -26,8 +26,8 @@ import java.util.Map;
  * @author DaoYuanWang
  */
 @Component
-public class HttpBusinessImpl implements HttpBusiness {
-    private static Logger LOGGER = LoggerFactory.getLogger(HttpBusinessImpl.class);
+public class BankNameBusinessImpl implements HttpBusiness {
+    private static Logger LOGGER = LoggerFactory.getLogger(BankNameBusinessImpl.class);
 
     /**
      * 错误码
@@ -42,7 +42,7 @@ public class HttpBusinessImpl implements HttpBusiness {
     private HttpApi httpApi;
     private static Map<String, String> alterMap = null;
 
-    public HttpBusinessImpl() {
+    public BankNameBusinessImpl() {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(HttpApi.ALI_CCD_API)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
@@ -105,6 +105,6 @@ public class HttpBusinessImpl implements HttpBusiness {
     }
 
     public static void main(String[] args) {
-        System.out.println(new HttpBusinessImpl().alterByBankName("CITIC"));
+        System.out.println(new BankNameBusinessImpl().alterByBankName("CITIC"));
     }
 }

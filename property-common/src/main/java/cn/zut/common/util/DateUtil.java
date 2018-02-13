@@ -14,17 +14,16 @@ import java.util.GregorianCalendar;
  */
 public class DateUtil {
 
-    public static final String DEFAULT_TIME_PATTERN = "yyyy/MM/dd HH:mm:ss";
-    public static final String BELONG_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
-    public static final String SECOND_DATE_PATTERN = "yyyyMMddHHmmss";
-    public static final String MINUTE_DATE_PATTERN = "yyyyMMddHHmm";
-    public static final String MILLISECOND_PATTERN = "yyyyMMddHHmmssSSS";
-    public static final String DEFAULT_DATE_PATTERN = "yyyyMMdd";
-    public static final String BELONG_DATE_PATTERN = "yyyy-MM-dd";
-    public static final String TIME_END = " 23:59:59";
-    public static final String TIME_BEGIN = " 00:00:00";
-    public static final String MONTH_PATTERN = "MMddHHmmss";
-
+    public static final String YEAR_TO_SECOND_SPLIT_SLASH = "yyyy/MM/dd HH:mm:ss";
+    public static final String YEAR_TO_SECOND_SPLIT = "yyyy-MM-dd HH:mm:ss";
+    public static final String YEAR_TO_SECOND = "yyyyMMddHHmmss";
+    public static final String YEAR_TO_MINUTE = "yyyyMMddHHmm";
+    public static final String YEAR_TO_MILLI_SECOND = "yyyyMMddHHmmssSSS";
+    public static final String YEAR_TO_DAY_SPILT = "yyyy-MM-dd";
+    public static final String YEAR_TO_DAY = "yyyyMMdd";
+    public static final String DAY_TIME_BEGIN = " 00:00:00";
+    public static final String DAY_TIME_END = " 23:59:59";
+    public static final String MONTH_TO_SECOND = "MMddHHmmss";
 
     private static ThreadLocal<DateFormat> simpleDateFormat(String pattern) {
         return ThreadLocal.withInitial(() -> new SimpleDateFormat(pattern));
@@ -43,22 +42,22 @@ public class DateUtil {
     /**
      * 格式化时间字符串 yyyy-MM-dd HH:mm:ss
      */
-    public static String formatBelongTimePattern(Date date) {
-        return format(date, BELONG_TIME_PATTERN);
+    public static String formatYearToSecondPattern(Date date) {
+        return format(date, YEAR_TO_SECOND_SPLIT);
     }
 
     /**
      * 格式化时间字符串 yyyyMMddHHmmssSSS
      */
     public static String formatMilliseCodePattern(Date date) {
-        return format(date, MILLISECOND_PATTERN);
+        return format(date, YEAR_TO_MILLI_SECOND);
     }
 
     /**
      * 格式化时间字符串 yyyyMMddHHmmss
      */
     public static String formatMilliseDatePattern(Date date) {
-        return format(date, SECOND_DATE_PATTERN);
+        return format(date, YEAR_TO_SECOND);
     }
 
     /**
@@ -146,8 +145,8 @@ public class DateUtil {
      * @return 日期
      */
     public static Date getEndTimeOfDay(Date date) {
-        String dateStr = format(date, BELONG_DATE_PATTERN) + " " + TIME_END;
-        return parse(dateStr, BELONG_TIME_PATTERN);
+        String dateStr = format(date, YEAR_TO_DAY_SPILT) + " " + DAY_TIME_END;
+        return parse(dateStr, YEAR_TO_SECOND_SPLIT);
     }
 
     /**
@@ -157,8 +156,8 @@ public class DateUtil {
      * @return 日期
      */
     public static Date getBeginTimeOfDay(Date date) {
-        String dateStr = format(date, BELONG_DATE_PATTERN) + " " + TIME_BEGIN;
-        return parse(dateStr, BELONG_TIME_PATTERN);
+        String dateStr = format(date, YEAR_TO_DAY_SPILT) + " " + DAY_TIME_BEGIN;
+        return parse(dateStr, YEAR_TO_SECOND_SPLIT);
     }
 
     /**
@@ -170,7 +169,7 @@ public class DateUtil {
      * @return 相差天数
      */
     public static int daysBetween(Date smdate, Date bdate) {
-        DateFormat sdf = simpleDateFormat(BELONG_DATE_PATTERN).get();
+        DateFormat sdf = simpleDateFormat(YEAR_TO_DAY_SPILT).get();
         try {
             smdate = sdf.parse(sdf.format(smdate));
             bdate = sdf.parse(sdf.format(bdate));
@@ -245,7 +244,7 @@ public class DateUtil {
      * @return 相差小时数
      */
     private static int hoursBetween(Date miniDate, Date bigDate) {
-        DateFormat sdf = simpleDateFormat(BELONG_TIME_PATTERN).get();
+        DateFormat sdf = simpleDateFormat(YEAR_TO_SECOND_SPLIT).get();
         try {
             miniDate = sdf.parse(sdf.format(miniDate));
             bigDate = sdf.parse(sdf.format(bigDate));

@@ -14,7 +14,7 @@ import java.security.SecureRandom;
  *
  * @author DaoyuanWang
  */
-public class DESEncryptionUtil {
+public class DesEncryptionUtil {
 
     public static String encrypt(String sourceText, String keyString) {
         if (StringUtils.isBlank(sourceText) || StringUtils.isBlank(keyString)) {

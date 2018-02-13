@@ -15,7 +15,7 @@ public class GenericIdUtil {
      */
     public static Long genericMemberId() {
         StringBuffer sb = new StringBuffer();
-        sb.append(DateUtil.format(new Date(), DateUtil.MINUTE_DATE_PATTERN));
+        sb.append(DateUtil.format(new Date(), DateUtil.YEAR_TO_MINUTE));
         sb.append(RandomUtil.generateNumberString(6));
 
         return Long.valueOf(sb.toString());

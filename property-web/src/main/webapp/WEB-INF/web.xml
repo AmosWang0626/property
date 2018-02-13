@@ -22,7 +22,7 @@
         <async-supported>true</async-supported>
     </servlet>
 
-    <!--中文编码过滤器-->
+    <!-- 解决前端页面传来的数据解析乱码 -->
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -31,6 +31,7 @@
             <param-value>UTF-8</param-value>
         </init-param>
     </filter>
+
     <filter-mapping>
         <filter-name>encodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
