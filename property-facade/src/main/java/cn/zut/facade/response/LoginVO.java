@@ -1,6 +1,6 @@
 package cn.zut.facade.response;
 
-import com.google.gson.Gson;
+import com.alibaba.fastjson.JSON;
 
 import java.io.Serializable;
 
@@ -53,6 +53,6 @@ public class LoginVO implements Serializable {
 
     @Override
     public String toString() {
-        return new Gson().toJson(this);
+        return JSON.toJSONString(this);
     }
 }

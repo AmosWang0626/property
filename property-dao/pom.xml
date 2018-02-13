@@ -20,6 +20,10 @@
     <dependencies>
         <dependency>
             <groupId>cn.zut</groupId>
+            <artifactId>property-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.zut</groupId>
             <artifactId>property-facade</artifactId>
         </dependency>
     </dependencies>

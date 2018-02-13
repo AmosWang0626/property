@@ -13,8 +13,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>cn.zut</groupId>
-            <artifactId>property-common</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
         </dependency>
     </dependencies>
+
 </project>

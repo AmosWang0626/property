@@ -1,4 +1,4 @@
-package cn.zut.facade.exception;
+package cn.zut.common.exception;
 
 import cn.zut.common.response.Message;
 

@@ -2,6 +2,8 @@ package cn.zut.core.business.impl;
 
 import cn.zut.common.check.GeneralCheck;
 import cn.zut.common.dao.PageModel;
+import cn.zut.common.exception.ExceptionCode;
+import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.request.ForgetPwdRequest;
 import cn.zut.common.request.LoginRequest;
 import cn.zut.common.request.RegisterRequest;
@@ -19,8 +21,6 @@ import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.persistence.LoginInfoMapper;
 import cn.zut.dao.persistence.MemberMapper;
 import cn.zut.dao.search.MemberSearch;
-import cn.zut.facade.exception.ExceptionCode;
-import cn.zut.facade.exception.ExceptionMessage;
 import cn.zut.facade.response.LoginVO;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
