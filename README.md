@@ -31,7 +31,9 @@
     common  -----+
                  | ----- dao  -----  core ----- web
     facade  -----+
-* 项目最外层pom.xml中用<dependencyManagement>定义依赖的jar及其版本,不引入;
+    
+### 项目须知
+* 项目最外层pom.xml中用dependencyManagement定义依赖的jar及其版本,不引入;
 * 在common层引入所有的jar;
-
-具体可参照当前项目中写得用户登录/注册相关功能
+* 具体可参照当前项目中写得用户登录/注册相关功能;
+* 当前项目中分页模板已作出,需者可阅.
