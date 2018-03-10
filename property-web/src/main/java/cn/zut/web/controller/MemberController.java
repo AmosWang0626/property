@@ -30,7 +30,7 @@ import java.util.List;
  */
 @RequestMapping("passport")
 @Controller
-public class MemberController extends BaseController {
+public class MemberController {
 
     @Resource
     private MemberBusiness memberBusiness;
@@ -40,9 +40,10 @@ public class MemberController extends BaseController {
      *
      * @return jsp路径
      */
-    @RequestMapping(value = "login", method = RequestMethod.GET)
-    public String login() {
-        return "UserLogin";
+    @RequestMapping(value = "home", method = RequestMethod.GET)
+    public ModelAndView login() {
+        return new ModelAndView("UserLogin", "GenericResponse",
+                new GenericResponse(new ExceptionMessage(ExceptionCode.PLEASE_INPUT_PHONE_NO_AND_PASSWORD)));
     }
 
     /**
@@ -55,16 +56,11 @@ public class MemberController extends BaseController {
         // 参数校验
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
-            return genericReturn("UserLogin", new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage())));
+            return new ModelAndView("UserLogin", "GenericResponse",
+                    new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage())));
         }
 
-        GenericResponse<LoginResponse> genericResponse = memberBusiness.register(registerRequest);
-        if (genericResponse.success()) {
-            // redirect:product
-            return genericReturn("UserManagePage", genericResponse);
-        } else {
-            return genericReturn("UserLogin", genericResponse);
-        }
+        return new ModelAndView("UserLogin", "GenericResponse", memberBusiness.register(registerRequest));
     }
 
     /**
@@ -72,20 +68,28 @@ public class MemberController extends BaseController {
      *
      * @return 登录状态
      */
-    @RequestMapping(value = "realLogin", method = RequestMethod.POST)
+    @RequestMapping(value = "login", method = RequestMethod.POST)
     public ModelAndView realLogin(@ModelAttribute LoginRequest loginRequest, BindingResult bindingResult) {
         // 参数校验
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
-            return genericReturn("UserLogin", new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage())));
+            return new ModelAndView("UserLogin", "GenericResponse",
+                    new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage())));
         }
 
         GenericResponse<LoginResponse> genericResponse = memberBusiness.login(loginRequest);
         if (genericResponse.success()) {
-            // redirect:product
-            return genericReturn("UserManagePage", genericResponse);
+            PageModel<MemberSearch> pageModel = new PageModel<>();
+            pageModel.setPage(1);
+            pageModel.setRows(5);
+            PageResult<MemberEntity> pageResult = memberBusiness.pageMemberByModel(pageModel);
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.addObject("pageResult", pageResult);
+            modelAndView.addObject("GenericResponse", genericResponse);
+            modelAndView.setViewName("UserManagePage");
+            return modelAndView;
         } else {
-            return genericReturn("UserLogin", genericResponse);
+            return new ModelAndView("UserLogin", "GenericResponse", genericResponse);
         }
     }
 
@@ -97,10 +101,12 @@ public class MemberController extends BaseController {
         String phoneNo = forgetPwdRequest.getPhoneForgetPwd();
 
         if (StringUtils.isBlank(phoneNo)) {
-            return genericReturn("UserLogin", new GenericResponse<>(new ExceptionMessage(ExceptionCode.PLEASE_INPUT_PHONE_NO)));
+            return new ModelAndView("UserLogin", "GenericResponse",
+                    new GenericResponse<>(new ExceptionMessage(ExceptionCode.PLEASE_INPUT_PHONE_NO)));
         }
 
-        return genericReturn("UserLogin", memberBusiness.updatePwd(forgetPwdRequest));
+        return new ModelAndView("UserLogin", "GenericResponse",
+                memberBusiness.updatePwd(forgetPwdRequest));
     }
 
     @GetMapping("page")
@@ -114,6 +120,6 @@ public class MemberController extends BaseController {
         pageModel.setRows(size);
         PageResult<MemberEntity> pageResult = memberBusiness.pageMemberByModel(pageModel);
 
-        return genericReturn("UserManagePage", new GenericResponse<>(pageResult));
+        return new ModelAndView("UserManagePage", "pageResult", pageResult);
     }
 }

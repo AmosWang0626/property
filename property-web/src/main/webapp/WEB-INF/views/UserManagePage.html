@@ -17,23 +17,23 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <div class="navbar-brand">产品管理后台</div>
+                <div class="navbar-brand">用户管理后台</div>
             </div>
-            <ul th:if="${user_login} eq null" class="nav navbar-nav pull-right" id="product-login">
+            <ul th:if="${GenericResponse.getBody().getNickName()} eq null" class="nav navbar-nav pull-right" id="product-login">
                 <li><a href="/passport/login">登录</a></li>
             </ul>
-            <ul th:if="${user_login} ne null" class="nav navbar-nav navbar-right" id="product-logout">
+            <ul th:if="${GenericResponse.getBody().getNickName()} ne null" class="nav navbar-nav navbar-right" id="product-logout">
                 <li><a><span id="greetings">美好的一天</span></a></li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         <span id="user-id"></span>
-                        <span id="user-name" th:text="${user_login}"></span>
+                        <span id="user-name" th:text="${GenericResponse.getBody().getNickName()}"></span>
                         <span class="caret"></span>
                         <ul class="dropdown-menu">
                             <li role="presentation"><a href="#">修改资料</a></li>
                             <li role="presentation"><a href="#">修改密码</a></li>
                             <li role="separator" class="divider"></li>
-                            <li role="presentation"><a href="login">退出登录</a></li>
+                            <li role="presentation"><a href="home">退出登录</a></li>
                         </ul>
                     </a>
                 </li>

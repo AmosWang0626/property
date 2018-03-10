@@ -13,7 +13,7 @@
 <body>
 <div class="container ssm-div">
     <!-- 用户登录 -->
-    <form class="form-ssm" action="realLogin" method="post" data-toggle="validator">
+    <form class="form-ssm" action="login" method="post" data-toggle="validator">
         <h3 class="form-login-heading">请先登录</h3>
 
         <div class="form-group">
@@ -30,7 +30,7 @@
         </div>
 
         <a data-toggle="modal" data-target="#modalForgetPwd" id="modalForgetPwdClick">忘记密码</a>
-        <div th:text="${GenericResponse.getRespMsg()}" class="help-block with-errors" id="login-fail"></div>
+        <div th:text="${GenericResponse.respMsg}" class="help-block with-errors" id="login-fail"></div>
         <button type="submit" class="btn btn-lg btn-primary btn-block">登录</button>
         <button class="btn btn-info btn-block" type="button" data-toggle="modal" data-target="#modalRegister">
             没有账号,注册一个吧

@@ -20,7 +20,8 @@ public enum ExceptionCode implements Message {
     MEMBER_DATA_EXCEPTION("M2004", "手机号还未注册[{0}]"),
     MEMBER_PASSWORD_ERROR("M2005", "密码错误"),
     NICK_NAME_PHONE_NOT_NULL("M2006", "昵称和手机号不匹配"),
-    PLEASE_INPUT_PHONE_NO("M2007", "请输入手机号"),;
+    PLEASE_INPUT_PHONE_NO("M2007", "请输入手机号"),
+    PLEASE_INPUT_PHONE_NO_AND_PASSWORD("M2008", "请输入手机号和密码"),;
 
     private final String respCode;
     private final String respMsg;

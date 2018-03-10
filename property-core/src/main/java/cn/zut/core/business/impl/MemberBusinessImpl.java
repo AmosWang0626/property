@@ -64,11 +64,11 @@ public class MemberBusinessImpl implements MemberBusiness {
         GenericResponse<Long> save = memberService.save(registerRequest);
         if (save.success()) {
             Long memberId = save.getBody();
-            String token = DesEncryptionUtil.encrypt(String.valueOf(memberId), PropertyConstant.DES_PASSWORD);
             LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setToken(token);
+            loginResponse.setPhoneNo(EncryptUtil.encryPhoneNo(phoneNo));
             loginResponse.setNickName(registerRequest.getNameRegister());
-            loginResponse.setPhoneNo(phoneNo);
+            loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberId), PropertyConstant.DES_PASSWORD));
+
             return new GenericResponse<>(loginResponse);
         }
 

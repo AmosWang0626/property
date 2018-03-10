@@ -52,6 +52,7 @@
     </appender>
 
     <root level="${log.level}" additivity="false">
+        <!-- 下边这句注释掉, 会关闭掉控制台输出 -->
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="DEFAULT-APPENDER"/>
         <appender-ref ref="ERROR-APPENDER"/>
