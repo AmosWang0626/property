@@ -8,4 +8,9 @@ package cn.zut.facade.constant;
  */
 public interface PropertyConstant {
 
+    /**
+     * 随机字符串
+     */
+    String DES_PASSWORD = "VBC546QP";
+
 }

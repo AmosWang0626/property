@@ -1,6 +1,6 @@
 package cn.zut.core.business.impl;
 
-import cn.zut.common.response.GenericResponse;
+import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.business.FileBusiness;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

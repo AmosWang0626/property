@@ -1,9 +1,8 @@
 package cn.zut.core.service.impl;
 
+import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.request.RegisterRequest;
-import cn.zut.common.response.GenericResponse;
 import cn.zut.common.security.EncryptionUtil;
-import cn.zut.common.util.GenericIdUtil;
 import cn.zut.common.util.RandomUtil;
 import cn.zut.core.constant.PrivateConstant;
 import cn.zut.core.service.MemberService;
@@ -32,26 +31,24 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public GenericResponse save(RegisterRequest registerRequest) {
+    public GenericResponse<Long> save(RegisterRequest registerRequest) {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.init();
-        Long memberId = GenericIdUtil.genericMemberId();
-        memberEntity.setMemberId(memberId);
         memberEntity.setPhoneNo(registerRequest.getPhoneRegister());
         memberEntity.setNickName(registerRequest.getNameRegister());
+        memberMapper.insert(memberEntity);
 
         LoginInfoEntity loginInfoEntity = new LoginInfoEntity();
         loginInfoEntity.init();
-        loginInfoEntity.setMemberId(memberId);
+        loginInfoEntity.setMemberId(memberEntity.getMemberId());
         // 生成密码盐
         String salt = RandomUtil.generateLetterString(PrivateConstant.SALT_LENGTH);
         String encryptPassword = EncryptionUtil.encrypt(salt + registerRequest.getPwdRegister(), EncryptionUtil.MD5);
         loginInfoEntity.setSalt(salt);
         loginInfoEntity.setPassword(encryptPassword);
 
-        memberMapper.insert(memberEntity);
         loginInfoMapper.insert(loginInfoEntity);
 
-        return GenericResponse.SUCCESS;
+        return new GenericResponse<>(memberEntity.getMemberId());
     }
 }

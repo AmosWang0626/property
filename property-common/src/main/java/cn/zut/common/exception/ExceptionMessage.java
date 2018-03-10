@@ -1,6 +1,6 @@
 package cn.zut.common.exception;
 
-import cn.zut.common.response.Message;
+import cn.zut.common.generic.Message;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigDecimal;

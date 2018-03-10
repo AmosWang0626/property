@@ -1,6 +1,6 @@
 package cn.zut.common.request;
 
-import com.google.gson.Gson;
+import com.alibaba.fastjson.JSON;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -31,6 +31,6 @@ public class LoginRequest {
 
     @Override
     public String toString() {
-        return new Gson().toJson(this);
+        return JSON.toJSONString(this);
     }
 }

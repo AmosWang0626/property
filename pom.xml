@@ -344,7 +344,6 @@
             <id>dev</id>
             <properties>
                 <env>DEV</env>
-                <dubbo.port>20883</dubbo.port>
                 <redis.host>112.74.57.49</redis.host>
                 <redis.password>root</redis.password>
                 <redis.port>6379</redis.port>
@@ -357,7 +356,6 @@
             <id>test</id>
             <properties>
                 <env>TEST</env>
-                <dubbo.port>20880</dubbo.port>
                 <redis.host>112.74.57.49</redis.host>
                 <redis.password>root</redis.password>
                 <redis.port>6379</redis.port>
@@ -370,7 +368,6 @@
             <id>pro</id>
             <properties>
                 <env>PRO</env>
-                <dubbo.port>20880</dubbo.port>
                 <redis.host>112.74.57.49</redis.host>
                 <redis.password>root</redis.password>
                 <redis.port>6379</redis.port>

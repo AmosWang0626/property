@@ -1,4 +1,4 @@
-package cn.zut.common.response;
+package cn.zut.common.generic;
 
 /**
  * PROJECT: property

@@ -1,7 +1,7 @@
 package cn.zut.core.service;
 
+import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.request.RegisterRequest;
-import cn.zut.common.response.GenericResponse;
 
 /**
  * PROJECT: property
@@ -17,6 +17,6 @@ public interface MemberService {
      * @param registerRequest 注册表单
      * @return 通用
      */
-    GenericResponse save(RegisterRequest registerRequest);
+    GenericResponse<Long> save(RegisterRequest registerRequest);
 
 }

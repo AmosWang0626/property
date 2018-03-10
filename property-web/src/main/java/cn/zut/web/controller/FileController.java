@@ -1,6 +1,6 @@
 package cn.zut.web.controller;
 
-import cn.zut.common.response.GenericResponse;
+import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.business.FileBusiness;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

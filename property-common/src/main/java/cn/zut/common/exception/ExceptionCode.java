@@ -1,6 +1,6 @@
 package cn.zut.common.exception;
 
-import cn.zut.common.response.Message;
+import cn.zut.common.generic.Message;
 
 /**
  * PROJECT: property
@@ -19,7 +19,8 @@ public enum ExceptionCode implements Message {
     PHONE_IS_NOT_EXIST("M2003", "手机号还未注册[{0}]"),
     MEMBER_DATA_EXCEPTION("M2004", "手机号还未注册[{0}]"),
     MEMBER_PASSWORD_ERROR("M2005", "密码错误"),
-    NICK_NAME_PHONE_NOT_NULL("M2006", "昵称和手机号不匹配"),;
+    NICK_NAME_PHONE_NOT_NULL("M2006", "昵称和手机号不匹配"),
+    PLEASE_INPUT_PHONE_NO("M2007", "请输入手机号"),;
 
     private final String respCode;
     private final String respMsg;

@@ -30,7 +30,7 @@
         WHERE MEMBER_ID = #{memberId}
     </select>
 
-    <update id="update" parameterType="cn.zut.dao.entity.LoginInfoEntity">
+    <update id="update">
         UPDATE
         <include refid="tableName"/>
         <set>

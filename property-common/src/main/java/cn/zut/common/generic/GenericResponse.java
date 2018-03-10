@@ -1,4 +1,4 @@
-package cn.zut.common.response;
+package cn.zut.common.generic;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -74,7 +74,7 @@ public class GenericResponse<T> implements Serializable {
         this(message.getRespCode(), message.getRespMsg(), body);
     }
 
-    public GenericResponse(String respCode, String respMsg, T body) {
+    private GenericResponse(String respCode, String respMsg, T body) {
         this.respCode = respCode;
         this.respMsg = respMsg;
         this.body = body;
@@ -124,7 +124,7 @@ public class GenericResponse<T> implements Serializable {
     /**
      * 判断是不是服务端提示,子类可根据需求重写此方法.
      */
-    protected boolean isServerResponse() {
+    private boolean isServerResponse() {
         return this == SUCCESS || this == FAIL || this == ERROR_PARAM || this == ILLEGAL_REQUEST || this == SERVER_EXCEPTION;
     }
 

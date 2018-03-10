@@ -4,11 +4,12 @@ import cn.zut.common.check.GeneralCheck;
 import cn.zut.common.dao.PageModel;
 import cn.zut.common.exception.ExceptionCode;
 import cn.zut.common.exception.ExceptionMessage;
+import cn.zut.common.generic.GenericResponse;
+import cn.zut.common.generic.PageResult;
 import cn.zut.common.request.ForgetPwdRequest;
 import cn.zut.common.request.LoginRequest;
 import cn.zut.common.request.RegisterRequest;
-import cn.zut.common.response.GenericResponse;
-import cn.zut.common.response.PageResult;
+import cn.zut.common.response.LoginResponse;
 import cn.zut.common.security.DesEncryptionUtil;
 import cn.zut.common.security.EncryptionUtil;
 import cn.zut.common.util.EncryptUtil;
@@ -21,7 +22,7 @@ import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.persistence.LoginInfoMapper;
 import cn.zut.dao.persistence.MemberMapper;
 import cn.zut.dao.search.MemberSearch;
-import cn.zut.facade.response.LoginVO;
+import cn.zut.facade.constant.PropertyConstant;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +48,7 @@ public class MemberBusinessImpl implements MemberBusiness {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public GenericResponse register(RegisterRequest registerRequest) {
+    public GenericResponse<LoginResponse> register(RegisterRequest registerRequest) {
 
         String phoneNo = registerRequest.getPhoneRegister();
 
@@ -60,11 +61,22 @@ public class MemberBusinessImpl implements MemberBusiness {
             return new GenericResponse<>(new ExceptionMessage(ExceptionCode.PHONE_IS_EXIST, phoneNo));
         }
 
-        return memberService.save(registerRequest);
+        GenericResponse<Long> save = memberService.save(registerRequest);
+        if (save.success()) {
+            Long memberId = save.getBody();
+            String token = DesEncryptionUtil.encrypt(String.valueOf(memberId), PropertyConstant.DES_PASSWORD);
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setToken(token);
+            loginResponse.setNickName(registerRequest.getNameRegister());
+            loginResponse.setPhoneNo(phoneNo);
+            return new GenericResponse<>(loginResponse);
+        }
+
+        return GenericResponse.FAIL;
     }
 
     @Override
-    public GenericResponse<LoginVO> login(LoginRequest loginRequest) {
+    public GenericResponse<LoginResponse> login(LoginRequest loginRequest) {
         String phoneNo = loginRequest.getPhoneLogin();
         String password = loginRequest.getPwdLogin();
 
@@ -87,11 +99,11 @@ public class MemberBusinessImpl implements MemberBusiness {
         loginInfoEntity.setLastLoginTime(new Date());
         loginInfoMapper.update(loginInfoEntity);
 
-        LoginVO loginVO = new LoginVO();
-        loginVO.setPhoneNo(EncryptUtil.encryPhoneNo(phoneNo));
-        loginVO.setNickName(memberEntity.getNickName());
-        loginVO.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberEntity.getMemberId()), PrivateConstant.TOKEN_ENCRYPT));
-        return new GenericResponse<>(loginVO);
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setPhoneNo(EncryptUtil.encryPhoneNo(phoneNo));
+        loginResponse.setNickName(memberEntity.getNickName());
+        loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberEntity.getMemberId()), PrivateConstant.TOKEN_ENCRYPT));
+        return new GenericResponse<>(loginResponse);
     }
 
     @Override

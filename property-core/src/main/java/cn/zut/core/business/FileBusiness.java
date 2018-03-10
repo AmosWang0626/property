@@ -1,6 +1,6 @@
 package cn.zut.core.business;
 
-import cn.zut.common.response.GenericResponse;
+import cn.zut.common.generic.GenericResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

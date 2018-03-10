@@ -1,17 +1,17 @@
 package cn.zut.web.controller;
 
 import cn.zut.common.dao.PageModel;
+import cn.zut.common.exception.ExceptionCode;
+import cn.zut.common.exception.ExceptionMessage;
+import cn.zut.common.generic.GenericResponse;
+import cn.zut.common.generic.PageResult;
 import cn.zut.common.request.ForgetPwdRequest;
 import cn.zut.common.request.LoginRequest;
 import cn.zut.common.request.RegisterRequest;
-import cn.zut.common.response.GenericResponse;
-import cn.zut.common.response.PageResult;
+import cn.zut.common.response.LoginResponse;
 import cn.zut.core.business.MemberBusiness;
 import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.search.MemberSearch;
-import cn.zut.common.exception.ExceptionCode;
-import cn.zut.common.exception.ExceptionMessage;
-import cn.zut.facade.response.LoginVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -30,7 +30,7 @@ import java.util.List;
  */
 @RequestMapping("passport")
 @Controller
-public class MemberController {
+public class MemberController extends BaseController {
 
     @Resource
     private MemberBusiness memberBusiness;
@@ -52,24 +52,19 @@ public class MemberController {
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public ModelAndView register(@ModelAttribute RegisterRequest registerRequest, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView();
         // 参数校验
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
-            modelAndView.addObject("user_login", new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage()));
-            modelAndView.setViewName("UserLogin");
+            return genericReturn("UserLogin", new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage())));
         }
 
-        GenericResponse register = memberBusiness.register(registerRequest);
-        if (register.success()) {
-            modelAndView.addObject("user_login", registerRequest.getNameRegister());
+        GenericResponse<LoginResponse> genericResponse = memberBusiness.register(registerRequest);
+        if (genericResponse.success()) {
             // redirect:product
-            modelAndView.setViewName("UserManagePage");
+            return genericReturn("UserManagePage", genericResponse);
         } else {
-            modelAndView.addObject("user_login", register.getRespMsg());
-            modelAndView.setViewName("UserLogin");
+            return genericReturn("UserLogin", genericResponse);
         }
-        return modelAndView;
     }
 
     /**
@@ -79,26 +74,19 @@ public class MemberController {
      */
     @RequestMapping(value = "realLogin", method = RequestMethod.POST)
     public ModelAndView realLogin(@ModelAttribute LoginRequest loginRequest, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView();
         // 参数校验
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
-            modelAndView.addObject("user_login", new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage()));
-            modelAndView.setViewName("UserLogin");
+            return genericReturn("UserLogin", new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage())));
         }
 
-        GenericResponse<LoginVO> login = memberBusiness.login(loginRequest);
-        if (login.success()) {
-            LoginVO loginVO = login.getBody();
-            modelAndView.addObject("user_login", loginVO.getNickName());
+        GenericResponse<LoginResponse> genericResponse = memberBusiness.login(loginRequest);
+        if (genericResponse.success()) {
             // redirect:product
-            modelAndView.setViewName("UserManagePage");
+            return genericReturn("UserManagePage", genericResponse);
         } else {
-            modelAndView.addObject("user_login", login.getRespMsg());
-            modelAndView.setViewName("UserLogin");
+            return genericReturn("UserLogin", genericResponse);
         }
-
-        return modelAndView;
     }
 
     /**
@@ -109,15 +97,10 @@ public class MemberController {
         String phoneNo = forgetPwdRequest.getPhoneForgetPwd();
 
         if (StringUtils.isBlank(phoneNo)) {
-            return new ModelAndView("UserLogin", "user_login", "请先输入手机号");
+            return genericReturn("UserLogin", new GenericResponse<>(new ExceptionMessage(ExceptionCode.PLEASE_INPUT_PHONE_NO)));
         }
 
-        GenericResponse updatePwd = memberBusiness.updatePwd(forgetPwdRequest);
-        if (updatePwd.success()) {
-            return new ModelAndView("UserLogin", "user_login", "密码修改成功,请重新登录");
-        }
-
-        return new ModelAndView("UserLogin", "user_login", updatePwd.getRespMsg());
+        return genericReturn("UserLogin", memberBusiness.updatePwd(forgetPwdRequest));
     }
 
     @GetMapping("page")
@@ -130,6 +113,7 @@ public class MemberController {
         pageModel.setPage(page);
         pageModel.setRows(size);
         PageResult<MemberEntity> pageResult = memberBusiness.pageMemberByModel(pageModel);
-        return new ModelAndView("UserManagePage", "pageResult", pageResult);
+
+        return genericReturn("UserManagePage", new GenericResponse<>(pageResult));
     }
 }

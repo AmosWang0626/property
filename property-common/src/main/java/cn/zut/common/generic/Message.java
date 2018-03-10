@@ -1,4 +1,4 @@
-package cn.zut.common.response;
+package cn.zut.common.generic;
 
 import java.io.Serializable;
 
