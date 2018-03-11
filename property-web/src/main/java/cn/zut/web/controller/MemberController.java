@@ -119,7 +119,14 @@ public class MemberController {
         pageModel.setPage(page);
         pageModel.setRows(size);
         PageResult<MemberEntity> pageResult = memberBusiness.pageMemberByModel(pageModel);
+        ModelAndView modelAndView = new ModelAndView();
+        // 缓兵之计, 临时写法
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setNickName("管理员");
+        modelAndView.addObject("pageResult", pageResult);
+        modelAndView.addObject("GenericResponse", new GenericResponse<>(loginResponse));
+        modelAndView.setViewName("UserManagePage");
 
-        return new ModelAndView("UserManagePage", "pageResult", pageResult);
+        return modelAndView;
     }
 }

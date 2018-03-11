@@ -17,8 +17,8 @@ public enum ExceptionCode implements Message {
     PHONE_IS_EXIST("M2001", "该手机号已注册[{0}]"),
     PHONE_NO_ERROR("M2002", "手机号格式错误[{0}]"),
     PHONE_IS_NOT_EXIST("M2003", "手机号还未注册[{0}]"),
-    MEMBER_DATA_EXCEPTION("M2004", "手机号还未注册[{0}]"),
-    MEMBER_PASSWORD_ERROR("M2005", "密码错误"),
+    MEMBER_DATA_EXCEPTION("M2004", "用户登录信息异常[{0}]"),
+    MEMBER_PASSWORD_ERROR("M2005", "您输入的密码错误"),
     NICK_NAME_PHONE_NOT_NULL("M2006", "昵称和手机号不匹配"),
     PLEASE_INPUT_PHONE_NO("M2007", "请输入手机号"),
     PLEASE_INPUT_PHONE_NO_AND_PASSWORD("M2008", "请输入手机号和密码"),;

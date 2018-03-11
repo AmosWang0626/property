@@ -30,7 +30,7 @@
         </div>
 
         <a data-toggle="modal" data-target="#modalForgetPwd" id="modalForgetPwdClick">忘记密码</a>
-        <div th:text="${GenericResponse.respMsg}" class="help-block with-errors" id="login-fail"></div>
+        <div id="login-fail" th:text="${GenericResponse.respMsg}" class="help-block with-errors">{{message}}</div>
         <button type="submit" class="btn btn-lg btn-primary btn-block">登录</button>
         <button class="btn btn-info btn-block" type="button" data-toggle="modal" data-target="#modalRegister">
             没有账号,注册一个吧
@@ -112,7 +112,8 @@
                             <label class="sr-only" for="phone">手机号</label>
                             <input class="form-control" id="phone" name="phoneForgetPwd" type="tel"
                                    placeholder="请输入您的手机号" value=""
-                                   pattern="^1[345789]\d{9}$" data-error="请注意您的手机号格式" required autofocus><!-- disabled -->
+                                   pattern="^1[345789]\d{9}$" data-error="请注意您的手机号格式" required autofocus>
+                            <!-- disabled -->
                             <div class="help-block with-errors">请先填写登录时手机号</div>
                         </div>
                         <div class="form-group">
@@ -145,6 +146,22 @@
 <script src="../assets/js/jquery-3.2.1.min.js"></script>
 <script src="../assets/js/bootstrap.min.js"></script>
 <script src="../assets/js/validator.min.js"></script>
-<script src="../assets/js/property.js"></script>
+<script src="../assets/js/vue.js"></script>
+<script>
+    /* 预检验手机号是否已注册 */
+    $(function () {
+        var phoneLogin = $('#phoneLogin').val();
+        /* 模态框传值 */
+        $("#modalForgetPwdClick").click(function () {
+            $("#phoneForgetPwd").val(phoneLogin);
+        });
+    });
+    new Vue({
+        el: '#login-fail',
+        data: {
+            message: ""
+        }
+    })
+</script>
 </body>
 </html>
