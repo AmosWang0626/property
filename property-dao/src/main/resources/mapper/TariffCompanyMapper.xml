@@ -80,6 +80,9 @@
         UPDATE
         <include refid="tableName"/>
         <set>
+            <if test="business != null">
+                BUSINESS = #{business},
+            </if>
             <if test="name != null">
                 NAME = #{name},
             </if>
@@ -91,9 +94,6 @@
             </if>
             <if test="status != null">
                 STATUS = #{status},
-            </if>
-            <if test="business != null">
-                BUSINESS = #{business},
             </if>
             <if test="updateTime != null">
                 UPDATE_TIME = #{updateTime},

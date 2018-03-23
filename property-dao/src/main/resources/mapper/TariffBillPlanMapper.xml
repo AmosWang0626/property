@@ -45,7 +45,10 @@
     <sql id="condition">
         <if test="search != null">
             <where>
-                <if test="search.id != null">AND ID = #{search.id}</if>
+                <if test="search.memberId != null">AND MEMBER_ID = #{search.memberId}</if>
+                <if test="search.paymentStatus != null">AND PAYMENT_STATUS = #{search.paymentStatus}</if>
+                <if test="search.repayDate != null">AND REPAY_DATE = #{search.repayDate}</if>
+                <if test="search.overdueDays != null">AND OVERDUE_DAYS = #{search.overdueDays}</if>
             </where>
         </if>
     </sql>
@@ -55,7 +58,7 @@
         <include refid="columns"/>
         FROM
         <include refid="tableName"/>
-        WHERE MEMBER_ID = #{memberId}
+        WHERE PLAN_NO = #{planNo}
     </select>
 
     <select id="selectByExample" resultMap="baseResultMap">
@@ -86,14 +89,38 @@
         UPDATE
         <include refid="tableName"/>
         <set>
-            <if test="phoneNo != null">
-                PHONE_NO = #{phoneNo},
+            <if test="paymentStatus != null">
+                PAYMENT_STATUS = #{paymentStatus},
+            </if>
+            <if test="settleDate != null">
+                SETTLE_DATE = #{settleDate},
+            </if>
+            <if test="overdueDays != null">
+                OVERDUE_DAYS = #{overdueDays},
+            </if>
+            <if test="lateChargeAmt != null">
+                LATE_CHARGE_AMT = #{lateChargeAmt},
+            </if>
+            <if test="billAmountPaid != null">
+                BILL_AMOUNT_PAID = #{billAmountPaid},
+            </if>
+            <if test="lateChargeAmtPaid != null">
+                LATE_CHARGE_AMT_PAID = #{lateChargeAmtPaid},
+            </if>
+            <if test="billAmountOffer != null">
+                BILL_AMOUNT_OFFER = #{billAmountOffer},
+            </if>
+            <if test="lateChargeAmtOffer != null">
+                LATE_CHARGE_AMT_OFFER = #{lateChargeAmtOffer},
+            </if>
+            <if test="expand != null">
+                EXPAND = #{expand},
             </if>
             <if test="updateTime != null">
                 UPDATE_TIME = #{updateTime},
             </if>
         </set>
-        WHERE MEMBER_ID = #{memberId}
+        WHERE PLAN_NO = #{planNo}
     </update>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="memberId">

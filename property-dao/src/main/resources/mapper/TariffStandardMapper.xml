@@ -33,8 +33,9 @@
     <sql id="condition">
         <if test="search != null">
             <where>
-                <if test="search.id != null">AND ID = #{search.id}</if>
+                <if test="search.business != null">AND BUSINESS = #{search.business}</if>
             </where>
+            AND STATUS = 1
         </if>
     </sql>
 
@@ -43,7 +44,7 @@
         <include refid="columns"/>
         FROM
         <include refid="tableName"/>
-        WHERE MEMBER_ID = #{memberId}
+        WHERE STANDARD_ID = #{standardId} AND STATUS = 1
     </select>
 
     <select id="selectByExample" resultMap="baseResultMap">
@@ -74,14 +75,26 @@
         UPDATE
         <include refid="tableName"/>
         <set>
-            <if test="phoneNo != null">
-                PHONE_NO = #{phoneNo},
+            <if test="unitPrice != null">
+                UNIT_PRICE = #{unitPrice},
+            </if>
+            <if test="overdueRate != null">
+                OVERDUE_RATE = #{overdueRate},
+            </if>
+            <if test="startTime != null">
+                START_TIME = #{startTime},
+            </if>
+            <if test="endTime != null">
+                END_TIME = #{endTime},
+            </if>
+            <if test="status != null">
+                STATUS = #{status},
             </if>
             <if test="updateTime != null">
                 UPDATE_TIME = #{updateTime},
             </if>
         </set>
-        WHERE MEMBER_ID = #{memberId}
+        WHERE STANDARD_ID = #{standardId}
     </update>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="memberId">

@@ -37,7 +37,13 @@
     <sql id="condition">
         <if test="search != null">
             <where>
-                <if test="search.id != null">AND ID = #{search.id}</if>
+                <if test="search.memberId != null">AND MEMBER_ID = #{search.memberId}</if>
+                <if test="search.companyId != null">AND COMPANY_ID = #{search.companyId}</if>
+                <if test="search.planNo != null">AND PLAN_NO = #{search.planNo}</if>
+                <if test="search.business != null">AND BUSINESS = #{search.business}</if>
+                <if test="search.paymentWay != null">AND PAYMENT_WAY = #{search.paymentWay}</if>
+                <if test="search.paymentStatus != null">AND PAYMENT_STATUS = #{search.paymentStatus}</if>
+                <if test="search.errorCode != null">AND ERROR_CODE = #{search.errorCode}</if>
             </where>
         </if>
     </sql>
@@ -47,7 +53,7 @@
         <include refid="columns"/>
         FROM
         <include refid="tableName"/>
-        WHERE MEMBER_ID = #{memberId}
+        WHERE ID = #{id}
     </select>
 
     <select id="selectByExample" resultMap="baseResultMap">
@@ -73,20 +79,6 @@
         <include refid="tableName"/>
         <include refid="condition"/>
     </select>
-
-    <update id="update">
-        UPDATE
-        <include refid="tableName"/>
-        <set>
-            <if test="phoneNo != null">
-                PHONE_NO = #{phoneNo},
-            </if>
-            <if test="updateTime != null">
-                UPDATE_TIME = #{updateTime},
-            </if>
-        </set>
-        WHERE MEMBER_ID = #{memberId}
-    </update>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="memberId">
         INSERT INTO
