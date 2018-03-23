@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zut.dao.persistence.TariffBillMapper">
+
+    <resultMap id="baseResultMap" type="cn.zut.dao.entity.TariffBillEntity">
+        <result column="BILL_NO" property="billNo"/>
+        <result column="MEMBER_ID" property="memberId"/>
+        <result column="HOUSE_NO" property="houseNo"/>
+        <result column="BUSINESS" property="business"/>
+        <result column="STANDARD_ID" property="standardId"/>
+        <result column="PAYMENT_STATUS" property="paymentStatus"/>
+        <result column="USED_TOTAL" property="usedTotal"/>
+        <result column="UNIT_PRICE" property="unitPrice"/>
+        <result column="BILL_AMOUNT" property="billAmount"/>
+        <result column="OVERDUE_RATE" property="overdueRate"/>
+        <result column="BILL_MONTH" property="billMonth"/>
+        <result column="BILL_START_DATE" property="billStartDate"/>
+        <result column="BILL_END_DATE" property="billEndDate"/>
+        <result column="EXPAND" property="expand"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+    </resultMap>
+
+    <sql id="tableName">tariff_bill</sql>
+
+    <sql id="columns">
+        BILL_NO,
+        MEMBER_ID,
+        HOUSE_NO,
+        BUSINESS,
+        STANDARD_ID,
+        PAYMENT_STATUS,
+        USED_TOTAL,
+        UNIT_PRICE,
+        BILL_AMOUNT,
+        OVERDUE_RATE,
+        BILL_MONTH,
+        BILL_START_DATE,
+        BILL_END_DATE,
+        EXPAND,
+        CREATE_TIME,
+        UPDATE_TIME
+    </sql>
+
+    <sql id="condition">
+        <if test="search != null">
+            <where>
+                <if test="search.id != null">AND ID = #{search.id}</if>
+            </where>
+        </if>
+    </sql>
+
+    <select id="selectById" resultMap="baseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE MEMBER_ID = #{memberId}
+    </select>
+
+    <select id="selectByExample" resultMap="baseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <select id="selectListPageByExample" resultMap="baseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT #{firstIndex}, #{rows}
+    </select>
+
+    <select id="selectCountByExample" resultType="java.lang.Integer">
+        SELECT COUNT(0)
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <update id="update">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="phoneNo != null">
+                PHONE_NO = #{phoneNo},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime},
+            </if>
+        </set>
+        WHERE MEMBER_ID = #{memberId}
+    </update>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="memberId">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="columns"/>
+        )
+        VALUES
+        (
+        #{billNo},
+        #{memberId},
+        #{houseNo},
+        #{business},
+        #{standardId},
+        #{paymentStatus},
+        #{usedTotal},
+        #{unitPrice},
+        #{billAmount},
+        #{overdueRate},
+        #{billMonth},
+        #{billStartDate},
+        #{billEndDate},
+        #{expand},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+</mapper>

@@ -12,9 +12,10 @@
     <artifactId>property-facade</artifactId>
 
     <dependencies>
+        <!-- APACHE工具包 -->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
     </dependencies>
 

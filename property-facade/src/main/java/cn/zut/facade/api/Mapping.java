@@ -1,9 +1,11 @@
-package cn.zut.common.api;
+package cn.zut.facade.api;
 
 /**
  * PROJECT: property
  * DATE: 2017/11/30
  *
+ * @param <K> key类型
+ * @param <V> Value值类型
  * @author DaoYuanWang
  */
 public interface Mapping<K, V> {

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zut.dao.persistence.TariffStandardMapper">
+
+    <resultMap id="baseResultMap" type="cn.zut.dao.entity.TariffStandardEntity">
+        <result column="STANDARD_ID" property="standardId"/>
+        <result column="BUSINESS" property="business"/>
+        <result column="LEVEL" property="level"/>
+        <result column="UNIT_PRICE" property="unitPrice"/>
+        <result column="OVERDUE_RATE" property="overdueRate"/>
+        <result column="START_TIME" property="startTime"/>
+        <result column="END_TIME" property="endTime"/>
+        <result column="STATUS" property="status"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+    </resultMap>
+
+    <sql id="tableName">tariff_standard</sql>
+
+    <sql id="columns">
+        STANDARD_ID,
+        BUSINESS,
+        LEVEL,
+        UNIT_PRICE,
+        OVERDUE_RATE,
+        START_TIME,
+        END_TIME,
+        STATUS,
+        CREATE_TIME,
+        UPDATE_TIME
+    </sql>
+
+    <sql id="condition">
+        <if test="search != null">
+            <where>
+                <if test="search.id != null">AND ID = #{search.id}</if>
+            </where>
+        </if>
+    </sql>
+
+    <select id="selectById" resultMap="baseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE MEMBER_ID = #{memberId}
+    </select>
+
+    <select id="selectByExample" resultMap="baseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <select id="selectListPageByExample" resultMap="baseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT #{firstIndex}, #{rows}
+    </select>
+
+    <select id="selectCountByExample" resultType="java.lang.Integer">
+        SELECT COUNT(0)
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <update id="update">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="phoneNo != null">
+                PHONE_NO = #{phoneNo},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime},
+            </if>
+        </set>
+        WHERE MEMBER_ID = #{memberId}
+    </update>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="memberId">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="columns"/>
+        )
+        VALUES
+        (
+        #{standardId},
+        #{business},
+        #{level},
+        #{unitPrice},
+        #{overdueRate},
+        #{startTime},
+        #{endTime},
+        #{status},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+</mapper>

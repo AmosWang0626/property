@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zut.dao.persistence.TariffCompanyMapper">
+
+    <resultMap id="baseResultMap" type="cn.zut.dao.entity.TariffCompanyEntity">
+        <result column="COMPANY_ID" property="companyId"/>
+        <result column="BUSINESS" property="business"/>
+        <result column="NAME" property="name"/>
+        <result column="ADDRESS" property="address"/>
+        <result column="TELEPHONE" property="telephone"/>
+        <result column="ORGANIZATION_CODE" property="organizationCode"/>
+        <result column="LEGAL_NAME" property="legalName"/>
+        <result column="ESTABLISH" property="establish"/>
+        <result column="REGISTER_CAPITAL" property="registerCapital"/>
+        <result column="STATUS" property="status"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+    </resultMap>
+
+    <sql id="tableName">tariff_company</sql>
+
+    <sql id="columns">
+        COMPANY_ID,
+        BUSINESS,
+        NAME,
+        ADDRESS,
+        TELEPHONE,
+        ORGANIZATION_CODE,
+        LEGAL_NAME,
+        ESTABLISH,
+        REGISTER_CAPITAL,
+        STATUS,
+        CREATE_TIME,
+        UPDATE_TIME
+    </sql>
+
+    <sql id="condition">
+        <if test="search != null">
+            <where>
+                <if test="search.business != null">AND BUSINESS = #{search.business}</if>
+            </where>
+            AND STATUS = 1
+        </if>
+    </sql>
+
+    <select id="selectById" resultMap="baseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE COMPANY_ID = #{companyId} AND STATUS = 1
+    </select>
+
+    <select id="selectByExample" resultMap="baseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT 1
+    </select>
+
+    <select id="selectListPageByExample" resultMap="baseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT #{firstIndex}, #{rows}
+    </select>
+
+    <select id="selectCountByExample" resultType="java.lang.Integer">
+        SELECT COUNT(0)
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <update id="update">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="name != null">
+                NAME = #{name},
+            </if>
+            <if test="address != null">
+                ADDRESS = #{address},
+            </if>
+            <if test="telephone != null">
+                TELEPHONE = #{telephone},
+            </if>
+            <if test="status != null">
+                STATUS = #{status},
+            </if>
+            <if test="business != null">
+                BUSINESS = #{business},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime},
+            </if>
+        </set>
+        WHERE COMPANY_ID = #{companyId}
+    </update>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="companyId">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="columns"/>
+        )
+        VALUES
+        (
+        #{companyId},
+        #{business},
+        #{name},
+        #{address},
+        #{telephone},
+        #{organizationCode},
+        #{legalName},
+        #{establish},
+        #{registerCapital},
+        #{status},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+</mapper>
