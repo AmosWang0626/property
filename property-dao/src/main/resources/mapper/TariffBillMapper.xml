@@ -8,7 +8,7 @@
         <result column="HOUSE_NO" property="houseNo"/>
         <result column="BUSINESS" property="business"/>
         <result column="STANDARD_ID" property="standardId"/>
-        <result column="PAYMENT_STATUS" property="paymentStatus"/>
+        <result column="BILL_STATUS" property="billStatus"/>
         <result column="USED_TOTAL" property="usedTotal"/>
         <result column="UNIT_PRICE" property="unitPrice"/>
         <result column="BILL_AMOUNT" property="billAmount"/>
@@ -29,7 +29,7 @@
         HOUSE_NO,
         BUSINESS,
         STANDARD_ID,
-        PAYMENT_STATUS,
+        BILL_STATUS,
         USED_TOTAL,
         UNIT_PRICE,
         BILL_AMOUNT,
@@ -49,7 +49,7 @@
                 <if test="search.houseNo != null">AND HOUSE_NO = #{search.houseNo}</if>
                 <if test="search.business != null">AND BUSINESS = #{search.business}</if>
                 <if test="search.standardId != null">AND STANDARD_ID = #{search.standardId}</if>
-                <if test="search.paymentStatus != null">AND PAYMENT_STATUS = #{search.paymentStatus}</if>
+                <if test="search.billStatus != null">AND BILL_STATUS = #{search.billStatus}</if>
                 <if test="search.billMonth != null">AND BILL_MONTH = #{search.billMonth}</if>
             </where>
         </if>
@@ -91,8 +91,8 @@
         UPDATE
         <include refid="tableName"/>
         <set>
-            <if test="paymentStatus != null">
-                PAYMENT_STATUS = #{paymentStatus},
+            <if test="billStatus != null">
+                BILL_STATUS = #{billStatus},
             </if>
             <if test="expand != null">
                 EXPAND = #{expand},
@@ -117,7 +117,7 @@
         #{houseNo},
         #{business},
         #{standardId},
-        #{paymentStatus},
+        #{billStatus},
         #{usedTotal},
         #{unitPrice},
         #{billAmount},

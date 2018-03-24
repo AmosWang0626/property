@@ -1,5 +1,6 @@
 package cn.zut.dao.entity;
 
+import cn.zut.facade.enums.BillStatusEnum;
 import cn.zut.facade.enums.PaymentStatusEnum;
 
 import java.math.BigDecimal;
@@ -40,7 +41,7 @@ public class TariffBillPlanEntity {
     /**
      * 支付状态
      */
-    private PaymentStatusEnum paymentStatus;
+    private BillStatusEnum billStatus;
     /**
      * 应缴纳本金
      */
@@ -126,12 +127,12 @@ public class TariffBillPlanEntity {
         this.overdueDays = overdueDays;
     }
 
-    public PaymentStatusEnum getPaymentStatus() {
-        return paymentStatus;
+    public BillStatusEnum getBillStatus() {
+        return billStatus;
     }
 
-    public void setPaymentStatus(PaymentStatusEnum paymentStatus) {
-        this.paymentStatus = paymentStatus;
+    public void setBillStatus(BillStatusEnum billStatus) {
+        this.billStatus = billStatus;
     }
 
     public BigDecimal getBillAmount() {

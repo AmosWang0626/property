@@ -2,10 +2,7 @@ package cn.zut.test;
 
 import cn.zut.dao.entity.*;
 import cn.zut.dao.persistence.*;
-import cn.zut.facade.enums.BusinessLevelEnum;
-import cn.zut.facade.enums.BusinessTypeEnum;
-import cn.zut.facade.enums.PaymentStatusEnum;
-import cn.zut.facade.enums.PaymentWayEnum;
+import cn.zut.facade.enums.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -101,7 +98,7 @@ public class PropertyTariffTest {
         billEntity.setHouseNo("1301");
         billEntity.setBusiness(BusinessTypeEnum.WATER);
         billEntity.setStandardId(1L);
-        billEntity.setPaymentStatus(PaymentStatusEnum.PAY_PROCESSING);
+        billEntity.setBillStatus(BillStatusEnum.REPAYING);
         billEntity.setUsedTotal(new BigDecimal("30.00"));
         billEntity.setUnitPrice(new BigDecimal("30.00"));
         billEntity.setOverdueRate(new BigDecimal("0.001"));
@@ -121,7 +118,7 @@ public class PropertyTariffTest {
         TariffBillPlanEntity billPlanEntity = new TariffBillPlanEntity();
         billPlanEntity.setBillNo(1L);
         billPlanEntity.setMemberId(10000L);
-        billPlanEntity.setPaymentStatus(PaymentStatusEnum.PAY_PROCESSING);
+        billPlanEntity.setBillStatus(BillStatusEnum.REPAYING);
         billPlanEntity.setRepayDate(new Date());
         billPlanEntity.setSettleDate(new Date());
         billPlanEntity.setOverdueDays(2);

@@ -6,7 +6,7 @@
         <result column="PLAN_NO" property="planNo"/>
         <result column="BILL_NO" property="billNo"/>
         <result column="MEMBER_ID" property="memberId"/>
-        <result column="PAYMENT_STATUS" property="paymentStatus"/>
+        <result column="BILL_STATUS" property="billStatus"/>
         <result column="REPAY_DATE" property="repayDate"/>
         <result column="SETTLE_DATE" property="settleDate"/>
         <result column="OVERDUE_DAYS" property="overdueDays"/>
@@ -27,7 +27,7 @@
         PLAN_NO,
         BILL_NO,
         MEMBER_ID,
-        PAYMENT_STATUS,
+        BILL_STATUS,
         REPAY_DATE,
         SETTLE_DATE,
         OVERDUE_DAYS,
@@ -46,7 +46,7 @@
         <if test="search != null">
             <where>
                 <if test="search.memberId != null">AND MEMBER_ID = #{search.memberId}</if>
-                <if test="search.paymentStatus != null">AND PAYMENT_STATUS = #{search.paymentStatus}</if>
+                <if test="search.billStatus != null">AND BILL_STATUS = #{search.billStatus}</if>
                 <if test="search.repayDate != null">AND REPAY_DATE = #{search.repayDate}</if>
                 <if test="search.overdueDays != null">AND OVERDUE_DAYS = #{search.overdueDays}</if>
             </where>
@@ -89,8 +89,8 @@
         UPDATE
         <include refid="tableName"/>
         <set>
-            <if test="paymentStatus != null">
-                PAYMENT_STATUS = #{paymentStatus},
+            <if test="billStatus != null">
+                BILL_STATUS = #{billStatus},
             </if>
             <if test="settleDate != null">
                 SETTLE_DATE = #{settleDate},
@@ -134,7 +134,7 @@
         #{planNo},
         #{billNo},
         #{memberId},
-        #{paymentStatus},
+        #{billStatus},
         #{repayDate},
         #{settleDate},
         #{overdueDays},

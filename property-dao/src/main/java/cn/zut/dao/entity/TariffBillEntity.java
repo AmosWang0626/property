@@ -1,5 +1,6 @@
 package cn.zut.dao.entity;
 
+import cn.zut.facade.enums.BillStatusEnum;
 import cn.zut.facade.enums.BusinessTypeEnum;
 import cn.zut.facade.enums.PaymentStatusEnum;
 
@@ -57,7 +58,7 @@ public class TariffBillEntity {
     /**
      * 支付状态
      */
-    private PaymentStatusEnum paymentStatus;
+    private BillStatusEnum billStatus;
     /**
      * 账单起始时间
      */
@@ -159,12 +160,12 @@ public class TariffBillEntity {
         this.billMonth = billMonth;
     }
 
-    public PaymentStatusEnum getPaymentStatus() {
-        return paymentStatus;
+    public BillStatusEnum getBillStatus() {
+        return billStatus;
     }
 
-    public void setPaymentStatus(PaymentStatusEnum paymentStatus) {
-        this.paymentStatus = paymentStatus;
+    public void setBillStatus(BillStatusEnum billStatus) {
+        this.billStatus = billStatus;
     }
 
     public Date getBillStartDate() {
