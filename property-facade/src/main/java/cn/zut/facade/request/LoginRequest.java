@@ -1,4 +1,4 @@
-package cn.zut.common.request;
+package cn.zut.facade.request;
 
 import com.alibaba.fastjson.JSON;
 import org.hibernate.validator.constraints.NotBlank;

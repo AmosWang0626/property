@@ -1,7 +1,7 @@
 package cn.zut.core.service;
 
 import cn.zut.common.generic.GenericResponse;
-import cn.zut.common.request.RegisterRequest;
+import cn.zut.facade.request.RegisterRequest;
 
 /**
  * PROJECT: property

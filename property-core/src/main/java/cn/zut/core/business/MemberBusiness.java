@@ -3,10 +3,10 @@ package cn.zut.core.business;
 import cn.zut.common.dao.PageModel;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.generic.PageResult;
-import cn.zut.common.request.ForgetPwdRequest;
-import cn.zut.common.request.LoginRequest;
-import cn.zut.common.request.RegisterRequest;
-import cn.zut.common.response.LoginResponse;
+import cn.zut.facade.request.ForgetPwdRequest;
+import cn.zut.facade.request.LoginRequest;
+import cn.zut.facade.request.RegisterRequest;
+import cn.zut.facade.response.LoginResponse;
 import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.search.MemberSearch;
 

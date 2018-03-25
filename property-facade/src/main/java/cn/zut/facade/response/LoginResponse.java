@@ -9,7 +9,7 @@
  * written permission of Shanghai Heng-You Information Technology Co., Ltd.
  */
 
-package cn.zut.common.response;
+package cn.zut.facade.response;
 
 import java.io.Serializable;
 

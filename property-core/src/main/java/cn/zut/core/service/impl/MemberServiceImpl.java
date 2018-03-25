@@ -1,7 +1,7 @@
 package cn.zut.core.service.impl;
 
 import cn.zut.common.generic.GenericResponse;
-import cn.zut.common.request.RegisterRequest;
+import cn.zut.facade.request.RegisterRequest;
 import cn.zut.common.security.EncryptionUtil;
 import cn.zut.common.util.RandomUtil;
 import cn.zut.core.constant.PrivateConstant;
