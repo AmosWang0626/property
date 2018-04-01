@@ -13,4 +13,9 @@ public interface PropertyConstant {
      */
     String DES_PASSWORD = "VBC546QP";
 
+    /**
+     * Token
+     */
+    String TOKEN = "Token";
+
 }
