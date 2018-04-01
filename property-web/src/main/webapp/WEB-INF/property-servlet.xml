@@ -21,8 +21,9 @@
     <!-- 属性文件配置 -->
     <context:property-placeholder location="classpath*:*.properties" file-encoding="utf-8"/>
 
+    <!-- 文件最大10MB -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSizePerFile" value="500000000"/>
+        <property name="maxUploadSizePerFile" value="10485760"/>
         <property name="defaultEncoding" value="UTF-8"/>
         <property name="resolveLazily" value="true"/>
     </bean>

@@ -21,7 +21,8 @@ public enum ExceptionCode implements Message {
     MEMBER_PASSWORD_ERROR("M2005", "您输入的密码错误"),
     NICK_NAME_PHONE_NOT_NULL("M2006", "昵称和手机号不匹配"),
     PLEASE_INPUT_PHONE_NO("M2007", "请输入手机号"),
-    PLEASE_INPUT_PHONE_NO_AND_PASSWORD("M2008", "请输入手机号和密码"),;
+    PLEASE_INPUT_PHONE_NO_AND_PASSWORD("M2008", "请输入手机号和密码"),
+    UPLOAD_FILE_IS_NULL("M2009", "上传的文件不能为空"),;
 
     private final String respCode;
     private final String respMsg;

@@ -22,5 +22,9 @@
             <groupId>cn.zut</groupId>
             <artifactId>property-dao</artifactId>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
     </dependencies>
 </project>
