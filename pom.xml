@@ -365,6 +365,7 @@
                 <redis.port>6379</redis.port>
                 <log.root>D:logs</log.root>
                 <log.level>DEBUG</log.level>
+                <upload.path>D:files</upload.path>
             </properties>
         </profile>
         <!-- 测试环境配置 -->
@@ -377,6 +378,7 @@
                 <redis.port>6379</redis.port>
                 <log.root>/usr/local/logs</log.root>
                 <log.level>INFO</log.level>
+                <upload.path>/usr/local/soft/apache/htdocs/</upload.path>
             </properties>
         </profile>
         <!-- 开发环境配置 -->
@@ -389,6 +391,7 @@
                 <redis.port>6379</redis.port>
                 <log.root>/usr/local/logs</log.root>
                 <log.level>INFO</log.level>
+                <upload.path>/usr/local/soft/apache/htdocs/</upload.path>
             </properties>
         </profile>
     </profiles>
