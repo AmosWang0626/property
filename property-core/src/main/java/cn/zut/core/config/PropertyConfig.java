@@ -21,6 +21,11 @@ public class PropertyConfig {
     @Value("${uploadPath}")
     private String uploadPath;
     /**
+     * 服务器地址
+     */
+    @Value("${serverHost}")
+    private String serverHost;
+    /**
      * 当前环境(DEV开发/TEST测试/PRO生产)
      */
     @Value("${env}")

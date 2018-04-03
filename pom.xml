@@ -366,6 +366,7 @@
                 <log.root>D:logs</log.root>
                 <log.level>DEBUG</log.level>
                 <upload.path>D:files</upload.path>
+                <server.host>112.74.57.49</server.host>
             </properties>
         </profile>
         <!-- 测试环境配置 -->
@@ -379,6 +380,7 @@
                 <log.root>/usr/local/logs</log.root>
                 <log.level>INFO</log.level>
                 <upload.path>/usr/local/soft/apache/htdocs/</upload.path>
+                <server.host>112.74.57.49</server.host>
             </properties>
         </profile>
         <!-- 开发环境配置 -->
@@ -392,6 +394,7 @@
                 <log.root>/usr/local/logs</log.root>
                 <log.level>INFO</log.level>
                 <upload.path>/usr/local/soft/apache/htdocs/</upload.path>
+                <server.host>112.74.57.49</server.host>
             </properties>
         </profile>
     </profiles>

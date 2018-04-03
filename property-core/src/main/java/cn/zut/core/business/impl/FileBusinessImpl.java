@@ -29,21 +29,27 @@ public class FileBusinessImpl implements FileBusiness {
 
     @Override
     public GenericResponse upload(MultipartFile partFile) {
-        String filePath = undoFile(partFile);
-        LOGGER.info("上传的文件路径及名字: [{}]", filePath);
+        // 初始化图片名字以及设置自定义文件夹
+        String basePathAndFileName = initBasePathAndFileName(partFile);
+        // 图片访问路径
+        String accessPath = propertyConfig.getServerHost() + basePathAndFileName;
+        LOGGER.info("上传的文件路径及名字: [{}]", accessPath);
+        // 图片真实保存路径
+        String filePath = propertyConfig.getUploadPath() + basePathAndFileName;
         try {
             FileUtils.copyInputStreamToFile(partFile.getInputStream(), new File(filePath));
+            // 设置图片权限
+            Runtime.getRuntime().exec("chmod 644 " + filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return GenericResponse.SUCCESS;
     }
 
-    private String undoFile(MultipartFile partFile) {
+    private String initBasePathAndFileName(MultipartFile partFile) {
         String filePath = partFile.getOriginalFilename();
-        // 文件拓展名
+        // 获取文件拓展名
         String suffix = filePath.lastIndexOf(".") <= 0 ? ".jpg" : filePath.substring(filePath.lastIndexOf("."));
-        filePath = propertyConfig.getUploadPath() + "/img/" + System.currentTimeMillis() + suffix;
-        return filePath;
+        return "/img/" + System.currentTimeMillis() + suffix;
     }
 }
