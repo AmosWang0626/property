@@ -43,7 +43,7 @@ public class FileBusinessImpl implements FileBusiness {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return GenericResponse.SUCCESS;
+        return new GenericResponse<>(accessPath);
     }
 
     private String initBasePathAndFileName(MultipartFile partFile) {

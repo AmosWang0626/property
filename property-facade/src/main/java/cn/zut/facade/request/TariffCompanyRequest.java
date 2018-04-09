@@ -1,8 +1,9 @@
 package cn.zut.facade.request;
 
 import cn.zut.facade.enums.BusinessTypeEnum;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
+import java.util.List;
 
 /**
  * PROJECT: property
@@ -11,8 +12,7 @@ import lombok.Setter;
  * @author DaoyuanWang
  * @date 2018/3/24
  */
-@Getter
-@Setter
+@Data
 public class TariffCompanyRequest {
     /**
      * 公司编号
@@ -26,6 +26,10 @@ public class TariffCompanyRequest {
      * 公司名称
      */
     private String name;
+    /**
+     * 省市地址
+     */
+    private List<String> city;
     /**
      * 公司地址
      */

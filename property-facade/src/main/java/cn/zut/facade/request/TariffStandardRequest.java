@@ -2,8 +2,7 @@ package cn.zut.facade.request;
 
 import cn.zut.facade.enums.BusinessLevelEnum;
 import cn.zut.facade.enums.BusinessTypeEnum;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -15,8 +14,7 @@ import java.util.Date;
  * @author DaoyuanWang
  * @date 2018/3/24
  */
-@Getter
-@Setter
+@Data
 public class TariffStandardRequest {
     /**
      * 缴费标准编号
