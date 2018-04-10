@@ -22,7 +22,9 @@ public enum ExceptionCode implements Message {
     NICK_NAME_PHONE_NOT_NULL("M2006", "昵称和手机号不匹配"),
     PLEASE_INPUT_PHONE_NO("M2007", "请输入手机号"),
     PLEASE_INPUT_PHONE_NO_AND_PASSWORD("M2008", "请输入手机号和密码"),
-    UPLOAD_FILE_IS_NULL("M2009", "上传的文件不能为空"),;
+    UPLOAD_FILE_IS_NULL("M2009", "上传的文件不能为空"),
+    LAST_DATE_NOT_SMALL_PRE_DATE("M2010", "结束日期不能大于开始日期"),
+    ;
 
     private final String respCode;
     private final String respMsg;

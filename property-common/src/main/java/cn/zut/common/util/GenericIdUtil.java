@@ -14,11 +14,7 @@ public class GenericIdUtil {
      * 生成18位会员编号
      */
     public static Long genericMemberId() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(DateUtil.format(new Date(), DateUtil.YEAR_TO_MINUTE));
-        sb.append(RandomUtil.generateNumberString(6));
-
-        return Long.valueOf(sb.toString());
+        return Long.valueOf(DateUtil.FORMAT_YEAR_2_MIN.get().format(new Date()) + RandomUtil.generateNumberString(6));
     }
 
     public static void main(String[] args) {

@@ -1,6 +1,9 @@
 package cn.zut.core.business.impl;
 
+import cn.zut.common.exception.ExceptionCode;
+import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
+import cn.zut.common.util.DateUtil;
 import cn.zut.core.business.TariffStaticBusiness;
 import cn.zut.dao.entity.TariffCompanyEntity;
 import cn.zut.dao.entity.TariffStandardEntity;
@@ -78,6 +81,13 @@ public class TariffStaticBusinessImpl implements TariffStaticBusiness {
     public GenericResponse addStandard(TariffStandardRequest tariffStandardRequest) {
         TariffStandardEntity tariffStandardEntity = new TariffStandardEntity();
         BeanUtils.copyProperties(tariffStandardRequest, tariffStandardEntity);
+
+        if (!DateUtil.chenkDateSize(tariffStandardEntity.getStartTime(), tariffStandardEntity.getEndTime())) {
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.LAST_DATE_NOT_SMALL_PRE_DATE));
+        }
+
+        tariffStandardEntity.setStartTime(DateUtil.getDayStartTime(tariffStandardEntity.getStartTime()));
+        tariffStandardEntity.setEndTime(DateUtil.getDayEndTime(tariffStandardEntity.getEndTime()));
         tariffStandardEntity.setStatus(true);
         tariffStandardEntity.setCreateTime(new Date());
         tariffStandardMapper.insert(tariffStandardEntity);

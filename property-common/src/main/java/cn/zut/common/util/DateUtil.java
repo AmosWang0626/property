@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * 日期工具类
@@ -14,344 +13,210 @@ import java.util.GregorianCalendar;
  */
 public class DateUtil {
 
-    public static final String YEAR_TO_SECOND_SPLIT_SLASH = "yyyy/MM/dd HH:mm:ss";
-    public static final String YEAR_TO_SECOND_SPLIT = "yyyy-MM-dd HH:mm:ss";
-    public static final String YEAR_TO_SECOND = "yyyyMMddHHmmss";
-    public static final String YEAR_TO_MINUTE = "yyyyMMddHHmm";
-    public static final String YEAR_TO_MILLI_SECOND = "yyyyMMddHHmmssSSS";
-    public static final String YEAR_TO_DAY_SPILT = "yyyy-MM-dd";
-    public static final String YEAR_TO_DAY = "yyyyMMdd";
-    public static final String DAY_TIME_BEGIN = " 00:00:00";
-    public static final String DAY_TIME_END = " 23:59:59";
-    public static final String MONTH_TO_SECOND = "MMddHHmmss";
-
-    private static ThreadLocal<DateFormat> simpleDateFormat(String pattern) {
-        return ThreadLocal.withInitial(() -> new SimpleDateFormat(pattern));
-    }
+    public static final ThreadLocal<DateFormat> FORMAT_YEAR_2_DAY =
+            ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
+    private static final ThreadLocal<DateFormat> FORMAT_YEAR_2_DAY_SLOPE =
+            ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy/MM/dd"));
+    public static final ThreadLocal<DateFormat> FORMAT_YEAR_2_MONTH =
+            ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM"));
+    private static final ThreadLocal<DateFormat> FORMAT_MONTH_2_DAY =
+            ThreadLocal.withInitial(() -> new SimpleDateFormat("MM/dd"));
+    public static final ThreadLocal<DateFormat> FORMAT_MONTH =
+            ThreadLocal.withInitial(() -> new SimpleDateFormat("MM"));
+    public static final ThreadLocal<DateFormat> FORMAT_YEAR =
+            ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy"));
+    /**
+     * hh 小写 12小时时间制
+     * HH 大写 24小时时间制
+     */
+    public static final ThreadLocal<DateFormat> FORMAT_YEAR_2_SECOND =
+            ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+    public static final ThreadLocal<DateFormat> FORMAT_YEAR_2_MIN =
+            ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyyMMddHHmm"));
 
     /**
-     * 格式化时间
+     * 获取指定日期开始时间
+     *
+     * @param date 指定日期
+     * @return 开始日期
      */
-    public static String format(Date date, String pattern) {
-        if (date == null) {
-            return null;
-        }
-        return simpleDateFormat(pattern).get().format(date);
-    }
-
-    /**
-     * 格式化时间字符串 yyyy-MM-dd HH:mm:ss
-     */
-    public static String formatYearToSecondPattern(Date date) {
-        return format(date, YEAR_TO_SECOND_SPLIT);
-    }
-
-    /**
-     * 格式化时间字符串 yyyyMMddHHmmssSSS
-     */
-    public static String formatMilliseCodePattern(Date date) {
-        return format(date, YEAR_TO_MILLI_SECOND);
-    }
-
-    /**
-     * 格式化时间字符串 yyyyMMddHHmmss
-     */
-    public static String formatMilliseDatePattern(Date date) {
-        return format(date, YEAR_TO_SECOND);
-    }
-
-    /**
-     * 解析时间
-     */
-    public static Date parse(String date, String pattern) {
+    public static Date getDayStartTime(Date date) {
         try {
-            return simpleDateFormat(pattern).get().parse(date);
+            return FORMAT_YEAR_2_SECOND.get().parse(FORMAT_YEAR_2_DAY.get().format(date) + " 00:00:00");
         } catch (ParseException e) {
-            return null;
+            e.printStackTrace();
         }
+        return date;
     }
 
     /**
-     * 在当前日期上面增加分钟数
+     * 获取指定日期最后时间
+     *
+     * @param date 指定日期
+     * @return 最后日期
      */
-    public static Date addMinutes(int amount) {
-        return addMinutes(new Date(), amount);
-    }
-
-    /**
-     * 在当前日期上面增加分钟数
-     */
-    public static Date addMinutes(Date date, int amount) {
-        if (date == null) {
-            date = new Date();
-        }
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.MINUTE, amount);
-        return calendar.getTime();
-    }
-
-    /**
-     * 解析时间
-     */
-    public static Date parse(Date date, String pattern) {
-        DateFormat dateFormat = simpleDateFormat(pattern).get();
+    public static Date getDayEndTime(Date date) {
         try {
-            return dateFormat.parse(dateFormat.format(date));
+            return FORMAT_YEAR_2_SECOND.get().parse(FORMAT_YEAR_2_DAY.get().format(date) + " 23:59:59");
         } catch (ParseException e) {
-            return null;
+            e.printStackTrace();
         }
+        return date;
     }
 
     /**
-     * 在当前日期上面增加天数
+     * 获取本月月份
+     * ps: 2018-03
      */
-    public static Date addDay(int day) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, day);
-        return calendar.getTime();
+    public static String getYear2Month() {
+        return FORMAT_YEAR_2_MONTH.get().format(new Date());
     }
 
     /**
-     * 在当前日期上面加/减月数
-     *
-     * @param month 需要加/减的月数,减月份传负数
-     * @return 日期
+     * 获取上个月月份
+     * ps: 2018-02
      */
-    public static Date addMonth(int month) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, month);
-        return calendar.getTime();
+    public static String getPreYear2Month() {
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.MONTH, -1);
+        return FORMAT_YEAR_2_MONTH.get().format(ca.getTime());
     }
 
     /**
-     * 指定日期上面加/减月数
-     *
-     * @param date  指定日期
-     * @param month 需要加/减的月数,减月份传负数
-     * @return 日期
+     * 获取上个月月份
+     * ps: 2018-02
      */
-    public static Date addMonth(Date date, int month) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.MONTH, month);
-        return calendar.getTime();
+    public static String getPreYear2Month(Date date) {
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(date);
+        ca.add(Calendar.MONTH, -1);
+        return FORMAT_YEAR_2_MONTH.get().format(ca.getTime());
     }
 
     /**
-     * 获取当前日期最后一秒
-     *
-     * @param date 日期
-     * @return 日期
+     * 获取上个月第一天到最后一天
+     * ps: 02/01-02/28
      */
-    public static Date getEndTimeOfDay(Date date) {
-        String dateStr = format(date, YEAR_TO_DAY_SPILT) + " " + DAY_TIME_END;
-        return parse(dateStr, YEAR_TO_SECOND_SPLIT);
+    public static String getPreMonthDayFirst2Last() {
+        StringBuilder sb = new StringBuilder();
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.MONTH, -1);
+        ca.set(Calendar.DAY_OF_MONTH, 1);
+        sb.append(FORMAT_MONTH_2_DAY.get().format(ca.getTime()));
+        sb.append("-");
+        ca.set(Calendar.DAY_OF_MONTH, ca.getActualMaximum(Calendar.DAY_OF_MONTH));
+        sb.append(FORMAT_MONTH_2_DAY.get().format(ca.getTime()));
+        return sb.toString();
     }
 
     /**
-     * 获取当前日期开始
-     *
-     * @param date 日期
-     * @return 日期
+     * 获取指定日期的 上个月 第一天到最后一天
+     * ps: 2018/01/01-2018/01/31
      */
-    public static Date getBeginTimeOfDay(Date date) {
-        String dateStr = format(date, YEAR_TO_DAY_SPILT) + " " + DAY_TIME_BEGIN;
-        return parse(dateStr, YEAR_TO_SECOND_SPLIT);
+    public static String getPreMonthDayFirst2Last(Date date) {
+        StringBuilder sb = new StringBuilder();
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(date);
+        ca.add(Calendar.MONTH, -1);
+        ca.set(Calendar.DAY_OF_MONTH, 1);
+        sb.append(FORMAT_YEAR_2_DAY_SLOPE.get().format(ca.getTime()));
+        sb.append("-");
+        ca.set(Calendar.DAY_OF_MONTH, ca.getActualMaximum(Calendar.DAY_OF_MONTH));
+        sb.append(FORMAT_YEAR_2_DAY_SLOPE.get().format(ca.getTime()));
+        return sb.toString();
+    }
+
+    /**
+     * 获取上个月日期
+     * ps: 2018-03
+     */
+    public static String getPreMonth() {
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.MONTH, -1);
+        return FORMAT_YEAR_2_MONTH.get().format(ca.getTime());
+    }
+
+    /**
+     * 获取 指定日期上个月日期
+     * ps: 2018-03
+     */
+    public static String getPreMonth(Date date) {
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(date);
+        ca.add(Calendar.MONTH, -1);
+        return FORMAT_YEAR_2_MONTH.get().format(ca.getTime());
+    }
+
+    /**
+     * 获取 指定日期月份
+     * ps: 2018-03
+     */
+    public static String getMonth(Date date) {
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(date);
+        return FORMAT_YEAR_2_MONTH.get().format(ca.getTime());
+    }
+
+    /**
+     * 获取上个月月份
+     * ps: 04
+     */
+    public static String getNextOnlyMonth() {
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.MONTH, 1);
+        return FORMAT_MONTH.get().format(ca.getTime());
+    }
+
+    /**
+     * 获取本月月份
+     * ps: 03
+     */
+    public static String getOnlyMonth() {
+        return FORMAT_MONTH.get().format(new Date());
+    }
+
+    /**
+     * 获取下个月月份
+     * ps: 05
+     */
+    public static String getOnlyNextMonth() {
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.MONTH, 1);
+        return FORMAT_MONTH.get().format(ca.getTime());
     }
 
     /**
      * 计算两个日期之间相差的天数
-     * bdate - smdate 参数2 减 参数1 得到相差天数
+     * bigDate - smallDate 参数2 减 参数1 得到相差天数
      *
-     * @param smdate 较小的时间
-     * @param bdate  较大的时间
+     * @param smallDate 较小的时间
+     * @param bigDate   较大的时间
      * @return 相差天数
      */
-    public static int daysBetween(Date smdate, Date bdate) {
-        DateFormat sdf = simpleDateFormat(YEAR_TO_DAY_SPILT).get();
-        try {
-            smdate = sdf.parse(sdf.format(smdate));
-            bdate = sdf.parse(sdf.format(bdate));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(smdate);
-        long time1 = cal.getTimeInMillis();
-        cal.setTime(bdate);
-        long time2 = cal.getTimeInMillis();
+    public static int daysBetween(Date smallDate, Date bigDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(smallDate);
+        long time1 = calendar.getTimeInMillis();
+        calendar.setTime(bigDate);
+        long time2 = calendar.getTimeInMillis();
         long betweenDays = (time2 - time1) / (1000 * 3600 * 24);
 
         return Integer.parseInt(String.valueOf(betweenDays));
     }
 
-    public static Date getDateFromTime(Date dateTime) {
+    /**
+     * 比较两个日期大小
+     *
+     * @param date1 较小的时间
+     * @param date2 较大的时间
+     * @return 后者比前者大: true;
+     */
+    public static boolean chenkDateSize(Date date1, Date date2) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateTime);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
-    }
-
-    /**
-     * 给指定日期增加天数
-     *
-     * @param date 指定日期 @see Date
-     * @param days 增加的天数
-     * @return 增加天数后的日期
-     */
-    public static Date addDays(final Date date, int days) {
-        if (days == 0) {
-            return date;
-        }
-        if (date == null) {
-            return null;
-        }
-        Calendar cal = GregorianCalendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.DAY_OF_MONTH, days);
-        return cal.getTime();
-    }
-
-    /**
-     * 返回两个时间间隔的月数
-     *
-     * @param begin 起始时间 @see Date
-     * @param end   终止时间 @see Date
-     * @return 间隔的月份数，如果<code>begin</code>或者<code>end</code>为<code>null</code> ，返回 <code>-1</code>
-     */
-    public static int monthsBetween(final Date begin, final Date end) {
-        if (begin == null || end == null) {
-            return -1;
-        }
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(begin);
-        Calendar cal2 = Calendar.getInstance();
-        cal2.setTime(end);
-        return (cal2.get(Calendar.YEAR) - cal1.get(Calendar.YEAR)) * 12
-                + (cal2.get(Calendar.MONTH) - cal1.get(Calendar.MONTH));
-    }
-
-    /**
-     * 计算两个日期之间相差的小时数
-     * bigDate - miniDate 得到相差小时数
-     *
-     * @param miniDate 较小的时间
-     * @param bigDate  较大的时间
-     * @return 相差小时数
-     */
-    private static int hoursBetween(Date miniDate, Date bigDate) {
-        DateFormat sdf = simpleDateFormat(YEAR_TO_SECOND_SPLIT).get();
-        try {
-            miniDate = sdf.parse(sdf.format(miniDate));
-            bigDate = sdf.parse(sdf.format(bigDate));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(miniDate);
-        long time1 = cal.getTimeInMillis();
-        cal.setTime(bigDate);
-        long time2 = cal.getTimeInMillis();
-        long betweenHours = (time2 - time1) / (1000 * 3600);
-
-        return Integer.parseInt(String.valueOf(betweenHours));
-    }
-
-    /**
-     * 对于还款计划的日期设定，日期 A 和 日期 B 是否是同一天
-     * 如1月31 和 4月30，返回true
-     *
-     * @param paramA 较早时间
-     * @param paramB 较晚时间
-     * @return 是不是同一天
-     */
-    public static Boolean isSameDateInPlan(Date paramA, Date paramB) {
-        if (paramA.after(paramB)) {
-            return false;
-        }
-        if (isSameDay(paramA, paramB)) {
-            return true;
-        }
-        Date addedMonth = paramA;
-        //防止内存溢出，月数间隔大于120  直接返回false
-        int count = 1;
-        while (true) {
-            if (count > 120) {
-                return false;
-            }
-            if (isSameDay(addedMonth, paramB)) {
-                return true;
-            } else if (addedMonth.after(paramB)) {
-                return false;
-            }
-            addedMonth = addMonth(paramA, count);
-            count++;
-        }
-    }
-
-    /**
-     * 判断两个日期对象是否具有相同的日
-     *
-     * @param date1 第一个日期对象 @see Date
-     * @param date2 第二个日期对象 @see Date
-     * @return 如果两个日期对象具有相同的日，返回 <code>true</code>
-     */
-    public static boolean isSameDay(Date date1, Date date2) {
-        if (date1 == null && date2 == null) {
-            return true;
-        }
-        if (date1 == null || date2 == null) {
-            return false;
-        }
-        Calendar cal1 = GregorianCalendar.getInstance();
-        cal1.setTime(date1);
-        Calendar cal2 = GregorianCalendar.getInstance();
-        cal2.setTime(date2);
-        return (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR))
-                && (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) && (cal1.get(Calendar.DATE) == cal2
-                .get(Calendar.DATE)));
-    }
-
-    /**
-     * 判断两个日期对象是否具有相同的月份
-     *
-     * @param date1 第一个日期对象 @see Date
-     * @param date2 第二个日期对象 @see Date
-     * @return 如果两个日期对象具有相同的月份，返回 <code>true</code>
-     */
-    public static boolean isSameMonth(Date date1, Date date2) {
-        if (date1 == null && date2 == null) {
-            return true;
-        }
-        if (date1 == null || date2 == null) {
-            return false;
-        }
-        Calendar cal1 = GregorianCalendar.getInstance();
-        cal1.setTime(date1);
-        Calendar cal2 = GregorianCalendar.getInstance();
-        cal2.setTime(date2);
-        return isSameMonth(cal1, cal2);
-    }
-
-    /**
-     * 判断两个日历对象是否具有相同的月份
-     *
-     * @param cal1 第一个日期对象 @see Calendar
-     * @param cal2 第二个日期对象 @see Calendar
-     * @return 如果两个日历对象具有相同的月份，返回 <code>true</code>
-     */
-    public static boolean isSameMonth(Calendar cal1, Calendar cal2) {
-        if (cal1 == null && cal2 == null) {
-            return true;
-        }
-        if (cal1 == null || cal2 == null) {
-            return false;
-        }
-        return (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR))
-                && (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH));
+        calendar.setTime(date1);
+        long time1 = calendar.getTimeInMillis();
+        calendar.setTime(date2);
+        long time2 = calendar.getTimeInMillis();
+        return (time2 - time1) > 0;
     }
 }

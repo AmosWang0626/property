@@ -18,7 +18,8 @@ public enum BusinessTypeEnum implements Mapping<String, String> {
     ELECTRICITY("电费"),
     NETWORK("网费"),
     SITE("场地使用费"),
-    PARKING("停车费");
+    PARKING("停车费"),
+    PROPERTY("物业费"),;
 
     private final String value;
 
