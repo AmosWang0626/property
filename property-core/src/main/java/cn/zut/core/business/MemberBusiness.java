@@ -3,12 +3,12 @@ package cn.zut.core.business;
 import cn.zut.common.dao.PageModel;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.generic.PageResult;
-import cn.zut.facade.request.ForgetPwdRequest;
-import cn.zut.facade.request.LoginRequest;
-import cn.zut.facade.request.RegisterRequest;
-import cn.zut.facade.response.LoginResponse;
 import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.search.MemberSearch;
+import cn.zut.facade.request.LoginRequest;
+import cn.zut.facade.request.RegisterRequest;
+import cn.zut.facade.request.ResetPasswordRequest;
+import cn.zut.facade.response.LoginResponse;
 
 /**
  * PROJECT: property
@@ -36,10 +36,10 @@ public interface MemberBusiness {
     /**
      * 用户忘记密码
      *
-     * @param forgetPwdRequest 忘记密码表单
+     * @param resetPasswordRequest 忘记密码表单
      * @return 通用
      */
-    GenericResponse updatePwd(ForgetPwdRequest forgetPwdRequest);
+    GenericResponse updatePwd(ResetPasswordRequest resetPasswordRequest);
 
     /**
      * 获取用户信息用户

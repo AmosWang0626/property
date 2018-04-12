@@ -1,15 +1,6 @@
-/*
- * Heng-You Confidential
- *
- * Copyright (C) 2017 Shanghai Heng-You Information Technology Co., Ltd.
- * All rights reserved.
- *
- * No part of this file may be reproduced or transmitted in any form or by any means,
- * electronic, mechanical, photocopying, recording, or otherwise, without prior
- * written permission of Shanghai Heng-You Information Technology Co., Ltd.
- */
-
 package cn.zut.facade.response;
+
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -20,6 +11,7 @@ import java.io.Serializable;
  * @date 2018/3/9
  * @apiNote 登录信息VO
  */
+@Data
 public class LoginResponse implements Serializable {
 
     private static final long serialVersionUID = -3216712463111859678L;
@@ -36,28 +28,4 @@ public class LoginResponse implements Serializable {
      * 用户昵称
      */
     private String nickName;
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getPhoneNo() {
-        return phoneNo;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
 }

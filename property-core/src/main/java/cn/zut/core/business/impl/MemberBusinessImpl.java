@@ -6,23 +6,22 @@ import cn.zut.common.exception.ExceptionCode;
 import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.generic.PageResult;
-import cn.zut.facade.request.ForgetPwdRequest;
-import cn.zut.facade.request.LoginRequest;
-import cn.zut.facade.request.RegisterRequest;
-import cn.zut.facade.response.LoginResponse;
 import cn.zut.common.security.DesEncryptionUtil;
 import cn.zut.common.security.EncryptionUtil;
 import cn.zut.common.util.EncryptUtil;
 import cn.zut.common.util.RandomUtil;
 import cn.zut.core.business.MemberBusiness;
-import cn.zut.core.constant.PrivateConstant;
+import cn.zut.core.constant.PropertyConstant;
 import cn.zut.core.service.MemberService;
 import cn.zut.dao.entity.LoginInfoEntity;
 import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.persistence.LoginInfoMapper;
 import cn.zut.dao.persistence.MemberMapper;
 import cn.zut.dao.search.MemberSearch;
-import cn.zut.facade.constant.PropertyConstant;
+import cn.zut.facade.request.LoginRequest;
+import cn.zut.facade.request.RegisterRequest;
+import cn.zut.facade.request.ResetPasswordRequest;
+import cn.zut.facade.response.LoginResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +49,7 @@ public class MemberBusinessImpl implements MemberBusiness {
     @Override
     public GenericResponse<LoginResponse> register(RegisterRequest registerRequest) {
 
-        String phoneNo = registerRequest.getPhoneRegister();
+        String phoneNo = registerRequest.getPhoneNo();
 
         // 校验手机号格式
         if (!GeneralCheck.isPhoneNo(phoneNo)) {
@@ -60,25 +59,29 @@ public class MemberBusinessImpl implements MemberBusiness {
         if (getMemberByPhoneNo(phoneNo) != null) {
             return new GenericResponse<>(new ExceptionMessage(ExceptionCode.PHONE_IS_EXIST, phoneNo));
         }
+        // 校验短信验证码是否正确
+        if (!EncryptUtil.checkVerifyCode(registerRequest.getVerifyCode())) {
+            return new GenericResponse<>(new ExceptionMessage(ExceptionCode.PLEASE_INPUT_PROPER_VERIFY_CODE, phoneNo));
+        }
 
         GenericResponse<Long> save = memberService.save(registerRequest);
         if (save.success()) {
             Long memberId = save.getBody();
             LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setPhoneNo(EncryptUtil.encryPhoneNo(phoneNo));
-            loginResponse.setNickName(registerRequest.getNameRegister());
+            loginResponse.setNickName(registerRequest.getNikeName());
+            loginResponse.setPhoneNo(EncryptUtil.encryptPhoneNo(phoneNo));
             loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberId), PropertyConstant.DES_PASSWORD));
 
             return new GenericResponse<>(loginResponse);
         }
 
-        return GenericResponse.FAIL;
+        return new GenericResponse<>(new ExceptionMessage(ExceptionCode.UNKNOWN_EXCEPTION));
     }
 
     @Override
     public GenericResponse<LoginResponse> login(LoginRequest loginRequest) {
-        String phoneNo = loginRequest.getPhoneLogin();
-        String password = loginRequest.getPwdLogin();
+        String phoneNo = loginRequest.getPhoneNo();
+        String password = loginRequest.getPassword();
 
         MemberEntity memberEntity = getMemberByPhoneNo(phoneNo);
         // 校验手机号码是否已经被注册
@@ -100,26 +103,30 @@ public class MemberBusinessImpl implements MemberBusiness {
         loginInfoMapper.update(loginInfoEntity);
 
         LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setPhoneNo(EncryptUtil.encryPhoneNo(phoneNo));
         loginResponse.setNickName(memberEntity.getNickName());
-        loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberEntity.getMemberId()), PrivateConstant.TOKEN_ENCRYPT));
+        loginResponse.setPhoneNo(EncryptUtil.encryptPhoneNo(phoneNo));
+        loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberEntity.getMemberId()), PropertyConstant.TOKEN_ENCRYPT));
+
         return new GenericResponse<>(loginResponse);
     }
 
     @Override
-    public GenericResponse updatePwd(ForgetPwdRequest forgetPwdRequest) {
-        MemberSearch memberSearch = new MemberSearch();
-        memberSearch.setNickName(forgetPwdRequest.getNameForgetPwd());
-        memberSearch.setPhoneNo(forgetPwdRequest.getPhoneForgetPwd());
-        MemberEntity memberEntity = memberMapper.selectByExample(memberSearch);
+    public GenericResponse updatePwd(ResetPasswordRequest resetPasswordRequest) {
+        MemberEntity memberEntity = getMemberByPhoneNo(resetPasswordRequest.getPhoneNo());
+        // 校验手机号码是否已经被注册
         if (memberEntity == null) {
-            return new GenericResponse<>(new ExceptionMessage(ExceptionCode.NICK_NAME_PHONE_NOT_NULL));
+            return new GenericResponse<>(new ExceptionMessage(ExceptionCode.PHONE_IS_NOT_EXIST, resetPasswordRequest.getPhoneNo()));
         }
+        // 校验短信验证码是否正确
+        if (!EncryptUtil.checkVerifyCode(resetPasswordRequest.getVerifyCode())) {
+            return new GenericResponse<>(new ExceptionMessage(ExceptionCode.PLEASE_INPUT_PROPER_VERIFY_CODE, resetPasswordRequest.getPhoneNo()));
+        }
+
         Long memberId = memberEntity.getMemberId();
         LoginInfoEntity loginInfoEntity = loginInfoMapper.selectById(memberId);
         // 生成密码盐
-        String salt = RandomUtil.generateLetterString(PrivateConstant.SALT_LENGTH);
-        String encryptPassword = EncryptionUtil.encrypt(salt + forgetPwdRequest.getNameForgetPwd(), EncryptionUtil.MD5);
+        String salt = RandomUtil.generateLetterString(PropertyConstant.SALT_LENGTH);
+        String encryptPassword = EncryptionUtil.encrypt(salt + resetPasswordRequest.getPassword(), EncryptionUtil.MD5);
         loginInfoEntity.setSalt(salt);
         loginInfoEntity.setPassword(encryptPassword);
         loginInfoEntity.setLastLoginTime(new Date());
@@ -141,6 +148,12 @@ public class MemberBusinessImpl implements MemberBusiness {
         return pageResult;
     }
 
+    /**
+     * 根据手机号拿到用户对象
+     *
+     * @param phoneNo 手机号
+     * @return MemberEntity
+     */
     private MemberEntity getMemberByPhoneNo(String phoneNo) {
         MemberSearch memberSearch = new MemberSearch();
         memberSearch.setPhoneNo(phoneNo);

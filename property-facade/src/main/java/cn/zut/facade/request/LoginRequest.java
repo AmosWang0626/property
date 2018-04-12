@@ -1,6 +1,5 @@
 package cn.zut.facade.request;
 
-import com.alibaba.fastjson.JSON;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -8,29 +7,30 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class LoginRequest {
 
-    private String phoneLogin;
-    private String pwdLogin;
+    /**
+     * 手机号
+     */
+    private String phoneNo;
+    /**
+     * 新密码
+     */
+    private String password;
 
     @NotBlank(message = "手机号不能为空")
-    public String getPhoneLogin() {
-        return phoneLogin;
+    public String getPhoneNo() {
+        return phoneNo;
     }
 
-    public void setPhoneLogin(String phoneLogin) {
-        this.phoneLogin = phoneLogin;
-    }
-
-    public String getPwdLogin() {
-        return pwdLogin;
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
     }
 
     @NotBlank(message = "密码不能为空")
-    public void setPwdLogin(String pwdLogin) {
-        this.pwdLogin = pwdLogin;
+    public String getPassword() {
+        return password;
     }
 
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -5,12 +5,8 @@ import org.hibernate.validator.constraints.NotBlank;
 /**
  * @author DaoyuanWang
  */
-public class RegisterRequest {
+public class ResetPasswordRequest {
 
-    /**
-     * 昵称
-     */
-    private String nikeName;
     /**
      * 手机号
      */
@@ -20,18 +16,9 @@ public class RegisterRequest {
      */
     private String verifyCode;
     /**
-     * 密码
+     * 新密码
      */
     private String password;
-
-    @NotBlank(message = "昵称不能为空")
-    public String getNikeName() {
-        return nikeName;
-    }
-
-    public void setNikeName(String nikeName) {
-        this.nikeName = nikeName;
-    }
 
     @NotBlank(message = "手机号不能为空")
     public String getPhoneNo() {
