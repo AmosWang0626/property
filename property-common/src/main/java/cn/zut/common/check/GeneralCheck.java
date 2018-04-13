@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class GeneralCheck {
 
     private static final String ID_NO_CHECK = "^(\\d{6})(\\d{4})(\\d{2})(\\d{2})(\\d{3})([0-9]|X)$";
-    private static final String PHONE_NO_CHECK = "^1([3-5|]|[7-9])\\d{9}$";
+    private static final String PHONE_NO_CHECK = "^1([3-9])\\d{9}$";
     private static final char BANK_CARD_ID_ERROR = 'N';
     private static final int MIN_BANK_CARD_ID = 15;
     private static final int MAX_BANK_CARD_ID = 19;

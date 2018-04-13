@@ -111,15 +111,17 @@ public class MemberBusinessImpl implements MemberBusiness {
     }
 
     @Override
-    public GenericResponse updatePwd(ResetPasswordRequest resetPasswordRequest) {
-        MemberEntity memberEntity = getMemberByPhoneNo(resetPasswordRequest.getPhoneNo());
+    public GenericResponse<LoginResponse> updatePwd(ResetPasswordRequest resetPasswordRequest) {
+        String phoneNo = resetPasswordRequest.getPhoneNo();
+
+        MemberEntity memberEntity = getMemberByPhoneNo(phoneNo);
         // 校验手机号码是否已经被注册
         if (memberEntity == null) {
-            return new GenericResponse<>(new ExceptionMessage(ExceptionCode.PHONE_IS_NOT_EXIST, resetPasswordRequest.getPhoneNo()));
+            return new GenericResponse<>(new ExceptionMessage(ExceptionCode.PHONE_IS_NOT_EXIST, phoneNo));
         }
         // 校验短信验证码是否正确
         if (!EncryptUtil.checkVerifyCode(resetPasswordRequest.getVerifyCode())) {
-            return new GenericResponse<>(new ExceptionMessage(ExceptionCode.PLEASE_INPUT_PROPER_VERIFY_CODE, resetPasswordRequest.getPhoneNo()));
+            return new GenericResponse<>(new ExceptionMessage(ExceptionCode.PLEASE_INPUT_PROPER_VERIFY_CODE, phoneNo));
         }
 
         Long memberId = memberEntity.getMemberId();
@@ -132,7 +134,12 @@ public class MemberBusinessImpl implements MemberBusiness {
         loginInfoEntity.setLastLoginTime(new Date());
         loginInfoMapper.update(loginInfoEntity);
 
-        return GenericResponse.SUCCESS;
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setNickName(memberEntity.getNickName());
+        loginResponse.setPhoneNo(EncryptUtil.encryptPhoneNo(phoneNo));
+        loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberEntity.getMemberId()), PropertyConstant.TOKEN_ENCRYPT));
+
+        return new GenericResponse(loginResponse);
     }
 
     @Override

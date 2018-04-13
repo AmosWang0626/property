@@ -39,7 +39,7 @@ public interface MemberBusiness {
      * @param resetPasswordRequest 忘记密码表单
      * @return 通用
      */
-    GenericResponse updatePwd(ResetPasswordRequest resetPasswordRequest);
+    GenericResponse<LoginResponse> updatePwd(ResetPasswordRequest resetPasswordRequest);
 
     /**
      * 获取用户信息用户
