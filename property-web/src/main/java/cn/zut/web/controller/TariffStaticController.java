@@ -1,13 +1,13 @@
 package cn.zut.web.controller;
 
+import cn.zut.common.dao.PageModel;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.business.TariffStaticBusiness;
+import cn.zut.dao.entity.TariffCompanyEntity;
+import cn.zut.dao.entity.TariffStandardEntity;
 import cn.zut.facade.request.TariffCompanyRequest;
 import cn.zut.facade.request.TariffStandardRequest;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -39,6 +39,30 @@ public class TariffStaticController {
     @RequestMapping(value = "addStandard", method = RequestMethod.POST)
     public GenericResponse addStandard(@RequestBody TariffStandardRequest tariffStandardRequest) {
         return tariffStaticBusiness.addStandard(tariffStandardRequest);
+    }
+
+    @GetMapping("pageCompany")
+    public GenericResponse pageCompany(@RequestParam(value = "page", required = false) Integer page,
+                                       @RequestParam(value = "size", required = false) Integer size) {
+        if (page == null || size == null) {
+            return GenericResponse.SUCCESS;
+        }
+        PageModel<TariffCompanyEntity> pageModel = new PageModel<>();
+        pageModel.setPage(page);
+        pageModel.setRows(size);
+        return new GenericResponse<>(tariffStaticBusiness.pageCompanyByModel(pageModel));
+    }
+
+    @GetMapping("pageStandard")
+    public GenericResponse pageApply(@RequestParam(value = "page", required = false) Integer page,
+                                     @RequestParam(value = "size", required = false) Integer size) {
+        if (page == null || size == null) {
+            return GenericResponse.SUCCESS;
+        }
+        PageModel<TariffStandardEntity> pageModel = new PageModel<>();
+        pageModel.setPage(page);
+        pageModel.setRows(size);
+        return new GenericResponse<>(tariffStaticBusiness.pageStandardByModel(pageModel));
     }
 
 }

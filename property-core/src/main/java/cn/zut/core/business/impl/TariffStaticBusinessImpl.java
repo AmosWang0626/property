@@ -1,8 +1,10 @@
 package cn.zut.core.business.impl;
 
+import cn.zut.common.dao.PageModel;
 import cn.zut.common.exception.ExceptionCode;
 import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
+import cn.zut.common.generic.SimplePageResult;
 import cn.zut.common.util.DateUtil;
 import cn.zut.core.business.TariffStaticBusiness;
 import cn.zut.dao.entity.TariffCompanyEntity;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * PROJECT: property
@@ -127,5 +130,31 @@ public class TariffStaticBusinessImpl implements TariffStaticBusiness {
         tariffStandardEntity.setUpdateTime(new Date());
         tariffStandardMapper.update(tariffStandardEntity);
         return GenericResponse.SUCCESS;
+    }
+
+    @Override
+    public SimplePageResult<TariffCompanyEntity> pageCompanyByModel(PageModel<TariffCompanyEntity> pageModel) {
+        List<TariffCompanyEntity> tariffCompanyEntities = tariffCompanyMapper.selectListPageByExample(pageModel);
+        int memberCount = tariffCompanyMapper.selectCountByExample(pageModel.getSearch());
+        SimplePageResult<TariffCompanyEntity> pageResult = new SimplePageResult<>();
+        // 总记录数量 || 记录数据列表 || 页码 || 记录数量
+        pageResult.setTotal(memberCount);
+        pageResult.setRows(tariffCompanyEntities);
+        pageResult.setPage(pageModel.getPage());
+        pageResult.setSize(pageModel.getRows());
+        return pageResult;
+    }
+
+    @Override
+    public SimplePageResult<TariffStandardEntity> pageStandardByModel(PageModel<TariffStandardEntity> pageModel) {
+        List<TariffStandardEntity> tariffStandardEntities = tariffStandardMapper.selectListPageByExample(pageModel);
+        int countByExample = tariffStandardMapper.selectCountByExample(pageModel.getSearch());
+        SimplePageResult<TariffStandardEntity> pageResult = new SimplePageResult<>();
+        // 总记录数量 || 记录数据列表 || 页码 || 记录数量
+        pageResult.setTotal(countByExample);
+        pageResult.setRows(tariffStandardEntities);
+        pageResult.setPage(pageModel.getPage());
+        pageResult.setSize(pageModel.getRows());
+        return pageResult;
     }
 }

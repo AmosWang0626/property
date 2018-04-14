@@ -34,7 +34,7 @@ public class FileController {
      */
     @RequestMapping(value = "upload", method = RequestMethod.POST)
     public GenericResponse upload(final @RequestParam("file") MultipartFile file) {
-        if(file.isEmpty()){
+        if (file.isEmpty()) {
             return new GenericResponse(new ExceptionMessage(ExceptionCode.UPLOAD_FILE_IS_NULL));
         }
         return fileBusiness.upload(file);

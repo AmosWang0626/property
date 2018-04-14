@@ -139,7 +139,7 @@ public class MemberBusinessImpl implements MemberBusiness {
         loginResponse.setPhoneNo(EncryptUtil.encryptPhoneNo(phoneNo));
         loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberEntity.getMemberId()), PropertyConstant.TOKEN_ENCRYPT));
 
-        return new GenericResponse(loginResponse);
+        return new GenericResponse<>(loginResponse);
     }
 
     @Override

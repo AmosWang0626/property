@@ -1,6 +1,10 @@
 package cn.zut.core.business;
 
+import cn.zut.common.dao.PageModel;
 import cn.zut.common.generic.GenericResponse;
+import cn.zut.common.generic.SimplePageResult;
+import cn.zut.dao.entity.TariffCompanyEntity;
+import cn.zut.dao.entity.TariffStandardEntity;
 import cn.zut.facade.request.TariffCompanyRequest;
 import cn.zut.facade.request.TariffStandardRequest;
 
@@ -93,4 +97,19 @@ public interface TariffStaticBusiness {
      */
     GenericResponse removeStandard(Long standardId);
 
+    /**
+     * 公司管理
+     *
+     * @param pageModel 分页查询对象
+     * @return GenericResponse
+     */
+    SimplePageResult<TariffCompanyEntity> pageCompanyByModel(PageModel<TariffCompanyEntity> pageModel);
+
+    /**
+     * 标准管理
+     *
+     * @param pageModel 分页查询对象
+     * @return GenericResponse
+     */
+    SimplePageResult<TariffStandardEntity> pageStandardByModel(PageModel<TariffStandardEntity> pageModel);
 }
