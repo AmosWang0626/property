@@ -5,9 +5,7 @@ import cn.zut.common.dao.PageModel;
 import cn.zut.common.exception.ExceptionCode;
 import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
-import cn.zut.common.generic.PageResult;
 import cn.zut.core.business.MemberBusiness;
-import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.search.MemberSearch;
 import cn.zut.facade.request.LoginRequest;
 import cn.zut.facade.request.RegisterRequest;
@@ -91,8 +89,6 @@ public class MemberController {
         PageModel<MemberSearch> pageModel = new PageModel<>();
         pageModel.setPage(page);
         pageModel.setRows(size);
-        PageResult<MemberEntity> pageResult = memberBusiness.pageMemberByModel(pageModel);
-
-        return new GenericResponse<>(pageResult);
+        return new GenericResponse<>(memberBusiness.pageMemberByModel(pageModel));
     }
 }

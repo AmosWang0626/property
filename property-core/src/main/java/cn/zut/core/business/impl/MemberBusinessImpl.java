@@ -5,7 +5,7 @@ import cn.zut.common.dao.PageModel;
 import cn.zut.common.exception.ExceptionCode;
 import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
-import cn.zut.common.generic.PageResult;
+import cn.zut.common.generic.SimplePageResult;
 import cn.zut.common.security.DesEncryptionUtil;
 import cn.zut.common.security.EncryptionUtil;
 import cn.zut.common.util.EncryptUtil;
@@ -143,15 +143,15 @@ public class MemberBusinessImpl implements MemberBusiness {
     }
 
     @Override
-    public PageResult<MemberEntity> pageMemberByModel(PageModel<MemberSearch> pageModel) {
+    public SimplePageResult<MemberEntity> pageMemberByModel(PageModel<MemberSearch> pageModel) {
         List<MemberEntity> applyEntities = memberMapper.selectListPageByExample(pageModel);
         int memberCount = memberMapper.selectCountByExample(pageModel.getSearch());
-        PageResult<MemberEntity> pageResult = new PageResult<>();
-        // 总记录数量 || 当前页记录数量 || 记录数据列表
+        SimplePageResult<MemberEntity> pageResult = new SimplePageResult<>();
+        // 总记录数量 || 记录数据列表 || 页码 || 记录数量
         pageResult.setTotal(memberCount);
-        pageResult.setNumber(applyEntities.size());
         pageResult.setRows(applyEntities);
-        pageResult.finish(pageModel.getPage(), pageModel.getRows());
+        pageResult.setPage(pageModel.getPage());
+        pageResult.setSize(pageModel.getRows());
         return pageResult;
     }
 
