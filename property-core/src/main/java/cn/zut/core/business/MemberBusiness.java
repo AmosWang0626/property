@@ -8,6 +8,7 @@ import cn.zut.dao.search.MemberSearch;
 import cn.zut.facade.request.LoginRequest;
 import cn.zut.facade.request.RegisterRequest;
 import cn.zut.facade.request.ResetPasswordRequest;
+import cn.zut.facade.request.UserInfoRequest;
 import cn.zut.facade.response.LoginResponse;
 
 /**
@@ -48,4 +49,20 @@ public interface MemberBusiness {
      * @return 通用
      */
     SimplePageResult<MemberEntity> pageMemberByModel(PageModel<MemberSearch> pageModel);
+
+    /**
+     * 修改用户信息
+     *
+     * @param userInfoRequest UserInfoRequest
+     * @return GenericResponse
+     */
+    GenericResponse modifyUserInfo(UserInfoRequest userInfoRequest);
+
+    /**
+     * 删除用户
+     *
+     * @param userInfoRequest UserInfoRequest
+     * @return GenericResponse
+     */
+    GenericResponse deleteUser(UserInfoRequest userInfoRequest);
 }

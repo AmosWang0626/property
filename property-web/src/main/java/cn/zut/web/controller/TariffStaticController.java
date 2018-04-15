@@ -41,6 +41,16 @@ public class TariffStaticController {
         return tariffStaticBusiness.addStandard(tariffStandardRequest);
     }
 
+    @RequestMapping(value = "modifyCompany", method = RequestMethod.POST)
+    public GenericResponse modifyCompany(@RequestBody TariffCompanyRequest tariffCompanyRequest) {
+        return tariffStaticBusiness.modifyCompany(tariffCompanyRequest);
+    }
+
+    @RequestMapping(value = "modifyStandard", method = RequestMethod.POST)
+    public GenericResponse modifyStandard(@RequestBody TariffStandardRequest tariffStandardRequest) {
+        return tariffStaticBusiness.modifyStandard(tariffStandardRequest);
+    }
+
     @GetMapping("pageCompany")
     public GenericResponse pageCompany(@RequestParam(value = "page", required = false) Integer page,
                                        @RequestParam(value = "size", required = false) Integer size) {

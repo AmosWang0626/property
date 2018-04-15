@@ -10,7 +10,7 @@ public class RegisterRequest {
     /**
      * 昵称
      */
-    private String nikeName;
+    private String nickName;
     /**
      * 手机号
      */
@@ -25,12 +25,12 @@ public class RegisterRequest {
     private String password;
 
     @NotBlank(message = "昵称不能为空")
-    public String getNikeName() {
-        return nikeName;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNikeName(String nikeName) {
-        this.nikeName = nikeName;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     @NotBlank(message = "手机号不能为空")

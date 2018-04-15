@@ -6,15 +6,18 @@ import cn.zut.common.exception.ExceptionCode;
 import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.business.MemberBusiness;
+import cn.zut.core.constant.PropertyConstant;
 import cn.zut.dao.search.MemberSearch;
 import cn.zut.facade.request.LoginRequest;
 import cn.zut.facade.request.RegisterRequest;
 import cn.zut.facade.request.ResetPasswordRequest;
+import cn.zut.facade.request.UserInfoRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -80,6 +83,44 @@ public class MemberController {
         return memberBusiness.updatePwd(resetPasswordRequest);
     }
 
+    /**
+     * 修改用户信息
+     */
+    @RequestMapping(value = "modifyUserInfo", method = RequestMethod.POST)
+    public GenericResponse modifyUserInfo(@RequestBody @Valid UserInfoRequest userInfoRequest,
+                                          BindingResult bindingResult, HttpServletRequest request) {
+        // 参数校验
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> list = bindingResult.getAllErrors();
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage()));
+        }
+
+        if (userInfoRequest.getMemberId() == null) {
+            userInfoRequest.setMemberId(getMemberId(request));
+        }
+
+        return memberBusiness.modifyUserInfo(userInfoRequest);
+    }
+
+    /**
+     * 删除用户
+     */
+    @RequestMapping(value = "deleteUser", method = RequestMethod.POST)
+    public GenericResponse deleteUser(@RequestBody @Valid UserInfoRequest userInfoRequest,
+                                          BindingResult bindingResult, HttpServletRequest request) {
+        // 参数校验
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> list = bindingResult.getAllErrors();
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage()));
+        }
+
+        if (userInfoRequest.getMemberId() == null) {
+            userInfoRequest.setMemberId(getMemberId(request));
+        }
+
+        return memberBusiness.deleteUser(userInfoRequest);
+    }
+
     @GetMapping("page")
     public GenericResponse pageApply(@RequestParam(value = "page", required = false) Integer page,
                                      @RequestParam(value = "size", required = false) Integer size) {
@@ -90,5 +131,9 @@ public class MemberController {
         pageModel.setPage(page);
         pageModel.setRows(size);
         return new GenericResponse<>(memberBusiness.pageMemberByModel(pageModel));
+    }
+
+    private Long getMemberId(HttpServletRequest request) {
+        return Long.valueOf((String) request.getAttribute(PropertyConstant.MEMBER_ID));
     }
 }

@@ -35,7 +35,7 @@ public class MemberServiceImpl implements MemberService {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.init();
         memberEntity.setPhoneNo(registerRequest.getPhoneNo());
-        memberEntity.setNickName(registerRequest.getNikeName());
+        memberEntity.setNickName(registerRequest.getNickName());
         memberMapper.insert(memberEntity);
 
         LoginInfoEntity loginInfoEntity = new LoginInfoEntity();

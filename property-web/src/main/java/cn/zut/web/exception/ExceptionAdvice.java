@@ -1,4 +1,4 @@
-package cn.zut.web.interceptor;
+package cn.zut.web.exception;
 
 import cn.zut.common.exception.UserTokenException;
 import cn.zut.common.generic.GenericResponse;

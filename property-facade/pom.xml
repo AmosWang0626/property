@@ -29,6 +29,10 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.zut</groupId>
+            <artifactId>property-common</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

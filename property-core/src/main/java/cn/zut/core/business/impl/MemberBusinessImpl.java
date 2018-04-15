@@ -2,6 +2,7 @@ package cn.zut.core.business.impl;
 
 import cn.zut.common.check.GeneralCheck;
 import cn.zut.common.dao.PageModel;
+import cn.zut.common.enums.MaritalEnum;
 import cn.zut.common.exception.ExceptionCode;
 import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
@@ -21,7 +22,9 @@ import cn.zut.dao.search.MemberSearch;
 import cn.zut.facade.request.LoginRequest;
 import cn.zut.facade.request.RegisterRequest;
 import cn.zut.facade.request.ResetPasswordRequest;
+import cn.zut.facade.request.UserInfoRequest;
 import cn.zut.facade.response.LoginResponse;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,9 +71,9 @@ public class MemberBusinessImpl implements MemberBusiness {
         if (save.success()) {
             Long memberId = save.getBody();
             LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setNickName(registerRequest.getNikeName());
+            loginResponse.setNickName(registerRequest.getNickName());
             loginResponse.setPhoneNo(EncryptUtil.encryptPhoneNo(phoneNo));
-            loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberId), PropertyConstant.DES_PASSWORD));
+            loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberId), PropertyConstant.TOKEN_ENCRYPT));
 
             return new GenericResponse<>(loginResponse);
         }
@@ -153,6 +156,30 @@ public class MemberBusinessImpl implements MemberBusiness {
         pageResult.setPage(pageModel.getPage());
         pageResult.setSize(pageModel.getRows());
         return pageResult;
+    }
+
+    @Override
+    public GenericResponse modifyUserInfo(UserInfoRequest userInfoRequest) {
+        // 校验手机号格式
+        if (!GeneralCheck.isPhoneNo(userInfoRequest.getPhoneNo())) {
+            return new GenericResponse<>(new ExceptionMessage(ExceptionCode.PHONE_NO_ERROR, userInfoRequest.getPhoneNo()));
+        }
+        MemberEntity memberEntity = new MemberEntity();
+        BeanUtils.copyProperties(userInfoRequest, memberEntity);
+
+        memberMapper.update(memberEntity);
+
+        return GenericResponse.SUCCESS;
+    }
+
+    @Override
+    public GenericResponse deleteUser(UserInfoRequest userInfoRequest) {
+        MemberEntity memberEntity = new MemberEntity();
+        BeanUtils.copyProperties(userInfoRequest, memberEntity);
+        memberEntity.setMaritalStatus(MaritalEnum.NONE);
+        memberMapper.update(memberEntity);
+
+        return GenericResponse.SUCCESS;
     }
 
     /**
