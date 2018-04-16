@@ -37,6 +37,9 @@
             </where>
             AND STATUS = 1
         </if>
+        <if test="search == null">
+            WHERE STATUS = 1
+        </if>
     </sql>
 
     <select id="selectById" resultMap="baseResultMap">

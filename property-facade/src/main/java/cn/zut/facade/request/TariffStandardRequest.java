@@ -44,8 +44,4 @@ public class TariffStandardRequest {
      * 缴费标准失效时间
      */
     private Date endTime;
-    /**
-     * 状态(1:正常;0:无效)
-     */
-    private Boolean status;
 }
