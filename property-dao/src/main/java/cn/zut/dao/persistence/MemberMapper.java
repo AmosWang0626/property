@@ -10,7 +10,7 @@ import cn.zut.dao.search.MemberSearch;
  *
  * @author DaoYuanWang
  */
-public interface MemberMapper extends Insert<MemberEntity>, Update<MemberEntity>,
+public interface MemberMapper extends Insert<MemberEntity>, Update<MemberEntity>, Delete<Long>,
         SelectById<MemberEntity, Long>, SelectByExample<MemberEntity, MemberSearch>,
         SelectCountByExample<MemberSearch>, SelectListPageByExample<MemberEntity, MemberSearch> {
 }

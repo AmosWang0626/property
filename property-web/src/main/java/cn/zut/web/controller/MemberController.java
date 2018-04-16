@@ -106,16 +106,11 @@ public class MemberController {
      * 删除用户
      */
     @RequestMapping(value = "deleteUser", method = RequestMethod.POST)
-    public GenericResponse deleteUser(@RequestBody @Valid UserInfoRequest userInfoRequest,
-                                          BindingResult bindingResult, HttpServletRequest request) {
+    public GenericResponse deleteUser(@RequestBody @Valid UserInfoRequest userInfoRequest, BindingResult bindingResult) {
         // 参数校验
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
             return new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage()));
-        }
-
-        if (userInfoRequest.getMemberId() == null) {
-            userInfoRequest.setMemberId(getMemberId(request));
         }
 
         return memberBusiness.deleteUser(userInfoRequest);

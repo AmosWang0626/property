@@ -72,6 +72,12 @@
         <include refid="condition"/>
     </select>
 
+    <select id="delete">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE MEMBER_ID = #{memberId}
+    </select>
+
     <update id="update">
         UPDATE
         <include refid="tableName"/>

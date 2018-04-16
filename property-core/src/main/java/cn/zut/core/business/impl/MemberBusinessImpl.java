@@ -2,7 +2,6 @@ package cn.zut.core.business.impl;
 
 import cn.zut.common.check.GeneralCheck;
 import cn.zut.common.dao.PageModel;
-import cn.zut.common.enums.MaritalEnum;
 import cn.zut.common.exception.ExceptionCode;
 import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
@@ -174,10 +173,7 @@ public class MemberBusinessImpl implements MemberBusiness {
 
     @Override
     public GenericResponse deleteUser(UserInfoRequest userInfoRequest) {
-        MemberEntity memberEntity = new MemberEntity();
-        BeanUtils.copyProperties(userInfoRequest, memberEntity);
-        memberEntity.setMaritalStatus(MaritalEnum.NONE);
-        memberMapper.update(memberEntity);
+        memberMapper.delete(userInfoRequest.getMemberId());
 
         return GenericResponse.SUCCESS;
     }
