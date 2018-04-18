@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.zut.dao.persistence.TariffStandardMapper">
+<mapper namespace="cn.zut.dao.persistence.TariffConsumeMapper">
 
-    <resultMap id="baseResultMap" type="cn.zut.dao.entity.TariffStandardEntity">
-        <result column="STANDARD_ID" property="standardId"/>
+    <resultMap id="baseResultMap" type="cn.zut.dao.entity.TariffConsumeEntity">
+        <result column="CONSUME_NO" property="consumeNo"/>
+        <result column="MEMBER_ID" property="memberId"/>
+        <result column="OPERATOR" property="operator"/>
         <result column="BUSINESS" property="business"/>
         <result column="LEVEL" property="level"/>
+        <result column="STANDARD_ID" property="standardId"/>
         <result column="UNIT_PRICE" property="unitPrice"/>
-        <result column="OVERDUE_RATE" property="overdueRate"/>
-        <result column="START_TIME" property="startTime"/>
-        <result column="END_TIME" property="endTime"/>
-        <result column="STATUS" property="status"/>
+        <result column="USED_TOTAL" property="usedTotal"/>
+        <result column="CONSUME_AMOUNT" property="consumeAmount"/>
+        <result column="CONSUME_EXPAND" property="consumeExpand"/>
+        <result column="PAYMENT_STATUS" property="paymentStatus"/>
+        <result column="EXPAND" property="expand"/>
         <result column="CREATE_TIME" property="createTime"/>
         <result column="UPDATE_TIME" property="updateTime"/>
     </resultMap>
 
-    <sql id="tableName">tariff_standard</sql>
+    <sql id="tableName">tariff_consume</sql>
 
     <sql id="columns">
-        STANDARD_ID,
+        CONSUME_NO,
+        MEMBER_ID,
+        OPERATOR,
         BUSINESS,
         LEVEL,
+        STANDARD_ID,
         UNIT_PRICE,
-        OVERDUE_RATE,
-        START_TIME,
-        END_TIME,
-        STATUS,
+        USED_TOTAL,
+        CONSUME_AMOUNT,
+        CONSUME_EXPAND,
+        PAYMENT_STATUS,
+        EXPAND,
         CREATE_TIME,
         UPDATE_TIME
     </sql>
@@ -33,13 +41,14 @@
     <sql id="condition">
         <if test="search != null">
             <where>
+                <if test="search.memberId != null">AND MEMBER_ID = #{search.memberId}</if>
+                <if test="search.operator != null">AND OPERATOR = #{search.operator}</if>
                 <if test="search.business != null">AND BUSINESS = #{search.business}</if>
                 <if test="search.level != null">AND LEVEL = #{search.level}</if>
+                <if test="search.standardId != null">AND STANDARD_ID = #{search.standardId}</if>
+                <if test="search.consumeExpand != null">AND CONSUME_EXPAND = #{search.consumeExpand}</if>
+                <if test="search.paymentStatus != null">AND PAYMENT_STATUS = #{search.paymentStatus}</if>
             </where>
-            AND STATUS = 1
-        </if>
-        <if test="search == null">
-            WHERE STATUS = 1
         </if>
     </sql>
 
@@ -48,7 +57,7 @@
         <include refid="columns"/>
         FROM
         <include refid="tableName"/>
-        WHERE STANDARD_ID = #{standardId} AND STATUS = 1
+        WHERE CONSUME_NO = #{consumeNo}
     </select>
 
     <select id="selectByExample" resultMap="baseResultMap">
@@ -57,7 +66,6 @@
         FROM
         <include refid="tableName"/>
         <include refid="condition"/>
-        LIMIT 1
     </select>
 
     <select id="selectListPageByExample" resultMap="baseResultMap">
@@ -80,29 +88,29 @@
         UPDATE
         <include refid="tableName"/>
         <set>
-            <if test="unitPrice != null">
-                UNIT_PRICE = #{unitPrice},
+            <if test="operator != null">
+                OPERATOR = #{operator},
             </if>
-            <if test="overdueRate != null">
-                OVERDUE_RATE = #{overdueRate},
+            <if test="consumeAmount != null">
+                CONSUME_AMOUNT = #{consumeAmount},
             </if>
-            <if test="startTime != null">
-                START_TIME = #{startTime},
+            <if test="consumeExpand != null">
+                CONSUME_EXPAND = #{consumeExpand},
             </if>
-            <if test="endTime != null">
-                END_TIME = #{endTime},
+            <if test="paymentStatus != null">
+                PAYMENT_STATUS = #{paymentStatus},
             </if>
-            <if test="status != null">
-                STATUS = #{status},
+            <if test="expand != null">
+                EXPAND = #{expand},
             </if>
             <if test="updateTime != null">
                 UPDATE_TIME = #{updateTime},
             </if>
         </set>
-        WHERE STANDARD_ID = #{standardId}
+        WHERE CONSUME_NO = #{consumeNo}
     </update>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="standardId">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="consumeNo">
         INSERT INTO
         <include refid="tableName"/>
         (
@@ -110,14 +118,18 @@
         )
         VALUES
         (
-        #{standardId},
+        #{consumeNo},
+        #{memberId},
+        #{operator},
         #{business},
         #{level},
+        #{standardId},
         #{unitPrice},
-        #{overdueRate},
-        #{startTime},
-        #{endTime},
-        #{status},
+        #{usedTotal},
+        #{consumeAmount},
+        #{consumeExpand},
+        #{paymentStatus},
+        #{expand},
         #{createTime},
         #{updateTime}
         )

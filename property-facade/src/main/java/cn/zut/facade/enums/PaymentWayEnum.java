@@ -20,7 +20,8 @@ public enum PaymentWayEnum implements Mapping<String, String> {
      */
     ALI_PAY("支付宝"),
     WE_CHAT("微信"),
-    BANK_CARD("银行卡");
+    BANK_CARD("银行卡"),
+    CASH("现金"),;
 
     private final String value;
 

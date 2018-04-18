@@ -39,7 +39,19 @@ public enum BusinessLevelEnum implements Mapping<String, String> {
      * 电费标准
      */
     ELECTRICITY_LIVE("电费家庭用电标准"),
-    ELECTRICITY_COMPANY("电费企业用电标准");
+    ELECTRICITY_COMPANY("电费企业用电标准"),
+    /**
+     * 网费标准
+     */
+    NETWORK_LIVE("网费家庭标准"),
+    NETWORK_COMPANY("网费企业标准"),
+    /**
+     * 停车费标准
+     */
+    PARKING_LIGHT_ONE_2_FOUR_HOUR("停车费-白天-地上3元"),
+    PARKING_LIGHT_FOUR_2_TWELVE_HOUR("停车费-白天-地上6元"),
+    PARKING_NIGHT_ONE_2_FOUR_HOUR("停车费-晚上-地上4元"),
+    PARKING_NIGHT_FOUR_2_TWELVE_HOUR("停车费-晚上-地上8元"),;
 
     private final String value;
 
@@ -75,7 +87,10 @@ public enum BusinessLevelEnum implements Mapping<String, String> {
         return null;
     }
 
-    public List<ComboVO> getPropertyList() {
+    /**
+     * 物业费
+     */
+    public static List<ComboVO> getPropertyList() {
         List<ComboVO> comboVOList = new ArrayList<>();
         comboVOList.add(new ComboVO<>(PROPERTY_ONE));
         comboVOList.add(new ComboVO<>(PROPERTY_TWO));
@@ -84,7 +99,10 @@ public enum BusinessLevelEnum implements Mapping<String, String> {
         return comboVOList;
     }
 
-    public List<ComboVO> getSiteList() {
+    /**
+     * 场地使用费
+     */
+    public static List<ComboVO> getSiteList() {
         List<ComboVO> comboVOList = new ArrayList<>();
         comboVOList.add(new ComboVO<>(SITE_ONE));
         comboVOList.add(new ComboVO<>(SITE_TWO));
@@ -94,17 +112,45 @@ public enum BusinessLevelEnum implements Mapping<String, String> {
         return comboVOList;
     }
 
-    public List<ComboVO> getWaterList() {
+    /**
+     * 水费
+     */
+    public static List<ComboVO> getWaterList() {
         List<ComboVO> comboVOList = new ArrayList<>();
         comboVOList.add(new ComboVO<>(WATER_LIVE));
         comboVOList.add(new ComboVO<>(WATER_COMPANY));
         return comboVOList;
     }
 
-    public List<ComboVO> getElectricityList() {
+    /**
+     * 网费
+     */
+    public static List<ComboVO> getNetworkList() {
+        List<ComboVO> comboVOList = new ArrayList<>();
+        comboVOList.add(new ComboVO<>(NETWORK_LIVE));
+        comboVOList.add(new ComboVO<>(NETWORK_COMPANY));
+        return comboVOList;
+    }
+
+    /**
+     * 电费
+     */
+    public static List<ComboVO> getElectricityList() {
         List<ComboVO> comboVOList = new ArrayList<>();
         comboVOList.add(new ComboVO<>(ELECTRICITY_LIVE));
         comboVOList.add(new ComboVO<>(ELECTRICITY_COMPANY));
+        return comboVOList;
+    }
+
+    /**
+     * 停车费
+     */
+    public static List<ComboVO> getParkingList() {
+        List<ComboVO> comboVOList = new ArrayList<>();
+        comboVOList.add(new ComboVO<>(PARKING_LIGHT_ONE_2_FOUR_HOUR));
+        comboVOList.add(new ComboVO<>(PARKING_LIGHT_FOUR_2_TWELVE_HOUR));
+        comboVOList.add(new ComboVO<>(PARKING_NIGHT_ONE_2_FOUR_HOUR));
+        comboVOList.add(new ComboVO<>(PARKING_NIGHT_FOUR_2_TWELVE_HOUR));
         return comboVOList;
     }
 }

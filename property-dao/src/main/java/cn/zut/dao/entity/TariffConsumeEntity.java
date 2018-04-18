@@ -1,8 +1,8 @@
 package cn.zut.dao.entity;
 
-import cn.zut.facade.enums.BillStatusEnum;
 import cn.zut.facade.enums.BusinessLevelEnum;
 import cn.zut.facade.enums.BusinessTypeEnum;
+import cn.zut.facade.enums.PaymentStatusEnum;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -12,23 +12,24 @@ import java.util.Date;
  * PROJECT: property
  *
  * @author DaoYuanWang
- * @apiNote 缴费账单表
+ * @apiNote 即时消费缴费表
  * @date 2018/3/21
  */
 @Data
-public class TariffBillEntity {
+public class TariffConsumeEntity {
+
     /**
-     * 账单编号
+     * 消费编号
      */
-    private Long billNo;
-    /**
-     * 户号
-     */
-    private String houseNo;
+    private Long consumeNo;
     /**
      * 用户编号
      */
     private Long memberId;
+    /**
+     * 操作人
+     */
+    private String operator;
     /**
      * 业务类型
      */
@@ -46,33 +47,21 @@ public class TariffBillEntity {
      */
     private BigDecimal unitPrice;
     /**
-     * 逾期利率(冗余字段)
-     */
-    private BigDecimal overdueRate;
-    /**
      * 使用量
      */
     private BigDecimal usedTotal;
     /**
-     * 账单金额
+     * 消费总金额
      */
-    private BigDecimal billAmount;
+    private BigDecimal consumeAmount;
     /**
-     * 账单月份
+     * 消费备注
      */
-    private String billMonth;
+    private String consumeExpand;
     /**
      * 支付状态
      */
-    private BillStatusEnum billStatus;
-    /**
-     * 账单起始时间
-     */
-    private Date billStartDate;
-    /**
-     * 账单结束时间
-     */
-    private Date billEndDate;
+    private PaymentStatusEnum paymentStatus;
     /**
      * 拓展字段
      */

@@ -83,6 +83,14 @@ public class TariffStaticBusinessImpl implements TariffStaticBusiness {
     @Override
     public GenericResponse addStandard(TariffStandardRequest tariffStandardRequest) {
         TariffStandardEntity tariffStandardEntity = new TariffStandardEntity();
+        tariffStandardEntity.setBusiness(tariffStandardRequest.getBusiness());
+        tariffStandardEntity.setLevel(tariffStandardRequest.getLevel());
+        tariffStandardEntity = tariffStandardMapper.selectByExample(tariffStandardEntity);
+        if (tariffStandardEntity != null) {
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.TARIFF_STANDARD_IS_EXIST));
+        }
+
+        tariffStandardEntity = new TariffStandardEntity();
         BeanUtils.copyProperties(tariffStandardRequest, tariffStandardEntity);
 
         if (!DateUtil.chenkDateSize(tariffStandardEntity.getStartTime(), tariffStandardEntity.getEndTime())) {

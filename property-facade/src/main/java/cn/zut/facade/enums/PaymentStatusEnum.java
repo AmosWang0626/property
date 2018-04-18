@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author DaoYuanWang
  */
-public enum PaymentStatusEnum implements Mapping {
+public enum PaymentStatusEnum implements Mapping<String, String> {
 
     /**
      * 支付状态

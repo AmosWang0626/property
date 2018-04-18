@@ -7,6 +7,7 @@
         <result column="MEMBER_ID" property="memberId"/>
         <result column="HOUSE_NO" property="houseNo"/>
         <result column="BUSINESS" property="business"/>
+        <result column="LEVEL" property="level"/>
         <result column="STANDARD_ID" property="standardId"/>
         <result column="BILL_STATUS" property="billStatus"/>
         <result column="USED_TOTAL" property="usedTotal"/>
@@ -28,6 +29,7 @@
         MEMBER_ID,
         HOUSE_NO,
         BUSINESS,
+        LEVEL,
         STANDARD_ID,
         BILL_STATUS,
         USED_TOTAL,
@@ -48,6 +50,7 @@
                 <if test="search.memberId != null">AND MEMBER_ID = #{search.memberId}</if>
                 <if test="search.houseNo != null">AND HOUSE_NO = #{search.houseNo}</if>
                 <if test="search.business != null">AND BUSINESS = #{search.business}</if>
+                <if test="search.level != null">AND LEVEL = #{search.level}</if>
                 <if test="search.standardId != null">AND STANDARD_ID = #{search.standardId}</if>
                 <if test="search.billStatus != null">AND BILL_STATUS = #{search.billStatus}</if>
                 <if test="search.billMonth != null">AND BILL_MONTH = #{search.billMonth}</if>
@@ -104,7 +107,7 @@
         WHERE BILL_NO = #{billNo}
     </update>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="memberId">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="billNo">
         INSERT INTO
         <include refid="tableName"/>
         (
@@ -116,6 +119,7 @@
         #{memberId},
         #{houseNo},
         #{business},
+        #{level},
         #{standardId},
         #{billStatus},
         #{usedTotal},

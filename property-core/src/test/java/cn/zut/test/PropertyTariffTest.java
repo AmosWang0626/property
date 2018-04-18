@@ -36,6 +36,8 @@ public class PropertyTariffTest {
     private TariffCompanyMapper tariffCompanyMapper;
     @Resource
     private TariffStandardMapper tariffStandardMapper;
+    @Resource
+    private TariffConsumeMapper tariffConsumeMapper;
 
     @Test
     public void tariffCompanyMapper() {
@@ -61,8 +63,7 @@ public class PropertyTariffTest {
         TariffCompanyBillEntity companyBillEntity = new TariffCompanyBillEntity();
         companyBillEntity.setCompanyId(1L);
         companyBillEntity.setMemberId(10000L);
-        companyBillEntity.setPlanNo(12222L);
-        companyBillEntity.setBusiness(BusinessTypeEnum.WATER);
+        companyBillEntity.setExternalNo(12222L);
         companyBillEntity.setPaymentAmount(new BigDecimal("2000.00"));
         companyBillEntity.setPaymentWay(PaymentWayEnum.BANK_CARD);
         companyBillEntity.setPaymentStatus(PaymentStatusEnum.PAY_PROCESSING);
@@ -135,4 +136,21 @@ public class PropertyTariffTest {
         LOGGER.info("-----------------------------------------插入成功-----------------------------------------");
     }
 
+    @Test
+    public void tariffConsumeMapper() {
+        TariffConsumeEntity tariffConsumeEntity = new TariffConsumeEntity();
+        tariffConsumeEntity.setMemberId(10000L);
+        tariffConsumeEntity.setOperator("操作员AAA");
+        tariffConsumeEntity.setBusiness(BusinessTypeEnum.WATER);
+        tariffConsumeEntity.setStandardId(1000L);
+        tariffConsumeEntity.setUsedTotal(new BigDecimal("30.00"));
+        tariffConsumeEntity.setUnitPrice(new BigDecimal("30.00"));
+        tariffConsumeEntity.setConsumeExpand("豫R:095c7");
+        tariffConsumeEntity.setConsumeAmount(new BigDecimal(1000));
+        tariffConsumeEntity.setPaymentStatus(PaymentStatusEnum.PAY_SUCCESS);
+        tariffConsumeEntity.setExpand("666666666666");
+        tariffConsumeEntity.setCreateTime(new Date());
+        tariffConsumeEntity.setUpdateTime(new Date());
+        tariffConsumeMapper.insert(tariffConsumeEntity);
+    }
 }

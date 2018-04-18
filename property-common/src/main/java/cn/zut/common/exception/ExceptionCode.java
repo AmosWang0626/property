@@ -25,7 +25,12 @@ public enum ExceptionCode implements Message {
     PLEASE_INPUT_PHONE_NO("M2007", "请输入手机号"),
     PLEASE_INPUT_PHONE_NO_AND_PASSWORD("M2008", "请输入手机号和密码"),
     UPLOAD_FILE_IS_NULL("M2009", "上传的文件不能为空"),
-    LAST_DATE_NOT_SMALL_PRE_DATE("M2010", "结束日期不能大于开始日期"),;
+    LAST_DATE_NOT_SMALL_PRE_DATE("M2010", "结束日期不能大于开始日期"),
+
+    TARIFF_STANDARD_IS_EXIST("T0002", "当前资费标准已存在,可删除,可修改"),
+    TARIFF_STANDARD_IS_NOT_EXIST("T0001", "当前资费标准不存在,请联系管理员添加"),
+
+    DEMO("0", "666"),;
 
     private final String respCode;
     private final String respMsg;
