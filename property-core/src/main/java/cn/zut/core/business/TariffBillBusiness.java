@@ -1,8 +1,8 @@
 package cn.zut.core.business;
 
 import cn.zut.common.generic.GenericResponse;
-import cn.zut.facade.request.ConsumePreviewRequest;
 import cn.zut.facade.request.ConsumeConfirmRequest;
+import cn.zut.facade.request.ConsumePreviewRequest;
 
 /**
  * PROJECT: property
@@ -31,4 +31,10 @@ public interface TariffBillBusiness {
      */
     GenericResponse consumeConfirm(ConsumeConfirmRequest consumeConfirmRequest);
 
+    /**
+     * 生成月度账单
+     *
+     * @return GenericResponse
+     */
+    GenericResponse generateMonthBill();
 }

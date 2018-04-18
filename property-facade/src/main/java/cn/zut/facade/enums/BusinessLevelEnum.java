@@ -19,31 +19,31 @@ public enum BusinessLevelEnum implements Mapping<String, String> {
      * 物业费标准
      */
     PROPERTY_ONE("物业费一级标准"),
-    PROPERTY_TWO("物业费二级标准"),
+    /*PROPERTY_TWO("物业费二级标准"),
     PROPERTY_THREE("物业费三级标准"),
-    PROPERTY_FORE("物业费四级标准"),
+    PROPERTY_FORE("物业费四级标准"),*/
     /**
      * 场地使用费标准
      */
     SITE_ONE("场地使用费一级标准"),
     SITE_TWO("场地使用费二级标准"),
-    SITE_THREE("场地使用费三级标准"),
+    /*SITE_THREE("场地使用费三级标准"),
     SITE_FORE("场地使用费四级标准"),
-    SITE_FIVE("场地使用费五级标准"),
+    SITE_FIVE("场地使用费五级标准"),*/
     /**
      * 水费标准
      */
-    WATER_LIVE("水费家庭用水标准"),
+    /*WATER_LIVE("水费家庭用水标准"),*/
     WATER_COMPANY("水费企业用水标准"),
     /**
      * 电费标准
      */
-    ELECTRICITY_LIVE("电费家庭用电标准"),
+    /*ELECTRICITY_LIVE("电费家庭用电标准"),*/
     ELECTRICITY_COMPANY("电费企业用电标准"),
     /**
      * 网费标准
      */
-    NETWORK_LIVE("网费家庭标准"),
+    /*NETWORK_LIVE("网费家庭标准"),*/
     NETWORK_COMPANY("网费企业标准"),
     /**
      * 停车费标准
@@ -93,9 +93,6 @@ public enum BusinessLevelEnum implements Mapping<String, String> {
     public static List<ComboVO> getPropertyList() {
         List<ComboVO> comboVOList = new ArrayList<>();
         comboVOList.add(new ComboVO<>(PROPERTY_ONE));
-        comboVOList.add(new ComboVO<>(PROPERTY_TWO));
-        comboVOList.add(new ComboVO<>(PROPERTY_THREE));
-        comboVOList.add(new ComboVO<>(PROPERTY_FORE));
         return comboVOList;
     }
 
@@ -106,9 +103,9 @@ public enum BusinessLevelEnum implements Mapping<String, String> {
         List<ComboVO> comboVOList = new ArrayList<>();
         comboVOList.add(new ComboVO<>(SITE_ONE));
         comboVOList.add(new ComboVO<>(SITE_TWO));
-        comboVOList.add(new ComboVO<>(SITE_THREE));
+        /*comboVOList.add(new ComboVO<>(SITE_THREE));
         comboVOList.add(new ComboVO<>(SITE_FORE));
-        comboVOList.add(new ComboVO<>(SITE_FIVE));
+        comboVOList.add(new ComboVO<>(SITE_FIVE));*/
         return comboVOList;
     }
 
@@ -117,7 +114,7 @@ public enum BusinessLevelEnum implements Mapping<String, String> {
      */
     public static List<ComboVO> getWaterList() {
         List<ComboVO> comboVOList = new ArrayList<>();
-        comboVOList.add(new ComboVO<>(WATER_LIVE));
+        /*comboVOList.add(new ComboVO<>(WATER_LIVE));*/
         comboVOList.add(new ComboVO<>(WATER_COMPANY));
         return comboVOList;
     }
@@ -127,7 +124,7 @@ public enum BusinessLevelEnum implements Mapping<String, String> {
      */
     public static List<ComboVO> getNetworkList() {
         List<ComboVO> comboVOList = new ArrayList<>();
-        comboVOList.add(new ComboVO<>(NETWORK_LIVE));
+        /*comboVOList.add(new ComboVO<>(NETWORK_LIVE));*/
         comboVOList.add(new ComboVO<>(NETWORK_COMPANY));
         return comboVOList;
     }
@@ -137,7 +134,7 @@ public enum BusinessLevelEnum implements Mapping<String, String> {
      */
     public static List<ComboVO> getElectricityList() {
         List<ComboVO> comboVOList = new ArrayList<>();
-        comboVOList.add(new ComboVO<>(ELECTRICITY_LIVE));
+        /*comboVOList.add(new ComboVO<>(ELECTRICITY_LIVE));*/
         comboVOList.add(new ComboVO<>(ELECTRICITY_COMPANY));
         return comboVOList;
     }

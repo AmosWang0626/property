@@ -1,5 +1,6 @@
 package cn.zut.test;
 
+import cn.zut.core.business.TariffBillBusiness;
 import cn.zut.dao.entity.*;
 import cn.zut.dao.persistence.*;
 import cn.zut.facade.enums.*;
@@ -80,7 +81,7 @@ public class PropertyTariffTest {
     public void tariffStandardMapper() {
         TariffStandardEntity standardEntity = new TariffStandardEntity();
         standardEntity.setBusiness(BusinessTypeEnum.WATER);
-        standardEntity.setLevel(BusinessLevelEnum.WATER_LIVE);
+        standardEntity.setLevel(BusinessLevelEnum.WATER_COMPANY);
         standardEntity.setUnitPrice(new BigDecimal("30.00"));
         standardEntity.setOverdueRate(new BigDecimal("0.001"));
         standardEntity.setStartTime(new Date());
@@ -152,5 +153,13 @@ public class PropertyTariffTest {
         tariffConsumeEntity.setCreateTime(new Date());
         tariffConsumeEntity.setUpdateTime(new Date());
         tariffConsumeMapper.insert(tariffConsumeEntity);
+    }
+
+    @Resource
+    private TariffBillBusiness tariffBillBusiness;
+
+    @Test
+    public void generateTariffBill() {
+        tariffBillBusiness.generateMonthBill();
     }
 }

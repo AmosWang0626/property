@@ -127,6 +127,26 @@ public class DateUtil {
     }
 
     /**
+     * 获取上个月第一天日期
+     */
+    public static Date getPreMonthFirstDay() {
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.MONTH, -1);
+        ca.set(Calendar.DAY_OF_MONTH, 1);
+        return ca.getTime();
+    }
+
+    /**
+     * 获取上个月最后一天日期
+     */
+    public static Date getPreMonthLastDay() {
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.MONTH, -1);
+        ca.set(Calendar.DAY_OF_MONTH, ca.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return ca.getTime();
+    }
+
+    /**
      * 获取上个月日期
      * ps: 2018-03
      */
@@ -156,6 +176,19 @@ public class DateUtil {
         ca.setTime(date);
         return FORMAT_YEAR_2_MONTH.get().format(ca.getTime());
     }
+
+    /**
+     * 获取当月月份
+     * ps: 2018-03
+     */
+    public static String getMonth() {
+        Calendar ca = Calendar.getInstance();
+        return FORMAT_YEAR_2_MONTH.get().format(ca.getTime());
+    }
+
+//    public static void main(String[] args) {
+//        System.out.println(getMonth());
+//    }
 
     /**
      * 获取上个月月份
@@ -211,7 +244,7 @@ public class DateUtil {
      * @param date2 较大的时间
      * @return 后者比前者大: true;
      */
-    public static boolean chenkDateSize(Date date1, Date date2) {
+    public static boolean checkDateSize(Date date1, Date date2) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date1);
         long time1 = calendar.getTimeInMillis();

@@ -93,7 +93,7 @@ public class TariffStaticBusinessImpl implements TariffStaticBusiness {
         tariffStandardEntity = new TariffStandardEntity();
         BeanUtils.copyProperties(tariffStandardRequest, tariffStandardEntity);
 
-        if (!DateUtil.chenkDateSize(tariffStandardEntity.getStartTime(), tariffStandardEntity.getEndTime())) {
+        if (!DateUtil.checkDateSize(tariffStandardEntity.getStartTime(), tariffStandardEntity.getEndTime())) {
             return new GenericResponse(new ExceptionMessage(ExceptionCode.LAST_DATE_NOT_SMALL_PRE_DATE));
         }
 
