@@ -30,6 +30,24 @@ public enum ExceptionCode implements Message {
     TARIFF_STANDARD_IS_EXIST("T0002", "当前资费标准已存在,可删除,可修改"),
     TARIFF_STANDARD_IS_NOT_EXIST("T0001", "当前资费标准不存在,请联系管理员添加"),
 
+    /**
+     * 交易失败原因
+     */
+    PAYMENT_WAY_NOT_EXIST("TP0001", "请先选择支付方式"),
+    PAYMENT_ALI_PAY_PWD_ERROR("TP0001", "[支付宝支付]交易失败, 失败原因[密码错误]"),
+    PAYMENT_ALI_PAY_INSUFFICIENT_BALANCE("TP0001", "[支付宝支付]交易失败, 失败原因[余额不足]"),
+    PAYMENT_ALI_PAY_NETWORK_ERROR("TP0001", "[支付宝支付]交易失败, 失败原因[网络异常]"),
+    PAYMENT_ALI_PAY_OVER_QUOTA("TP0001", "[支付宝支付]交易失败, 失败原因[超过限额]"),
+    PAYMENT_WE_CHAT_PWD_ERROR("TP0001", "[微信支付]交易失败, 失败原因[密码错误]"),
+    PAYMENT_WE_CHAT_INSUFFICIENT_BALANCE("TP0001", "[微信支付]交易失败, 失败原因[余额不足]"),
+    PAYMENT_WE_CHAT_NETWORK_ERROR("TP0001", "[微信支付]交易失败, 失败原因[网络异常]"),
+    PAYMENT_WE_CHAT_OVER_QUOTA("TP0001", "[微信支付]交易失败, 失败原因[超过限额]"),
+    PAYMENT_BANK_CARD_PWD_ERROR("TP0001", "[银行卡支付]交易失败, 失败原因[密码错误]"),
+    PAYMENT_BANK_CARD_INSUFFICIENT_BALANCE("TP0001", "[银行卡支付]交易失败, 失败原因[余额不足]"),
+    PAYMENT_BANK_CARD_OVER_QUOTA("TP0001", "[银行卡支付]交易失败, 失败原因[超过限额]"),
+    PAYMENT_CASH_COUNTERFEIT_MONEY("TP0001", "[现金支付]交易失败, 失败原因[假币]"),
+    PAYMENT_CASH_NOTCH("TP0001", "[现金支付]交易失败, 失败原因[缺角]"),
+
     DEMO("0", "666"),;
 
     private final String respCode;

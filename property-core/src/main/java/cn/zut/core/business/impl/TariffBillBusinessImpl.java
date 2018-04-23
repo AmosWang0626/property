@@ -89,10 +89,10 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
         BigDecimal useTotal = new BigDecimal(new Random().nextInt(30) + 50);
 
         TariffBillRequest tariffBillRequest = new TariffBillRequest();
-        // 房间号 + 业主编号（从house表拿）
+        // 房间号 || 业主编号
         tariffBillRequest.setHouseNo("1#101");
         tariffBillRequest.setMemberId(10000L);
-        // 使用量
+        // 使用量(暂时随机)
         tariffBillRequest.setUsedTotal(useTotal);
         // 业务类型 + 业务等级
         tariffBillRequest.setBusiness(BusinessTypeEnum.PROPERTY);
@@ -114,15 +114,12 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
     private TariffBillEntity generateBill(TariffBillRequest tariffBillRequest) throws RuntimeException {
         TariffBillEntity tariffBillEntity = new TariffBillEntity();
 
-        // 房间号 + 业主编号 --- 从house表拿
+        // 房间号 || 业主用户编号 || 面积或使用量 || 业务类型 || 业务等级 || 备注
         tariffBillEntity.setHouseNo(tariffBillRequest.getHouseNo());
         tariffBillEntity.setMemberId(tariffBillRequest.getMemberId());
-        // 面积或使用量
         tariffBillEntity.setUsedTotal(tariffBillRequest.getUsedTotal());
-        // 业务类型 + 业务等级
         tariffBillEntity.setBusiness(tariffBillRequest.getBusiness());
         tariffBillEntity.setLevel(tariffBillRequest.getLevel());
-
         tariffBillEntity.setExpand(tariffBillRequest.getExpand());
 
         // 由于标准是会变的,所以注意取其最新标准
