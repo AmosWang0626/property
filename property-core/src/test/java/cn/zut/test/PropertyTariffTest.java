@@ -1,9 +1,11 @@
 package cn.zut.test;
 
 import cn.zut.core.business.TariffBillBusiness;
+import cn.zut.core.service.TariffCompanyService;
 import cn.zut.dao.entity.*;
 import cn.zut.dao.persistence.*;
 import cn.zut.facade.enums.*;
+import cn.zut.facade.request.TariffCompanyBillRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -67,7 +69,7 @@ public class PropertyTariffTest {
         companyBillEntity.setExternalNo(12222L);
         companyBillEntity.setPaymentAmount(new BigDecimal("2000.00"));
         companyBillEntity.setPaymentWay(PaymentWayEnum.BANK_CARD);
-        companyBillEntity.setPaymentStatus(PaymentStatusEnum.PAY_PROCESSING);
+        companyBillEntity.setPaymentStatus(PaymentStatusEnum.PAY_SUCCESS);
         companyBillEntity.setPaymentDate(new Date());
         companyBillEntity.setErrorCode("");
         companyBillEntity.setErrorMessage("");
@@ -161,5 +163,19 @@ public class PropertyTariffTest {
     @Test
     public void generateTariffBill() {
         tariffBillBusiness.generateMonthBill();
+    }
+
+    @Resource
+    private TariffCompanyService tariffCompanyService;
+
+    @Test
+    public void paymentRecord() {
+        TariffCompanyBillRequest tariffCompanyBillRequest = new TariffCompanyBillRequest();
+        tariffCompanyBillRequest.setCompanyId(66666L);
+        tariffCompanyBillRequest.setExternalNo("65168523323");
+        tariffCompanyBillRequest.setMemberId(10000L);
+        tariffCompanyBillRequest.setPaymentAmount(new BigDecimal(1000));
+        tariffCompanyBillRequest.setPaymentWay(PaymentWayEnum.ALI_PAY);
+        tariffCompanyService.paymentRecord(tariffCompanyBillRequest);
     }
 }

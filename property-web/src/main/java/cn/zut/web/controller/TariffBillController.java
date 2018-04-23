@@ -5,8 +5,8 @@ import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.business.TariffBillBusiness;
 import cn.zut.core.constant.PropertyConstant;
-import cn.zut.facade.request.ConsumePreviewRequest;
 import cn.zut.facade.request.ConsumeConfirmRequest;
+import cn.zut.facade.request.ConsumePreviewRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +34,8 @@ public class TariffBillController {
     private TariffBillBusiness tariffBillBusiness;
 
     @PostMapping("unitPrice")
-    public GenericResponse getUnitPrice(@RequestBody @Valid ConsumePreviewRequest consumePreviewRequest, BindingResult bindingResult) {
+    public GenericResponse getUnitPrice(@RequestBody @Valid ConsumePreviewRequest consumePreviewRequest,
+                                        BindingResult bindingResult) {
         // 参数校验
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
@@ -45,9 +46,16 @@ public class TariffBillController {
     }
 
     @RequestMapping("consumeConfirm")
-    public GenericResponse consumeConfirm(@RequestBody ConsumeConfirmRequest consumeConfirmRequest, HttpServletRequest request) {
-        // 操作人编号
-        consumeConfirmRequest.setMemberId(getMemberId(request));
+    public GenericResponse consumeConfirm(@RequestBody @Valid ConsumeConfirmRequest consumeConfirmRequest,
+                                          BindingResult bindingResult, HttpServletRequest request) {
+        // 参数校验
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> list = bindingResult.getAllErrors();
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage()));
+        }
+
+        // 操作人用户编号
+        consumeConfirmRequest.setOperatorMemberId(getMemberId(request));
         return tariffBillBusiness.consumeConfirm(consumeConfirmRequest);
     }
 

@@ -80,7 +80,7 @@ CREATE TABLE `tariff_company_bill`  (
   `ID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `COMPANY_ID` bigint(20) NOT NULL COMMENT '公司编号',
   `MEMBER_ID` bigint(20) NOT NULL COMMENT '用户编号',
-  `EXTERNAL_NO` bigint(20) NOT NULL COMMENT '外部交易编号',
+  `EXTERNAL_NO` varchar(20) NOT NULL COMMENT '外部交易编号',
   `PAYMENT_AMOUNT` decimal(18, 2) NOT NULL COMMENT '交易金额',
   `PAYMENT_WAY` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '支付方式',
   `PAYMENT_STATUS` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '支付状态',
@@ -95,8 +95,8 @@ CREATE TABLE `tariff_company_bill`  (
 -- Table structure for tariff_consume
 -- ----------------------------
 DROP TABLE IF EXISTS `tariff_consume`;
-CREATE TABLE `tariff_consume`  (
-  `CONSUME_NO` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '消费编号',
+CREATE TABLE `tariff_consume` (
+  `CONSUME_NO` varchar(20) NOT NULL COMMENT '消费编号',
   `MEMBER_ID` bigint(20) NOT NULL COMMENT '用户编号',
   `OPERATOR` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作人',
   `BUSINESS` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '业务类型',
@@ -110,8 +110,8 @@ CREATE TABLE `tariff_consume`  (
   `EXPAND` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '拓展字段',
   `UPDATE_TIME` datetime NULL DEFAULT NULL COMMENT '修改时间',
   `CREATE_TIME` datetime NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`CONSUME_NO`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '消费账单表' ROW_FORMAT = Compact;
+  PRIMARY KEY (`CONSUME_NO`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='消费账单表';
 
 -- ----------------------------
 -- Table structure for tariff_standard

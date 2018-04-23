@@ -1,6 +1,5 @@
 package cn.zut.facade.request;
 
-import cn.zut.facade.enums.PaymentStatusEnum;
 import cn.zut.facade.enums.PaymentWayEnum;
 import lombok.Data;
 
@@ -26,7 +25,7 @@ public class TariffCompanyBillRequest {
     /**
      * 缴费计划编号
      */
-    private Long externalNo;
+    private String externalNo;
     /**
      * 交易金额
      */

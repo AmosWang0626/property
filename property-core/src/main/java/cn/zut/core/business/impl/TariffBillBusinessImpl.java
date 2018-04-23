@@ -4,19 +4,25 @@ import cn.zut.common.exception.ExceptionCode;
 import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.util.DateUtil;
+import cn.zut.common.util.GenericIdUtil;
 import cn.zut.core.business.TariffBillBusiness;
+import cn.zut.core.service.TariffCompanyService;
 import cn.zut.dao.entity.TariffBillEntity;
+import cn.zut.dao.entity.TariffCompanyEntity;
 import cn.zut.dao.entity.TariffConsumeEntity;
 import cn.zut.dao.entity.TariffStandardEntity;
 import cn.zut.dao.persistence.TariffBillMapper;
+import cn.zut.dao.persistence.TariffCompanyMapper;
 import cn.zut.dao.persistence.TariffConsumeMapper;
 import cn.zut.dao.persistence.TariffStandardMapper;
 import cn.zut.facade.enums.BillStatusEnum;
 import cn.zut.facade.enums.BusinessLevelEnum;
 import cn.zut.facade.enums.BusinessTypeEnum;
+import cn.zut.facade.enums.PaymentStatusEnum;
 import cn.zut.facade.request.ConsumeConfirmRequest;
 import cn.zut.facade.request.ConsumePreviewRequest;
 import cn.zut.facade.request.TariffBillRequest;
+import cn.zut.facade.request.TariffCompanyBillRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -45,6 +51,11 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
     private TariffConsumeMapper tariffConsumeMapper;
     @Resource
     private TariffStandardMapper tariffStandardMapper;
+    @Resource
+    private TariffCompanyMapper tariffCompanyMapper;
+
+    @Resource
+    private TariffCompanyService tariffCompanyService;
 
     @Override
     public GenericResponse getUnitPrice(ConsumePreviewRequest consumePreviewRequest) {
@@ -65,20 +76,53 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
         tariffStandardEntity.setBusiness(consumeConfirmRequest.getBusiness());
         tariffStandardEntity.setLevel(consumeConfirmRequest.getLevel());
         tariffStandardEntity = tariffStandardMapper.selectByExample(tariffStandardEntity);
-
+        // 先拿到标准
         if (tariffStandardEntity == null) {
             return new GenericResponse(new ExceptionMessage(ExceptionCode.TARIFF_STANDARD_IS_NOT_EXIST));
         }
+
+        // 再拿到收费公司
+        TariffCompanyEntity tariffCompanyEntity = new TariffCompanyEntity();
+        tariffCompanyEntity.setBusiness(consumeConfirmRequest.getBusiness());
+        tariffCompanyEntity = tariffCompanyMapper.selectByExample(tariffCompanyEntity);
+        if (tariffCompanyEntity == null) {
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.TARIFF_COMPANY_BUSINESS_NOT_EXIST));
+        }
+
+        BigDecimal consumeAmount = tariffStandardEntity.getUnitPrice().multiply(consumeConfirmRequest.getUsedTotal());
+        String consumeNo = GenericIdUtil.genericConsumeNo();
+
         TariffConsumeEntity tariffConsumeEntity = new TariffConsumeEntity();
         BeanUtils.copyProperties(consumeConfirmRequest, tariffConsumeEntity);
-        tariffConsumeEntity.setConsumeAmount(tariffStandardEntity.getUnitPrice().multiply(consumeConfirmRequest.getUsedTotal()));
+        tariffConsumeEntity.setConsumeNo(consumeNo);
+        tariffConsumeEntity.setConsumeAmount(consumeAmount);
         tariffConsumeEntity.setStandardId(tariffStandardEntity.getStandardId());
         tariffConsumeEntity.setUnitPrice(tariffStandardEntity.getUnitPrice());
+        // 设置操作人信息
+        tariffConsumeEntity.setOperator(consumeConfirmRequest.getOperator() + "[" + consumeConfirmRequest.getOperatorMemberId() + "]");
         tariffConsumeEntity.setCreateTime(new Date());
-        tariffConsumeEntity.setUpdateTime(new Date());
+
+        // 请求支付公司接口
+        TariffCompanyBillRequest tariffCompanyBillRequest = new TariffCompanyBillRequest();
+        tariffCompanyBillRequest.setMemberId(consumeConfirmRequest.getMemberId());
+        tariffCompanyBillRequest.setCompanyId(tariffCompanyEntity.getCompanyId());
+        tariffCompanyBillRequest.setExternalNo(consumeNo);
+        tariffCompanyBillRequest.setPaymentAmount(consumeAmount);
+        tariffCompanyBillRequest.setPaymentWay(consumeConfirmRequest.getPaymentWay());
+        GenericResponse paymentRecordResponse = tariffCompanyService.paymentRecord(tariffCompanyBillRequest);
+        // 保存消费记录
+        if (paymentRecordResponse.success()) {
+            tariffConsumeEntity.setPaymentStatus(PaymentStatusEnum.PAY_SUCCESS);
+            tariffConsumeMapper.insert(tariffConsumeEntity);
+
+            return GenericResponse.SUCCESS;
+        }
+
+        tariffConsumeEntity.setPaymentStatus(PaymentStatusEnum.PAY_FAIL);
+        tariffConsumeEntity.setExpand("错误码: " + paymentRecordResponse.getRespCode() + ", 错误原因: " + paymentRecordResponse.getRespMsg());
         tariffConsumeMapper.insert(tariffConsumeEntity);
 
-        return GenericResponse.SUCCESS;
+        return paymentRecordResponse;
     }
 
     @Override

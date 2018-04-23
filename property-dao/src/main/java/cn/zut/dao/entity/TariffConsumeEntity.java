@@ -21,7 +21,7 @@ public class TariffConsumeEntity {
     /**
      * 消费编号
      */
-    private Long consumeNo;
+    private String consumeNo;
     /**
      * 用户编号
      */
