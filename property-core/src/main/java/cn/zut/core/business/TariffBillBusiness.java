@@ -4,6 +4,7 @@ import cn.zut.common.dao.PageModel;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.generic.SimplePageResult;
 import cn.zut.dao.entity.TariffBillEntity;
+import cn.zut.dao.entity.TariffBillPlanEntity;
 import cn.zut.facade.request.ConsumeConfirmRequest;
 import cn.zut.facade.request.ConsumePreviewRequest;
 import cn.zut.facade.request.TariffBillRequest;
@@ -59,4 +60,12 @@ public interface TariffBillBusiness {
      * @return GenericResponse
      */
     SimplePageResult<TariffBillEntity> pageBillByModel(PageModel<TariffBillEntity> pageModel);
+
+    /**
+     * 查询所有账单计划
+     *
+     * @param pageModel 分页查询对象
+     * @return GenericResponse
+     */
+    SimplePageResult<TariffBillPlanEntity> pageBillPlanByModel(PageModel<TariffBillPlanEntity> pageModel);
 }

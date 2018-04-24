@@ -7,6 +7,7 @@ import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.business.TariffBillBusiness;
 import cn.zut.core.constant.PropertyConstant;
 import cn.zut.dao.entity.TariffBillEntity;
+import cn.zut.dao.entity.TariffBillPlanEntity;
 import cn.zut.facade.request.ConsumeConfirmRequest;
 import cn.zut.facade.request.ConsumePreviewRequest;
 import cn.zut.facade.request.TariffBillRequest;
@@ -79,6 +80,18 @@ public class TariffBillController {
         pageModel.setPage(page);
         pageModel.setRows(size);
         return new GenericResponse<>(tariffBillBusiness.pageBillByModel(pageModel));
+    }
+
+    @GetMapping("pageBillPlan")
+    public GenericResponse pageBillPlan(@RequestParam(value = "page", required = false) Integer page,
+                                        @RequestParam(value = "size", required = false) Integer size) {
+        if (page == null || size == null) {
+            return GenericResponse.SUCCESS;
+        }
+        PageModel<TariffBillPlanEntity> pageModel = new PageModel<>();
+        pageModel.setPage(page);
+        pageModel.setRows(size);
+        return new GenericResponse<>(tariffBillBusiness.pageBillPlanByModel(pageModel));
     }
 
     private Long getMemberId(HttpServletRequest request) {

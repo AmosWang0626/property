@@ -9,14 +9,8 @@ import cn.zut.common.util.DateUtil;
 import cn.zut.common.util.GenericIdUtil;
 import cn.zut.core.business.TariffBillBusiness;
 import cn.zut.core.service.TariffCompanyService;
-import cn.zut.dao.entity.TariffBillEntity;
-import cn.zut.dao.entity.TariffCompanyEntity;
-import cn.zut.dao.entity.TariffConsumeEntity;
-import cn.zut.dao.entity.TariffStandardEntity;
-import cn.zut.dao.persistence.TariffBillMapper;
-import cn.zut.dao.persistence.TariffCompanyMapper;
-import cn.zut.dao.persistence.TariffConsumeMapper;
-import cn.zut.dao.persistence.TariffStandardMapper;
+import cn.zut.dao.entity.*;
+import cn.zut.dao.persistence.*;
 import cn.zut.facade.enums.BillStatusEnum;
 import cn.zut.facade.enums.BusinessLevelEnum;
 import cn.zut.facade.enums.BusinessTypeEnum;
@@ -50,6 +44,8 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
 
     @Resource
     private TariffBillMapper tariffBillMapper;
+    @Resource
+    private TariffBillPlanMapper tariffBillPlanMapper;
     @Resource
     private TariffConsumeMapper tariffConsumeMapper;
     @Resource
@@ -184,6 +180,19 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
         List<TariffBillEntity> tariffBillEntities = tariffBillMapper.selectListPageByExample(pageModel);
         int memberCount = tariffBillMapper.selectCountByExample(pageModel.getSearch());
         SimplePageResult<TariffBillEntity> pageResult = new SimplePageResult<>();
+        // 总记录数量 || 记录数据列表 || 页码 || 记录数量
+        pageResult.setTotal(memberCount);
+        pageResult.setRows(tariffBillEntities);
+        pageResult.setPage(pageModel.getPage());
+        pageResult.setSize(pageModel.getRows());
+        return pageResult;
+    }
+
+    @Override
+    public SimplePageResult<TariffBillPlanEntity> pageBillPlanByModel(PageModel<TariffBillPlanEntity> pageModel) {
+        List<TariffBillPlanEntity> tariffBillEntities = tariffBillPlanMapper.selectListPageByExample(pageModel);
+        int memberCount = tariffBillPlanMapper.selectCountByExample(pageModel.getSearch());
+        SimplePageResult<TariffBillPlanEntity> pageResult = new SimplePageResult<>();
         // 总记录数量 || 记录数据列表 || 页码 || 记录数量
         pageResult.setTotal(memberCount);
         pageResult.setRows(tariffBillEntities);
