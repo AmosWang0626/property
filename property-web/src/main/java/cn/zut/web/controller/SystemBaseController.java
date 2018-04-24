@@ -55,8 +55,32 @@ public class SystemBaseController {
         return new GenericResponse<>(comboVOList);
     }
 
+    @GetMapping("getImmediateBusiness")
+    public GenericResponse getImmediateBusiness() {
+        List<ComboVO> comboVOList = new ArrayList<>();
+        comboVOList.add(new ComboVO<>(BusinessTypeEnum.SITE));
+        comboVOList.add(new ComboVO<>(BusinessTypeEnum.PARKING));
+
+        return new GenericResponse<>(comboVOList);
+    }
+
+    @GetMapping("getBillEntryBusiness")
+    public GenericResponse getBillEntryBusiness() {
+        List<ComboVO> comboVOList = new ArrayList<>();
+        comboVOList.add(new ComboVO<>(BusinessTypeEnum.WATER));
+        comboVOList.add(new ComboVO<>(BusinessTypeEnum.ELECTRICITY));
+        comboVOList.add(new ComboVO<>(BusinessTypeEnum.NETWORK));
+        comboVOList.add(new ComboVO<>(BusinessTypeEnum.PROPERTY));
+
+        return new GenericResponse<>(comboVOList);
+    }
+
     @GetMapping("getBusinessLevel")
-    public GenericResponse getBusinessLevel(@RequestParam(value = "business") BusinessTypeEnum business) {
+    public GenericResponse getBusinessLevel(@RequestParam(value = "business", required = false) BusinessTypeEnum business) {
+        if (business == null) {
+            return GenericResponse.SUCCESS;
+        }
+
         List<ComboVO> comboVOList = null;
 
         switch (business) {

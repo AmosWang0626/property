@@ -31,7 +31,7 @@ public class TariffCompanyBillEntity {
     /**
      * 缴费计划编号
      */
-    private Long externalNo;
+    private String externalNo;
     /**
      * 交易金额
      */

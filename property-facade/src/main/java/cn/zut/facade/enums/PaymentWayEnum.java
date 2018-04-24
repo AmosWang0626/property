@@ -1,11 +1,7 @@
 package cn.zut.facade.enums;
 
-import cn.zut.facade.api.ComboVO;
 import cn.zut.facade.api.Mapping;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * PROJECT: property
@@ -55,13 +51,5 @@ public enum PaymentWayEnum implements Mapping<String, String> {
             }
         }
         return null;
-    }
-
-    public List<ComboVO> getPaymentWayList() {
-        List<ComboVO> comboVOList = new ArrayList<>();
-        comboVOList.add(new ComboVO<>(ALI_PAY));
-        comboVOList.add(new ComboVO<>(WE_CHAT));
-        comboVOList.add(new ComboVO<>(BANK_CARD));
-        return comboVOList;
     }
 }

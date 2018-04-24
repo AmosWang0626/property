@@ -1,8 +1,10 @@
 package cn.zut.core.business.impl;
 
+import cn.zut.common.dao.PageModel;
 import cn.zut.common.exception.ExceptionCode;
 import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
+import cn.zut.common.generic.SimplePageResult;
 import cn.zut.common.util.DateUtil;
 import cn.zut.common.util.GenericIdUtil;
 import cn.zut.core.business.TariffBillBusiness;
@@ -31,6 +33,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -71,7 +74,7 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
     }
 
     @Override
-    public GenericResponse consumeConfirm(ConsumeConfirmRequest consumeConfirmRequest) {
+    public GenericResponse consumeConfirm(Long operatorMemberId, ConsumeConfirmRequest consumeConfirmRequest) {
         TariffStandardEntity tariffStandardEntity = new TariffStandardEntity();
         tariffStandardEntity.setBusiness(consumeConfirmRequest.getBusiness());
         tariffStandardEntity.setLevel(consumeConfirmRequest.getLevel());
@@ -99,7 +102,7 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
         tariffConsumeEntity.setStandardId(tariffStandardEntity.getStandardId());
         tariffConsumeEntity.setUnitPrice(tariffStandardEntity.getUnitPrice());
         // 设置操作人信息
-        tariffConsumeEntity.setOperator(consumeConfirmRequest.getOperator() + "[" + consumeConfirmRequest.getOperatorMemberId() + "]");
+        tariffConsumeEntity.setOperator(consumeConfirmRequest.getOperator() + "[" + operatorMemberId + "]");
         tariffConsumeEntity.setCreateTime(new Date());
 
         // 请求支付公司接口
@@ -153,6 +156,40 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
         tariffBillMapper.insert(tariffBillEntity);
 
         return GenericResponse.SUCCESS;
+    }
+
+    @Override
+    public GenericResponse billEntry(Long operatorMemberId, TariffBillRequest tariffBillRequest) {
+        // 根据户号,设置memberId
+        String houseNo = tariffBillRequest.getHouseNo();
+        Long memberId = 10008L;
+        tariffBillRequest.setMemberId(memberId);
+        tariffBillRequest.setOperator(tariffBillRequest.getOperator() + "[" + operatorMemberId + "]");
+
+        TariffBillEntity tariffBillEntity;
+        try {
+            tariffBillEntity = generateBill(tariffBillRequest);
+        } catch (RuntimeException e) {
+            LOGGER.error("当前资费标准不存在", e);
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.TARIFF_STANDARD_IS_NOT_EXIST));
+        }
+
+        tariffBillMapper.insert(tariffBillEntity);
+
+        return GenericResponse.SUCCESS;
+    }
+
+    @Override
+    public SimplePageResult<TariffBillEntity> pageBillByModel(PageModel<TariffBillEntity> pageModel) {
+        List<TariffBillEntity> tariffBillEntities = tariffBillMapper.selectListPageByExample(pageModel);
+        int memberCount = tariffBillMapper.selectCountByExample(pageModel.getSearch());
+        SimplePageResult<TariffBillEntity> pageResult = new SimplePageResult<>();
+        // 总记录数量 || 记录数据列表 || 页码 || 记录数量
+        pageResult.setTotal(memberCount);
+        pageResult.setRows(tariffBillEntities);
+        pageResult.setPage(pageModel.getPage());
+        pageResult.setSize(pageModel.getRows());
+        return pageResult;
     }
 
     private TariffBillEntity generateBill(TariffBillRequest tariffBillRequest) throws RuntimeException {

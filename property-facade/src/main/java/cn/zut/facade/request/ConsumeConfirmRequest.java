@@ -49,10 +49,6 @@ public class ConsumeConfirmRequest {
     @NotEmpty(message = "操作人不能为空")
     private String operator;
     /**
-     * 操作人 memberId
-     */
-    private Long operatorMemberId;
-    /**
      * 消费备注
      */
     private String consumeExpand;

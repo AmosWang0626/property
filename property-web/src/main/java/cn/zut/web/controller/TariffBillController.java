@@ -1,18 +1,18 @@
 package cn.zut.web.controller;
 
+import cn.zut.common.dao.PageModel;
 import cn.zut.common.exception.ExceptionCode;
 import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.business.TariffBillBusiness;
 import cn.zut.core.constant.PropertyConstant;
+import cn.zut.dao.entity.TariffBillEntity;
 import cn.zut.facade.request.ConsumeConfirmRequest;
 import cn.zut.facade.request.ConsumePreviewRequest;
+import cn.zut.facade.request.TariffBillRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -54,13 +54,34 @@ public class TariffBillController {
             return new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage()));
         }
 
-        // 操作人用户编号
-        consumeConfirmRequest.setOperatorMemberId(getMemberId(request));
-        return tariffBillBusiness.consumeConfirm(consumeConfirmRequest);
+        return tariffBillBusiness.consumeConfirm(getMemberId(request), consumeConfirmRequest);
+    }
+
+    @RequestMapping("billEntry")
+    public GenericResponse billEntry(@RequestBody @Valid TariffBillRequest tariffBillRequest,
+                                     BindingResult bindingResult, HttpServletRequest request) {
+        // 参数校验
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> list = bindingResult.getAllErrors();
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage()));
+        }
+
+        return tariffBillBusiness.billEntry(getMemberId(request), tariffBillRequest);
+    }
+
+    @GetMapping("pageBill")
+    public GenericResponse pageBill(@RequestParam(value = "page", required = false) Integer page,
+                                    @RequestParam(value = "size", required = false) Integer size) {
+        if (page == null || size == null) {
+            return GenericResponse.SUCCESS;
+        }
+        PageModel<TariffBillEntity> pageModel = new PageModel<>();
+        pageModel.setPage(page);
+        pageModel.setRows(size);
+        return new GenericResponse<>(tariffBillBusiness.pageBillByModel(pageModel));
     }
 
     private Long getMemberId(HttpServletRequest request) {
         return Long.valueOf((String) request.getAttribute(PropertyConstant.MEMBER_ID));
     }
-
 }

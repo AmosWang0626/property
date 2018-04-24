@@ -66,7 +66,7 @@ public class PropertyTariffTest {
         TariffCompanyBillEntity companyBillEntity = new TariffCompanyBillEntity();
         companyBillEntity.setCompanyId(1L);
         companyBillEntity.setMemberId(10000L);
-        companyBillEntity.setExternalNo(12222L);
+        companyBillEntity.setExternalNo("56162356");
         companyBillEntity.setPaymentAmount(new BigDecimal("2000.00"));
         companyBillEntity.setPaymentWay(PaymentWayEnum.BANK_CARD);
         companyBillEntity.setPaymentStatus(PaymentStatusEnum.PAY_SUCCESS);
