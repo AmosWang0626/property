@@ -9,7 +9,12 @@ import cn.zut.dao.entity.TariffBillPlanEntity;
  *
  * @author DaoYuanWang
  */
-public interface TariffBillPlanMapper extends Insert<TariffBillPlanEntity>, Update<TariffBillPlanEntity>,
-        SelectById<TariffBillPlanEntity, Long>, SelectByExample<TariffBillPlanEntity, TariffBillPlanEntity>,
-        SelectCountByExample<TariffBillPlanEntity>, SelectListPageByExample<TariffBillPlanEntity, TariffBillPlanEntity> {
+public interface TariffBillPlanMapper extends
+        Insert<TariffBillPlanEntity>,
+        BatchInsert<TariffBillPlanEntity>,
+        Update<TariffBillPlanEntity>,
+        SelectById<TariffBillPlanEntity, Long>,
+        SelectByExample<TariffBillPlanEntity, TariffBillPlanEntity>,
+        SelectCountByExample<TariffBillPlanEntity>,
+        SelectListPageByExample<TariffBillPlanEntity, TariffBillPlanEntity> {
 }

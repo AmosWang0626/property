@@ -49,6 +49,7 @@
                 <if test="search.billStatus != null">AND BILL_STATUS = #{search.billStatus}</if>
                 <if test="search.repayDate != null">AND REPAY_DATE = #{search.repayDate}</if>
                 <if test="search.overdueDays != null">AND OVERDUE_DAYS = #{search.overdueDays}</if>
+                <if test="search.billNo != null">AND BILL_NO = #{search.billNo}</if>
             </where>
         </if>
     </sql>
@@ -62,6 +63,14 @@
     </select>
 
     <select id="selectByExample" resultMap="baseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <select id="selectListByExample" resultMap="baseResultMap">
         SELECT
         <include refid="columns"/>
         FROM
@@ -149,5 +158,47 @@
         #{updateTime}
         )
     </insert>
+
+    <insert id="batchInsert">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="columns"/>
+        )
+        VALUES
+        <foreach collection="list" item="item" separator="," index="index">
+            (
+            #{item.planNo},
+            #{item.billNo},
+            #{item.memberId},
+            #{item.billStatus},
+            #{item.repayDate},
+            #{item.settleDate},
+            #{item.overdueDays},
+            #{item.billAmount},
+            #{item.lateChargeAmt},
+            #{item.billAmountPaid},
+            #{item.lateChargeAmtPaid},
+            #{item.billAmountOffer},
+            #{item.lateChargeAmtOffer},
+            #{item.expand},
+            #{item.createTime},
+            #{item.updateTime}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate">
+        <foreach collection="list" item="item" separator=";">
+            UPDATE
+            <include refid="tableName"/>
+            <set>
+                <if test="item.updateTime != null">
+                    UPDATE_TIME = #{item.updateTime},
+                </if>
+            </set>
+            WHERE ID = #{item.id}
+        </foreach>
+    </update>
 
 </mapper>

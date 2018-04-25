@@ -8,6 +8,7 @@ import cn.zut.dao.entity.TariffBillPlanEntity;
 import cn.zut.facade.request.ConsumeConfirmRequest;
 import cn.zut.facade.request.ConsumePreviewRequest;
 import cn.zut.facade.request.TariffBillRequest;
+import cn.zut.facade.response.TariffBillPlanVO;
 
 /**
  * PROJECT: property
@@ -45,6 +46,13 @@ public interface TariffBillBusiness {
     GenericResponse generateMonthBill();
 
     /**
+     * 生成账单还款计划
+     *
+     * @return GenericResponse
+     */
+    GenericResponse generateBillPlan();
+
+    /**
      * 手动录入账单
      *
      * @param operatorMemberId  操作人用户编号
@@ -67,5 +75,5 @@ public interface TariffBillBusiness {
      * @param pageModel 分页查询对象
      * @return GenericResponse
      */
-    SimplePageResult<TariffBillPlanEntity> pageBillPlanByModel(PageModel<TariffBillPlanEntity> pageModel);
+    SimplePageResult<TariffBillPlanVO> pageBillPlanByModel(PageModel<TariffBillPlanEntity> pageModel);
 }

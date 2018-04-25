@@ -13,15 +13,15 @@ import java.util.Date;
  */
 public class DateUtil {
 
-    public static final ThreadLocal<DateFormat> FORMAT_YEAR_2_DAY =
+    private static final ThreadLocal<DateFormat> FORMAT_YEAR_2_DAY =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
     private static final ThreadLocal<DateFormat> FORMAT_YEAR_2_DAY_SLOPE =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy/MM/dd"));
-    public static final ThreadLocal<DateFormat> FORMAT_YEAR_2_MONTH =
+    private static final ThreadLocal<DateFormat> FORMAT_YEAR_2_MONTH =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM"));
     private static final ThreadLocal<DateFormat> FORMAT_MONTH_2_DAY =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("MM/dd"));
-    public static final ThreadLocal<DateFormat> FORMAT_MONTH =
+    private static final ThreadLocal<DateFormat> FORMAT_MONTH =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("MM"));
     public static final ThreadLocal<DateFormat> FORMAT_YEAR =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy"));
@@ -62,35 +62,6 @@ public class DateUtil {
             e.printStackTrace();
         }
         return date;
-    }
-
-    /**
-     * 获取本月月份
-     * ps: 2018-03
-     */
-    public static String getYear2Month() {
-        return FORMAT_YEAR_2_MONTH.get().format(new Date());
-    }
-
-    /**
-     * 获取上个月月份
-     * ps: 2018-02
-     */
-    public static String getPreYear2Month() {
-        Calendar ca = Calendar.getInstance();
-        ca.add(Calendar.MONTH, -1);
-        return FORMAT_YEAR_2_MONTH.get().format(ca.getTime());
-    }
-
-    /**
-     * 获取上个月月份
-     * ps: 2018-02
-     */
-    public static String getPreYear2Month(Date date) {
-        Calendar ca = Calendar.getInstance();
-        ca.setTime(date);
-        ca.add(Calendar.MONTH, -1);
-        return FORMAT_YEAR_2_MONTH.get().format(ca.getTime());
     }
 
     /**
@@ -168,6 +139,14 @@ public class DateUtil {
     }
 
     /**
+     * 获取当月月份
+     * ps: 2018-03
+     */
+    public static String getMonth() {
+        return FORMAT_YEAR_2_MONTH.get().format(new Date());
+    }
+
+    /**
      * 获取 指定日期月份
      * ps: 2018-03
      */
@@ -178,44 +157,45 @@ public class DateUtil {
     }
 
     /**
-     * 获取当月月份
-     * ps: 2018-03
+     * 获取下个月月份
+     * ps: 2018-06
      */
-    public static String getMonth() {
-        Calendar ca = Calendar.getInstance();
-        return FORMAT_YEAR_2_MONTH.get().format(ca.getTime());
-    }
-
-//    public static void main(String[] args) {
-//        System.out.println(getMonth());
-//    }
-
-    /**
-     * 获取上个月月份
-     * ps: 04
-     */
-    public static String getNextOnlyMonth() {
+    public static String getNextMonth() {
         Calendar ca = Calendar.getInstance();
         ca.add(Calendar.MONTH, 1);
-        return FORMAT_MONTH.get().format(ca.getTime());
-    }
-
-    /**
-     * 获取本月月份
-     * ps: 03
-     */
-    public static String getOnlyMonth() {
-        return FORMAT_MONTH.get().format(new Date());
+        return FORMAT_YEAR_2_MONTH.get().format(ca.getTime());
     }
 
     /**
      * 获取下个月月份
-     * ps: 05
+     * ps: 2018-06
      */
-    public static String getOnlyNextMonth() {
+    public static String getNextMonth(Date date) {
         Calendar ca = Calendar.getInstance();
+        ca.setTime(date);
         ca.add(Calendar.MONTH, 1);
-        return FORMAT_MONTH.get().format(ca.getTime());
+        return FORMAT_YEAR_2_MONTH.get().format(ca.getTime());
+    }
+
+    /**
+     * parameter: billMonth [2018-05]
+     * parameter: day       [1-31]
+     * 根据月份获取指定日期
+     *
+     * @param billMonth 账单月份
+     * @return Date 格式转换错误返回 null
+     */
+    public static Date getDateByMonthAndDay(String billMonth, int day) {
+        try {
+            Date parseDate = DateUtil.FORMAT_YEAR_2_MONTH.get().parse(billMonth);
+            Calendar ca = Calendar.getInstance();
+            ca.setTime(parseDate);
+            ca.set(Calendar.DAY_OF_MONTH, day);
+            return ca.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -227,11 +207,11 @@ public class DateUtil {
      * @return 相差天数
      */
     public static int daysBetween(Date smallDate, Date bigDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(smallDate);
-        long time1 = calendar.getTimeInMillis();
-        calendar.setTime(bigDate);
-        long time2 = calendar.getTimeInMillis();
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(smallDate);
+        long time1 = ca.getTimeInMillis();
+        ca.setTime(bigDate);
+        long time2 = ca.getTimeInMillis();
         long betweenDays = (time2 - time1) / (1000 * 3600 * 24);
 
         return Integer.parseInt(String.valueOf(betweenDays));
@@ -240,16 +220,16 @@ public class DateUtil {
     /**
      * 比较两个日期大小
      *
-     * @param date1 较小的时间
-     * @param date2 较大的时间
+     * @param smallDate 较小的时间
+     * @param bigDate   较大的时间
      * @return 后者比前者大: true;
      */
-    public static boolean checkDateSize(Date date1, Date date2) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date1);
-        long time1 = calendar.getTimeInMillis();
-        calendar.setTime(date2);
-        long time2 = calendar.getTimeInMillis();
+    public static boolean checkDateSize(Date smallDate, Date bigDate) {
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(smallDate);
+        long time1 = ca.getTimeInMillis();
+        ca.setTime(bigDate);
+        long time2 = ca.getTimeInMillis();
         return (time2 - time1) > 0;
     }
 }

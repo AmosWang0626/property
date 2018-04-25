@@ -19,13 +19,16 @@ import cn.zut.facade.request.ConsumeConfirmRequest;
 import cn.zut.facade.request.ConsumePreviewRequest;
 import cn.zut.facade.request.TariffBillRequest;
 import cn.zut.facade.request.TariffCompanyBillRequest;
+import cn.zut.facade.response.TariffBillPlanVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -155,6 +158,47 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
     }
 
     @Override
+    public GenericResponse generateBillPlan() {
+        List<TariffBillPlanEntity> tariffBillPlanEntities = new ArrayList<>();
+
+        List<TariffBillEntity> tariffBillEntities = tariffBillMapper.selectListByExample(null);
+        for (TariffBillEntity tariffBillEntity : tariffBillEntities) {
+            TariffBillPlanEntity tariffBillPlanEntity = new TariffBillPlanEntity();
+            tariffBillPlanEntity.setBillNo(tariffBillEntity.getBillNo());
+            tariffBillPlanEntity = tariffBillPlanMapper.selectByExample(tariffBillPlanEntity);
+            if (tariffBillPlanEntity != null) {
+                continue;
+            }
+
+            tariffBillPlanEntity = new TariffBillPlanEntity();
+
+            tariffBillPlanEntity.setBillNo(tariffBillEntity.getBillNo());
+            tariffBillPlanEntity.setMemberId(tariffBillEntity.getMemberId());
+            tariffBillPlanEntity.setBillStatus(tariffBillEntity.getBillStatus());
+            tariffBillPlanEntity.setBillAmount(tariffBillEntity.getBillAmount());
+            // 获取应还日期 每月10日
+            tariffBillPlanEntity.setRepayDate(DateUtil.getDateByMonthAndDay(tariffBillEntity.getBillMonth(), 10));
+
+            // 账单逾期天数 || 初始化逾期/减免金额
+            tariffBillPlanEntity.setOverdueDays(0);
+            tariffBillPlanEntity.setBillAmountPaid(BigDecimal.ZERO);
+            tariffBillPlanEntity.setBillAmountOffer(BigDecimal.ZERO);
+            tariffBillPlanEntity.setLateChargeAmt(BigDecimal.ZERO);
+            tariffBillPlanEntity.setLateChargeAmtPaid(BigDecimal.ZERO);
+            tariffBillPlanEntity.setLateChargeAmtOffer(BigDecimal.ZERO);
+            tariffBillPlanEntity.setCreateTime(new Date());
+
+            tariffBillPlanEntities.add(tariffBillPlanEntity);
+        }
+        if (CollectionUtils.isEmpty(tariffBillPlanEntities)) {
+            return GenericResponse.SUCCESS;
+        }
+        tariffBillPlanMapper.batchInsert(tariffBillPlanEntities);
+
+        return GenericResponse.SUCCESS;
+    }
+
+    @Override
     public GenericResponse billEntry(Long operatorMemberId, TariffBillRequest tariffBillRequest) {
         // 根据户号,设置memberId
         String houseNo = tariffBillRequest.getHouseNo();
@@ -189,13 +233,24 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
     }
 
     @Override
-    public SimplePageResult<TariffBillPlanEntity> pageBillPlanByModel(PageModel<TariffBillPlanEntity> pageModel) {
+    public SimplePageResult<TariffBillPlanVO> pageBillPlanByModel(PageModel<TariffBillPlanEntity> pageModel) {
         List<TariffBillPlanEntity> tariffBillEntities = tariffBillPlanMapper.selectListPageByExample(pageModel);
         int memberCount = tariffBillPlanMapper.selectCountByExample(pageModel.getSearch());
-        SimplePageResult<TariffBillPlanEntity> pageResult = new SimplePageResult<>();
+
+        List<TariffBillPlanVO> tariffBillPlanVOS = new ArrayList<>();
+        tariffBillEntities.forEach(tariffBillEntity -> {
+            TariffBillPlanVO tariffBillPlanVO = new TariffBillPlanVO();
+            BeanUtils.copyProperties(tariffBillEntity, tariffBillPlanVO);
+            tariffBillPlanVO.setSumBillAmount(tariffBillEntity.getSumBillAmount());
+            tariffBillPlanVO.setSumLateCharge(tariffBillEntity.getSumLateCharge());
+            tariffBillPlanVO.setTotalRepayAmount(tariffBillEntity.getTotalRepayAmount());
+            tariffBillPlanVOS.add(tariffBillPlanVO);
+        });
+
+        SimplePageResult<TariffBillPlanVO> pageResult = new SimplePageResult<>();
         // 总记录数量 || 记录数据列表 || 页码 || 记录数量
         pageResult.setTotal(memberCount);
-        pageResult.setRows(tariffBillEntities);
+        pageResult.setRows(tariffBillPlanVOS);
         pageResult.setPage(pageModel.getPage());
         pageResult.setSize(pageModel.getRows());
         return pageResult;
@@ -236,4 +291,5 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
 
         return tariffBillEntity;
     }
+
 }

@@ -74,6 +74,14 @@
         <include refid="condition"/>
     </select>
 
+    <select id="selectListByExample" resultMap="baseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
     <select id="selectListPageByExample" resultMap="baseResultMap">
         SELECT
         <include refid="columns"/>
