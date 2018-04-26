@@ -30,6 +30,9 @@ public enum ExceptionCode implements Message {
     TARIFF_STANDARD_IS_EXIST("T0002", "当前资费标准已存在,可删除,可修改"),
     TARIFF_STANDARD_IS_NOT_EXIST("T0001", "当前资费标准不存在,请联系管理员添加"),
     TARIFF_COMPANY_BUSINESS_NOT_EXIST("T0002", "当前收费公司不存在,请联系管理员添加"),
+    TARIFF_BILL_EXCEPTION_NOT_EXIST("T0003", "数据异常: 账单不存在"),
+    TARIFF_BILL_EXCEPTION_PLAN_NOT_EXIST("T0004", "数据异常: 账单计划不存在"),
+    TARIFF_BILL_ONLY_SUPPORT_FULL_REPAYMENT("T0005", "目前仅支持全额还款"),
 
     /**
      * 交易失败原因

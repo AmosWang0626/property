@@ -8,17 +8,13 @@ import cn.zut.common.generic.SimplePageResult;
 import cn.zut.common.util.DateUtil;
 import cn.zut.common.util.GenericIdUtil;
 import cn.zut.core.business.TariffBillBusiness;
+import cn.zut.core.service.TariffBillService;
 import cn.zut.core.service.TariffCompanyService;
 import cn.zut.dao.entity.*;
 import cn.zut.dao.persistence.*;
-import cn.zut.facade.enums.BillStatusEnum;
-import cn.zut.facade.enums.BusinessLevelEnum;
-import cn.zut.facade.enums.BusinessTypeEnum;
-import cn.zut.facade.enums.PaymentStatusEnum;
-import cn.zut.facade.request.ConsumeConfirmRequest;
-import cn.zut.facade.request.ConsumePreviewRequest;
-import cn.zut.facade.request.TariffBillRequest;
-import cn.zut.facade.request.TariffCompanyBillRequest;
+import cn.zut.facade.enums.*;
+import cn.zut.facade.request.*;
+import cn.zut.facade.response.TariffBillDetailVO;
 import cn.zut.facade.response.TariffBillPlanVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +54,8 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
 
     @Resource
     private TariffCompanyService tariffCompanyService;
+    @Resource
+    private TariffBillService tariffBillService;
 
     @Override
     public GenericResponse getUnitPrice(ConsumePreviewRequest consumePreviewRequest) {
@@ -254,6 +252,82 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
         pageResult.setPage(pageModel.getPage());
         pageResult.setSize(pageModel.getRows());
         return pageResult;
+    }
+
+    @Override
+    public GenericResponse paymentBill(Long memberId, TariffBillPaymentRequest tariffBillPaymentRequest) {
+        BigDecimal paymentAmount = tariffBillPaymentRequest.getPaymentAmount();
+        Long planNo = tariffBillPaymentRequest.getPlanNo();
+        PaymentWayEnum paymentWay = tariffBillPaymentRequest.getPaymentWay();
+
+        if (planNo == null || paymentWay == null || paymentAmount == null) {
+            return GenericResponse.ERROR_PARAM;
+        }
+
+        // 还款金额不能为0
+        if (BigDecimal.ZERO.compareTo(paymentAmount) >= 0) {
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.PAYMENT_AMOUNT_MUST_MORE_THAN_ZERO));
+        }
+
+        // 根据单号拿到还款计划
+        TariffBillPlanEntity tariffBillPlanEntity = tariffBillPlanMapper.selectById(planNo);
+        if (tariffBillPlanEntity == null) {
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.TARIFF_BILL_EXCEPTION_PLAN_NOT_EXIST));
+        }
+
+        // 仅支持全额还款
+        if (paymentAmount.compareTo(tariffBillPlanEntity.getTotalRepayAmount()) != 0) {
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.TARIFF_BILL_ONLY_SUPPORT_FULL_REPAYMENT));
+        }
+
+        // 根据单号拿到还款账单
+        Long billNo = tariffBillPlanEntity.getBillNo();
+        TariffBillEntity tariffBillEntity = tariffBillMapper.selectById(billNo);
+        if (tariffBillEntity == null) {
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.TARIFF_BILL_EXCEPTION_NOT_EXIST));
+        }
+
+        // 再拿到收费公司
+        TariffCompanyEntity tariffCompanyEntity = new TariffCompanyEntity();
+        tariffCompanyEntity.setBusiness(tariffBillEntity.getBusiness());
+        tariffCompanyEntity = tariffCompanyMapper.selectByExample(tariffCompanyEntity);
+        if (tariffCompanyEntity == null) {
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.TARIFF_COMPANY_BUSINESS_NOT_EXIST));
+        }
+
+        // 请求支付公司接口
+        TariffCompanyBillRequest tariffCompanyBillRequest = new TariffCompanyBillRequest();
+        tariffCompanyBillRequest.setMemberId(memberId);
+        tariffCompanyBillRequest.setCompanyId(tariffCompanyEntity.getCompanyId());
+        tariffCompanyBillRequest.setExternalNo(String.valueOf(planNo));
+        tariffCompanyBillRequest.setPaymentAmount(paymentAmount);
+        tariffCompanyBillRequest.setPaymentWay(paymentWay);
+        GenericResponse paymentRecordResponse = tariffCompanyService.paymentRecord(tariffCompanyBillRequest);
+        // 还款成功,给客户冲账
+        if (paymentRecordResponse.success()) {
+            tariffBillService.billOffset(tariffBillEntity, tariffBillPlanEntity, paymentAmount);
+        }
+
+        return paymentRecordResponse;
+    }
+
+    @Override
+    public GenericResponse<TariffBillDetailVO> billDetail(Long billNo) {
+        TariffBillDetailVO tariffBillDetailVO = new TariffBillDetailVO();
+
+        TariffBillEntity tariffBillEntity = tariffBillMapper.selectById(billNo);
+        if (tariffBillEntity == null) {
+            return new GenericResponse<>(tariffBillDetailVO);
+        }
+
+        tariffBillDetailVO.setBillAmount(tariffBillEntity.getBillAmount());
+        tariffBillDetailVO.setBillMonth(tariffBillEntity.getBillMonth());
+        tariffBillDetailVO.setBillStatus(tariffBillEntity.getBillStatus().getValue());
+        tariffBillDetailVO.setBusiness(tariffBillEntity.getBusiness().getValue());
+        tariffBillDetailVO.setLevel(tariffBillEntity.getLevel().getValue());
+        tariffBillDetailVO.setHouseNo(tariffBillEntity.getHouseNo());
+
+        return new GenericResponse<>(tariffBillDetailVO);
     }
 
     private TariffBillEntity generateBill(TariffBillRequest tariffBillRequest) throws RuntimeException {
