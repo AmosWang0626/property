@@ -27,6 +27,14 @@ public enum ExceptionCode implements Message {
     UPLOAD_FILE_IS_NULL("M2009", "上传的文件不能为空"),
     LAST_DATE_NOT_SMALL_PRE_DATE("M2010", "结束日期不能大于开始日期"),
 
+    /**
+     * 综合业务模块错误码
+     */
+    BUSINESS_SERVICE_ADD_FAIL("B0001", "服务申请失败"),
+
+    /**
+     * 资费管理模块错误码
+     */
     TARIFF_STANDARD_IS_EXIST("T0002", "当前资费标准已存在,可删除,可修改"),
     TARIFF_STANDARD_IS_NOT_EXIST("T0001", "当前资费标准不存在,请联系管理员添加"),
     TARIFF_COMPANY_BUSINESS_NOT_EXIST("T0002", "当前收费公司不存在,请联系管理员添加"),
@@ -35,7 +43,7 @@ public enum ExceptionCode implements Message {
     TARIFF_BILL_ONLY_SUPPORT_FULL_REPAYMENT("T0005", "目前仅支持全额还款"),
 
     /**
-     * 交易失败原因
+     * 资费管理模块 -- 交易失败错误码
      */
     PAYMENT_WAY_NOT_EXIST("TP0001", "请先选择支付方式"),
     PAYMENT_AMOUNT_MUST_MORE_THAN_ZERO("TP0002", "支付金额必须大于 0"),

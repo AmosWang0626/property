@@ -7,5 +7,5 @@ package cn.zut.common.dao;
  */
 public interface Insert<T> {
 
-    void insert(T t);
+    int insert(T t);
 }

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <title>查看详情</title>
+    <link rel="stylesheet" href="../../plugins/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../assets/css/admin.css"/>
+</head>
+<body>
+<table class="layui-table layui-table-add" lay-skin="nob">
+    <tbody>
+    <tr>
+        <th width="100" class="pad">ID</th>
+        <td>
+            <span th:text="${carSetEntity.id}"></span>
+    </tr>
+    <tr>
+        <th class="pad">车辆类型</th>
+        <td>
+            <p th:text="${carSetEntity.cartype}"></p></td>
+        </td>
+    </tr>
+    <tr>
+        <th class="pad">车牌号</th>
+        <td>
+            <p th:text="${carSetEntity.carnumber }"></p></td>
+        </td>
+    </tr>
+    <tr>
+        <th class="pad">进入时间</th>
+        <td>
+            <p th:text="${carSetEntity.comedate}"></p></td>
+    </tr>
+    <tr>
+        <th class="pad">离开时间</th>
+        <td><p th:text="${carSetEntity.leavedate}"></p></td>
+    </tr>
+    <tr>
+        <th class="pad">金额</th>
+        <td><p th:text="${carSetEntity.rent}"></p></td>
+    </tr>
+
+    </tbody>
+</table>
+
+
+<script type="text/javascript" src="../../plugins/layui/layui.js"></script>
+<script>
+    layui.use(['jquery','form','upload','layer'], function(){
+        var $ = layui.jquery,layer = layui.layer;
+    });
+</script>
+<script>
+    //调用示例
+
+</script>
+</body>
+</html>

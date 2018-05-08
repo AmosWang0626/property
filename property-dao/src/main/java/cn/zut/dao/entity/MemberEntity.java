@@ -2,6 +2,7 @@ package cn.zut.dao.entity;
 
 import cn.zut.common.enums.GenderEnum;
 import cn.zut.common.enums.MaritalEnum;
+import lombok.Data;
 
 import java.util.Date;
 
@@ -11,6 +12,7 @@ import java.util.Date;
  *
  * @author DaoyuanWang
  */
+@Data
 public class MemberEntity {
 
     /**
@@ -46,6 +48,10 @@ public class MemberEntity {
      */
     private MaritalEnum maritalStatus;
     /**
+     * 用户权限编号
+     */
+    private Integer rolesId;
+    /**
      * 创建时间
      */
     private Date createTime;
@@ -54,93 +60,10 @@ public class MemberEntity {
      */
     private Date updateTime;
 
-    public MemberEntity() {
-    }
-
     public void init() {
         Date date = new Date();
         this.setCreateTime(date);
         this.setUpdateTime(date);
         this.setMaritalStatus(MaritalEnum.NONE);
-    }
-
-    public Long getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
-    }
-
-    public String getPhoneNo() {
-        return phoneNo;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
-    public String getIdNo() {
-        return idNo;
-    }
-
-    public void setIdNo(String idNo) {
-        this.idNo = idNo;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    public GenderEnum getGender() {
-        return gender;
-    }
-
-    public void setGender(GenderEnum gender) {
-        this.gender = gender;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public MaritalEnum getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(MaritalEnum maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

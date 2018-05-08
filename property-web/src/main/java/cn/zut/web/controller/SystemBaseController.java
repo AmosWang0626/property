@@ -2,10 +2,7 @@ package cn.zut.web.controller;
 
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.facade.api.ComboVO;
-import cn.zut.facade.enums.BusinessLevelEnum;
-import cn.zut.facade.enums.BusinessTypeEnum;
-import cn.zut.facade.enums.PaymentStatusEnum;
-import cn.zut.facade.enums.PaymentWayEnum;
+import cn.zut.facade.enums.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -104,6 +101,16 @@ public class SystemBaseController {
                 break;
             default:
                 break;
+        }
+
+        return new GenericResponse<>(comboVOList);
+    }
+
+    @GetMapping("getServiceType")
+    public GenericResponse getServiceType() {
+        List<ComboVO> comboVOList = new ArrayList<>();
+        for (ServiceTypeEnum singleEnum : ServiceTypeEnum.values()) {
+            comboVOList.add(new ComboVO<>(singleEnum));
         }
 
         return new GenericResponse<>(comboVOList);

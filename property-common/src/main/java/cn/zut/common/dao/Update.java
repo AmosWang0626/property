@@ -5,5 +5,5 @@ package cn.zut.common.dao;
  */
 public interface Update<T> {
 
-    void update(T t);
+    int update(T t);
 }

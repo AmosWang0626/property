@@ -1,7 +1,10 @@
 package cn.zut.core.service;
 
 import cn.zut.common.generic.GenericResponse;
+import cn.zut.dao.entity.MenusEntity;
 import cn.zut.facade.request.RegisterRequest;
+
+import java.util.List;
 
 /**
  * PROJECT: property
@@ -18,5 +21,10 @@ public interface MemberService {
      * @return 通用
      */
     GenericResponse<Long> save(RegisterRequest registerRequest);
+
+    /**
+     * 根据用户id查找对应菜单表
+     */
+    List<MenusEntity> getMenus(Long menuId);
 
 }

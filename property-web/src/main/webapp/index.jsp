@@ -1,5 +1,12 @@
+<%@ page pageEncoding="UTF-8" %>
+<!DOCTYPE html>
 <html>
+<head>
+    <meta charset="utf-8">
+    <title>中工大学科技园</title>
+</head>
 <body>
-<h2>Hello Property World!</h2>
+<h1>中工大学科技园物业管理系统</h1>
+<a href="passport/menu">登录进入菜单</a>
 </body>
 </html>

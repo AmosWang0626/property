@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>房源信息添加</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+</head>
+
+<body>
+
+<blockquote class="layui-elem-quote layui-text">
+    仅限管理员操作!
+    <span th:text="${houseMsg}"></span>
+</blockquote>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>添加房源信息</legend>
+</fieldset>
+
+
+
+<form class="layui-form" action="/houseRentEntity/houseadd">
+    <input type="text"  name="id"  th:value="${houseRentEntity.id}" autocomplete="off" class="layui-input layui-hide">
+
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-inline" style="width: 400px;">
+                <input type="text" name="name"  th:value="${houseRentEntity.name}"  class="layui-input">
+            </div>
+        </div>
+    </div>
+<div class="layui-form-item">
+    <label class="layui-form-label">图片上传</label>
+
+    <div class="layui-upload">
+        <input type="text" id="img_file" name="img" th:value="${houseRentEntity.img}" class="layui-input layui-hide">
+        <button type="button" class="layui-btn" id="test1">上传图片</button>
+        <div class="layui-upload-list">
+            <img class="layui-upload-img" id="demo1">
+            <p id="demoText"></p>
+        </div>
+    </div>
+</div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <select name="type" th:value="${houseRentEntity.type}" lay-verify="required" lay-search="">
+                    <option value="出租">房屋出租</option>
+                    <option value="出售">房屋出售</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">大小(m³)</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="area" th:value="${houseRentEntity.area}" placeholder="(m³)" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">金额</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="text" name="rent" th:value="${houseRentEntity.rent}" placeholder="￥" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">详情</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea layui-hide" th:value="${houseRentEntity.details}" name="details" lay-verify="details" id="LAY_demo_editor"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+
+<script src="../../plugins/layui/layui.js"></script>
+<script>
+    layui.use(['form', 'layedit', 'laydate','upload'], function() {
+        var form = layui.form,
+            layer = layui.layer,
+            layedit = layui.layedit,
+            upload = layui.upload,
+            laydate = layui.laydate;
+
+
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test1'
+            ,url: '/upload/img'
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.code > 0){
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                document.getElementById("img_file").value=res.src;
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+
+        //创建一个编辑器
+        var editIndex = layedit.build('LAY_demo_editor');
+
+
+
+    });
+</script>
+
+</body>
+
+</html>

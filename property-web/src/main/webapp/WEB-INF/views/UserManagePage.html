@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>UserManage</title>
+    <link href="../../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/css/property.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container ssm-div">
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <div class="navbar-brand">用户管理后台</div>
+            </div>
+            <ul th:if="${GenericResponse.getBody().getNickName()} eq null" class="nav navbar-nav pull-right" id="product-login">
+                <li><a href="/passport/login">登录</a></li>
+            </ul>
+            <ul th:if="${GenericResponse.getBody().getNickName()} ne null" class="nav navbar-nav navbar-right" id="product-logout">
+                <li><a><span id="greetings">美好的一天</span></a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span id="user-id"></span>
+                        <span id="user-name" th:text="${GenericResponse.getBody().getNickName()}"></span>
+                        <span class="caret"></span>
+                        <ul class="dropdown-menu">
+                            <li role="presentation"><a href="#">修改资料</a></li>
+                            <li role="presentation"><a href="#">修改密码</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li role="presentation"><a href="home">退出登录</a></li>
+                        </ul>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 产品增加 -->
+    <!--<button class="btn btn-default pull-right" type="button" data-toggle="modal" data-target="#modalProductAdd">新增
+    </button>-->
+
+    <!-- Modal 产品增加 -->
+    <div class="modal fade" id="modalProductAdd" tabindex="-1" role="dialog" aria-labelledby="modalProductAddLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <form class="form-ssm" id="productAddForm" method="post">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="modalProductAddLabel">增加产品</h4>
+                    </div><!-- modal-header -->
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="sr-only" for="nameAddProduct">产品名称</label>
+                            <input class="form-control" id="nameAddProduct" placeholder="产品名称" required
+                                   autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="priceAddProduct">产品价格</label>
+                            <input class="form-control" id="priceAddProduct" placeholder="产品价格" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="infoAddProduct">产品信息</label>
+                            <input class="form-control" id="infoAddProduct" placeholder="产品信息" required>
+                        </div>
+                    </div><!-- modal-body -->
+                    <div class="modal-footer">
+                        <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+                        <button class="btn btn-primary">增加</button>
+                    </div><!-- modal-footer -->
+                </form><!-- register -->
+
+            </div><!-- modal-content -->
+        </div>
+    </div>
+
+    <!-- Modal 产品修改 -->
+    <div class="modal fade" id="modalProductModify" tabindex="-1" role="dialog"
+         aria-labelledby="modalProductModifyLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <form class="form-ssm" id="productModifyForm" method="post">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="modalProductModifyLabel">修改产品信息</h4>
+                    </div><!-- modal-header -->
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="sr-only" for="nameModifyProduct">产品名称</label>
+                            <input class="form-control" id="nameModifyProduct" placeholder="产品名称" required
+                                   autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="priceModifyProduct">产品价格</label>
+                            <input class="form-control" id="priceModifyProduct" placeholder="产品价格" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="infoModifyProduct">产品信息</label>
+                            <input class="form-control" id="infoModifyProduct" placeholder="产品信息" required>
+                        </div>
+                    </div><!-- modal-body -->
+                    <div class="modal-footer">
+                        <button class="btn btn-default" type="button" data-dismiss="modal">关闭</button>
+                        <button class="btn btn-primary">修改</button>
+                    </div><!-- modal-footer -->
+                </form><!-- register -->
+
+            </div><!-- modal-content -->
+        </div>
+    </div>
+    <table class="table table-bordered table-hover table-condensed">
+        <thead>
+        <tr>
+            <th>会员编号</th>
+            <th>用户名</th>
+            <th>手机号</th>
+            <th>注册时间</th>
+        </tr>
+        </thead>
+        <tbody th:each="user:${pageResult.rows}">
+        <tr>
+            <th scope="row" th:text="${user.memberId}">1</th>
+            <td th:text="${user.nickName}">aaa</td>
+            <td th:text="${user.phoneNo}">bbb</td>
+            <td th:text="${user.createTime}">ccc</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 分页导航栏 (如需重用只需修改下边的th:href链接) -->
+    <nav aria-label="Page navigation" data-th-align="center">
+        <ul class="pagination pagination-lg">
+            <li th:class="${pageResult.first}?'disabled'">
+                <a th:if="${pageResult.first}" href="javascript:void(0);">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                <!-- 这里的th:href链接 -->
+                <a th:if="${!pageResult.first}"
+                   th:href="@{/passport/page(page=${pageResult.page -1},size=${pageResult.size})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li th:each="index:${#numbers.sequence(1,pageResult.totalPages)}"
+                th:classappend="${index==pageResult.page}?'active'">
+                <!-- 这里的th:href链接 -->
+                <a th:text="${index}" th:href="@{/passport/page(page=${index},size=${pageResult.size})}">1</a>
+            </li>
+            <li th:class="${pageResult.last}?'disabled'">
+                <a th:if="${pageResult.last}" href="javascript:void(0);">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                <!-- 这里的th:href链接 -->
+                <a th:if="${!pageResult.last}"
+                   th:href="@{/passport/page(page=${pageResult.page +1},size=${pageResult.size})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            <li><span th:text="'总记录数'+${pageResult.total}+'条'">总条数1条</span></li>
+        </ul>
+    </nav>
+</div>
+<script src="../../assets/js/jquery-3.2.1.min.js"></script>
+<script src="../../assets/js/bootstrap.min.js"></script>
+<script src="../../assets/js/vue.js"></script>
+</body>
+</html>

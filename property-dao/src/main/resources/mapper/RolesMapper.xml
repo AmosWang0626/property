@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zut.dao.persistence.RolesMapper">
+
+    <resultMap id="BaseResultMap" type="cn.zut.dao.entity.RolesEntity">
+        <result column="ROLES_ID" property="rolesId"/>
+        <result column="ROLES_NAME" property="rolesName"/>
+    </resultMap>
+
+    <sql id="tableName">business_roles</sql>
+
+    <sql id="Base_Column_List">
+      ROLES_ID,
+      ROLES_NAME
+    </sql>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="tableName"/>
+        WHERE roles_id = #{rolesId},
+    </select>
+
+    <delete id="deleteById">
+        DELETE
+        FROM
+        <include refid="tableName"/>
+        WHERE roles_id = #{rolesId},
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="Base_Column_List"/>
+        )
+        VALUES
+        (
+        #{rolesId},
+        #{rolesName}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="rolesName != null">
+                roles_name = #{rolesName},
+            </if>
+        </set>
+        WHERE roles_id = #{rolesId},
+    </update>
+
+</mapper>

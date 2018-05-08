@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zut.dao.persistence.BusinessSurveyDataMapper">
+
+    <resultMap id="BaseResultMap" type="cn.zut.dao.entity.BusinessSurveyDataEntity">
+        <result column="QUESTION_ID" property="questionId"/>
+        <result column="QUESTION" property="question"/>
+        <result column="ANSWER_TYPE" property="answerType"/>
+        <result column="SURVEY_ID" property="surveyId"/>
+    </resultMap>
+
+    <sql id="tableName">business_survey_data</sql>
+
+    <sql id="Base_Column_List">
+      QUESTION_ID,
+      QUESTION,
+      ANSWER_TYPE,
+      SURVEY_ID
+    </sql>
+
+    <sql id="condition">
+        <if test="search != null">
+            <where>
+                <if test="search.questionId != null">AND QUESTION_ID = #{search.questionId}</if>
+                <if test="search.question != null">AND QUESTION = #{search.question}</if>
+                <if test="search.surveyId != null">AND SURVEY_ID = #{search.surveyId}</if>
+                <if test="search.answerType != null">AND ANSWER_TYPE = #{search.answerType}</if>
+            </where>
+        </if>
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT 1
+    </select>
+
+    <select id="selectListByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE QUESTION_ID = #{questionId}
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE QUESTION_ID = #{questionId}
+    </delete>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="questionId">
+        insert into
+        <include refid="tableName"/>
+        (
+        <include refid="Base_Column_List"/>
+        )
+        values
+        (
+        #{questionId},
+        #{question},
+        #{answerType},
+        #{surveyId}
+        )
+    </insert>
+
+    <update id="update">
+        update
+        <include refid="tableName"/>
+        <set>
+            <if test="question != null">
+                QUESTION = #{question},
+            </if>
+            <if test="answerType != null">
+                ANSWER_TYPE = #{answerType},
+            </if>
+            <if test="surveyId != null">
+                SURVEY_ID = #{surveyId},
+            </if>
+        </set>
+        where QUESTION_ID = #{questionId}
+    </update>
+
+</mapper>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <title>查看详情</title>
+    <link rel="stylesheet" href="../../plugins/layui/css/layui.css"/>
+    <link rel="stylesheet" href="../../assets/css/admin.css"/>
+</head>
+<body>
+<table class="layui-table layui-table-add" lay-skin="nob">
+    <tbody>
+    <tr>
+        <th width="100" class="pad">ID</th>
+        <td>
+            <span th:text="${houseRentEntity.id}"></span>
+    </tr>
+    <tr>
+        <th width="100" class="pad">图片</th>
+        <td>
+            <img th:src="'../../static/img/'+${houseRentEntity.img}" alt="">
+    </tr>
+    <tr>
+        <th class="pad">标题</th>
+        <td>
+            <p th:text="${houseRentEntity.name}"></p></td>
+        </td>
+    </tr>
+    <tr>
+        <th class="pad">类型</th>
+        <td>
+            <p th:text="${houseRentEntity.type }"></p></td>
+        </td>
+    </tr>
+    <tr>
+        <th class="pad">大小</th>
+        <td>
+            <p th:text="${houseRentEntity.area}"></p></td>
+    </tr>
+    <tr>
+        <th class="pad">地址</th>
+        <td><p th:text="${houseRentEntity.address}"></p></td>
+    </tr>
+    <tr>
+        <th class="pad">金额</th>
+        <td><p th:text="${houseRentEntity.rent}"></p></td>
+    </tr>
+    <tr>
+        <th class="pad">详情</th>
+        <td><p th:text="${houseRentEntity.details}"></p></td>
+    </tr>
+    </tbody>
+</table>
+
+
+<script type="text/javascript" src="../../plugins/layui/layui.js"></script>
+<script>
+    layui.use(['jquery','form','upload','layer'], function(){
+        var $ = layui.jquery,layer = layui.layer;
+    });
+</script>
+<script>
+    //调用示例
+
+</script>
+</body>
+</html>

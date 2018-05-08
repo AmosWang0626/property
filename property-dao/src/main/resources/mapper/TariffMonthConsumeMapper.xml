@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zut.dao.persistence.TariffMonthConsumeMapper">
+
+    <resultMap id="BaseResultMap" type="cn.zut.dao.entity.TariffMonthConsumeEntity">
+        <id column="ID" property="id"/>
+        <result column="MEMBER_ID" property="memberId"/>
+        <result column="HOUSE_NO" property="houseNo"/>
+        <result column="MONTH" property="month"/>
+        <result column="WATER" property="water"/>
+        <result column="ELECTRIC" property="electric"/>
+        <result column="NETWORK" property="network"/>
+        <result column="PROPERTY" property="property"/>
+        <result column="EXPAND" property="expand"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+    </resultMap>
+
+    <sql id="tableName">tariff_month_consume</sql>
+
+    <sql id="Base_Column_List">
+        ID,
+        MEMBER_ID,
+        HOUSE_NO,
+        MONTH,
+        WATER,
+        ELECTRIC,
+        NETWORK,
+        PROPERTY,
+        EXPAND,
+        CREATE_TIME,
+        UPDATE_TIME
+    </sql>
+
+    <sql id="condition">
+        <if test="search != null">
+            <where>
+                <if test="search.memberId != null">AND MEMBER_ID = #{search.memberId}</if>
+                <if test="search.houseNo != null">AND HOUSE_NO = #{search.houseNo}</if>
+                <if test="search.month != null">AND MONTH REGEXP #{search.month}</if>
+            </where>
+        </if>
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE ID = #{id}
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE ID = #{id}
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="Base_Column_List"/>
+        )
+        VALUES (
+        #{id},
+        #{memberId},
+        #{houseNo},
+        #{month},
+        #{water},
+        #{electric},
+        #{network},
+        #{property},
+        #{expand},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="water != null">
+                WATER = #{water},
+            </if>
+            <if test="electric != null">
+                ELECTRIC = #{electric},
+            </if>
+            <if test="network != null">
+                NETWORK = #{network},
+            </if>
+            <if test="property != null">
+                PROPERTY = #{property},
+            </if>
+            <if test="expand != null">
+                EXPAND = #{expand},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+</mapper>

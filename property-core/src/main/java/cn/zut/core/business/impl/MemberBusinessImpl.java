@@ -173,7 +173,7 @@ public class MemberBusinessImpl implements MemberBusiness {
 
     @Override
     public GenericResponse deleteUser(UserInfoRequest userInfoRequest) {
-        memberMapper.delete(userInfoRequest.getMemberId());
+        memberMapper.deleteById(userInfoRequest.getMemberId());
 
         return GenericResponse.SUCCESS;
     }

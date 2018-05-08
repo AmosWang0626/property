@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zut.dao.persistence.BusinessServiceMapper">
+
+    <resultMap id="BaseResultMap" type="cn.zut.dao.entity.BusinessServiceEntity">
+        <id column="ID" property="id"/>
+        <result column="MEMBER_ID" property="memberId"/>
+        <result column="TYPE" property="type"/>
+        <result column="DETAILS" property="details"/>
+        <result column="STATUS" property="status"/>
+        <result column="EVALUATE" property="evaluate"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="DETAIL_TIME" property="detailTime"/>
+        <result column="END_TIME" property="endTime"/>
+    </resultMap>
+
+    <sql id="tableName">business_service</sql>
+
+    <sql id="Base_Column_List">
+        ID,
+        MEMBER_ID,
+        TYPE,
+        DETAILS,
+        STATUS,
+        EVALUATE,
+        CREATE_TIME,
+        DETAIL_TIME,
+        END_TIME
+    </sql>
+
+    <sql id="condition">
+        <if test="search != null">
+            <where>
+                <if test="search.memberId != null">AND MEMBER_ID = #{search.memberId}</if>
+                <if test="search.type != null">AND TYPE = #{search.type}</if>
+                <if test="search.status != null">AND STATUS = #{search.status}</if>
+            </where>
+        </if>
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE ID = #{id}
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE ID = #{id}
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="Base_Column_List"/>
+        )
+        VALUES (
+        #{id},
+        #{memberId},
+        #{type},
+        #{details},
+        #{status},
+        #{evaluate},
+        #{createTime},
+        #{detailTime},
+        #{endTime},
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="memberId != null">
+                MEMBER_ID = #{memberId},
+            </if>
+            <if test="type != null">
+                TYPE = #{type},
+            </if>
+            <if test="details != null">
+                DETAILS = #{details},
+            </if>
+            <if test="status != null">
+                STATUS = #{status},
+            </if>
+            <if test="evaluate != null">
+                EVALUATE = #{evaluate},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime},
+            </if>
+            <if test="detailTime != null">
+                DETAIL_TIME = #{detailTime},
+            </if>
+            <if test="endTime != null">
+                END_TIME = #{endTime},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+</mapper>

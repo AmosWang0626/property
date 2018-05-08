@@ -5,8 +5,12 @@ import cn.zut.common.security.EncryptionUtil;
 import cn.zut.common.util.RandomUtil;
 import cn.zut.core.constant.PropertyConstant;
 import cn.zut.core.service.MemberService;
+import cn.zut.core.service.MenusService;
+import cn.zut.core.service.RolesMenuService;
+import cn.zut.core.service.RolesUserService;
 import cn.zut.dao.entity.LoginInfoEntity;
 import cn.zut.dao.entity.MemberEntity;
+import cn.zut.dao.entity.MenusEntity;
 import cn.zut.dao.persistence.LoginInfoMapper;
 import cn.zut.dao.persistence.MemberMapper;
 import cn.zut.facade.request.RegisterRequest;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * PROJECT: property
@@ -23,6 +28,12 @@ import javax.annotation.Resource;
  */
 @Service("memberService")
 public class MemberServiceImpl implements MemberService {
+    @Resource
+    private RolesMenuService rolesMenuService;
+    @Resource
+    private RolesUserService rolesUserService;
+    @Resource
+    private MenusService menusService;
 
     @Resource
     private MemberMapper memberMapper;
@@ -50,5 +61,12 @@ public class MemberServiceImpl implements MemberService {
         loginInfoMapper.insert(loginInfoEntity);
 
         return new GenericResponse<>(memberEntity.getMemberId());
+    }
+
+    @Override
+    public List<MenusEntity> getMenus(Long menuId) {
+        int roleId = rolesUserService.getUserRoles(menuId);
+        List<Integer> list = rolesMenuService.getMenusIdList(roleId);
+        return menusService.getAllMenus(list);
     }
 }

@@ -19,7 +19,7 @@ import java.io.IOException;
  *
  * @author DaoYuanWang
  */
-@Component
+@Component("fileBusiness")
 public class FileBusinessImpl implements FileBusiness {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileBusinessImpl.class);

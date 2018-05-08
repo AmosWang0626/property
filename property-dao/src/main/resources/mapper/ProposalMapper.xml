@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zut.dao.persistence.ProposalMapper">
+
+    <resultMap id="BaseResultMap" type="cn.zut.dao.entity.ProposalEntity">
+        <id column="ID" property="id"/>
+        <result column="TITLE" property="title"/>
+        <result column="NAME" property="name"/>
+        <result column="PHONE" property="phone"/>
+        <result column="TEXT" property="text"/>
+    </resultMap>
+
+    <sql id="tableName">business_proposal</sql>
+
+    <sql id="Base_Column_List">
+      ID,
+      TITLE,
+      NAME,
+      PHONE,
+      TEXT
+    </sql>
+
+    <sql id="condition">
+        <if test="search != null">
+            <where>
+                <if test="search.idNo != null">AND ID_NO = #{search.idNo}</if>
+            </where>
+        </if>
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT 1
+    </select>
+
+    <select id="selectListByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE ID = #{id}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="Base_Column_List"/>
+        )
+        VALUES
+        (
+        #{id},
+        #{title},
+        #{name},
+        #{phone},
+        #{text}
+        )
+    </insert>
+
+    <update id="update">
+        update
+        <include refid="tableName"/>
+        <set>
+            <if test="title != null">
+                TITLE = #{title},
+            </if>
+            <if test="name != null">
+                NAME = #{name},
+            </if>
+            <if test="phone != null">
+                PHONE = #{phone},
+            </if>
+            <if test="text != null">
+                TEXT = #{text},
+            </if>
+        </set>
+        where ID = #{id}
+    </update>
+
+</mapper>

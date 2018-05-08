@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zut.dao.persistence.BusinessSurveyMapper">
+
+    <resultMap id="BaseResultMap" type="cn.zut.dao.entity.BusinessSurveyEntity">
+        <id column="SURVEY_ID" property="surveyId"/>
+        <result column="TITLE" property="title"/>
+        <result column="DESCRIPTION" property="description"/>
+    </resultMap>
+
+    <sql id="tableName">business_survey</sql>
+
+    <sql id="Base_Column_List">
+      SURVEY_ID,
+      TITLE,
+      DESCRIPTION
+    </sql>
+
+    <sql id="condition">
+        <if test="search != null">
+            <where>
+                <if test="search.title != null">AND TITLE = #{search.title}</if>
+                <if test="search.description != null">AND DESCRIPTION = #{search.description}</if>
+            </where>
+        </if>
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE SURVEY_ID = #{surveyId}
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE SURVEY_ID = #{surveyId}
+    </delete>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="surveyId">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="Base_Column_List"/>
+        )
+        VALUES
+        (
+        #{surveyId},
+        #{title},
+        #{description}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="title != null">
+                TITLE = #{title},
+            </if>
+            <if test="description != null">
+                DESCRIPTION = #{description},
+            </if>
+        </set>
+        WHERE SURVEY_ID = #{surveyId}
+    </update>
+
+</mapper>

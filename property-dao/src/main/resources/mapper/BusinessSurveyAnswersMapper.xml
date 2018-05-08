@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zut.dao.persistence.BusinessSurveyAnswersMapper">
+
+    <!-- 表中字段与实体类字段对应,对应不上就会飘红 -->
+    <resultMap id="BaseResultMap" type="cn.zut.dao.entity.BusinessSurveyAnswersEntity">
+        <id column="ANSWER_ID" property="answerId"/>
+        <id column="QUESTION_ID" property="questionId"/>
+        <id column="CHOICE_TEXT" property="choiceText"/>
+        <id column="POLL" property="poll"/>
+    </resultMap>
+
+    <!-- 这个是表名,和数据库相对应 -->
+    <sql id="tableName">business_survey_answers</sql>
+
+    <!-- 下边这个是表格的所有字段 -->
+    <sql id="columns">
+        ANSWER_ID,
+        QUESTION_ID,
+        CHOICE_TEXT,
+        POLL
+    </sql>
+
+    <!-- 找到关键词: where 简单说就是一些条件,因为很多条件是通用的,所以这里抽出来,写成通用的 -->
+    <sql id="condition">
+        /* 如果search不为空,就在SQL后边缀上 ---> WHERE */
+        <if test="search != null">
+            <where>
+                /* 如果questionId不为空,就在SQL的 WHERE 后边缀上 ---> AND QUESTION_ID = * */
+                <if test="search.questionId != null">AND QUESTION_ID = #{search.questionId}</if>
+            </where>
+        </if>
+    </sql>
+
+    <!-- 这个方法是根据条件查询的 condition也就是条件,对应上边写的 (LIMIT 1 也就是我们只查询一条数据)-->
+    <select id="selectByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT 1
+    </select>
+
+    <!-- 和上边的相对应,这个后边不加上(LIMIT 1) 就是查询所有符合条件的数据 -->
+    <select id="selectListByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <!-- 同样是查询,根据id查询, 这个查询的条件是 ANSWER_ID = * -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE ANSWER_ID = #{answerId}
+    </select>
+
+    <!-- 根据id删除, 一般很少写删除语句, 这种方法慎用, 企业的项目中, 基本上见不到 delete语句 -->
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE ANSWER_ID = #{answerId}
+    </delete>
+
+    <!-- 这个是插入操作 -->
+    <insert id="insert">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="columns"/>
+        )
+        VALUES
+        (
+        #{answerId},
+        #{questionId},
+        #{choiceText},
+        #{poll},
+        )
+    </insert>
+
+    <!-- 这个是更新操作 -->
+    <update id="update">
+        update
+        <include refid="tableName"/>
+        <set>
+            /* 举一反三, 当且仅当 questionId不为空时, 缀上下边的语句 */
+            <if test="questionId != null">
+                QUESTION_ID = #{questionId},
+            </if>
+            <if test="choiceText != null">
+                CHOICE_TEXT = #{choiceText},
+            </if>
+            <if test="poll != null">
+                POLL = #{poll},
+            </if>
+        </set>
+        where ANSWER_ID = #{answerId}
+    </update>
+
+</mapper>

@@ -11,11 +11,12 @@
         <result column="GENDER" property="gender"/>
         <result column="AGE" property="age"/>
         <result column="MARITAL_STATUS" property="maritalStatus"/>
+        <result column="ROLES_ID" property="rolesId"/>
         <result column="CREATE_TIME" property="createTime"/>
         <result column="UPDATE_TIME" property="updateTime"/>
     </resultMap>
 
-    <sql id="tableName">member</sql>
+    <sql id="tableName">manage_member</sql>
 
     <sql id="columns">
         MEMBER_ID,
@@ -26,6 +27,7 @@
         GENDER,
         AGE,
         MARITAL_STATUS,
+        ROLES_ID,
         CREATE_TIME,
         UPDATE_TIME
     </sql>
@@ -72,11 +74,11 @@
         <include refid="condition"/>
     </select>
 
-    <select id="delete">
+    <delete id="delete">
         DELETE FROM
         <include refid="tableName"/>
         WHERE MEMBER_ID = #{memberId}
-    </select>
+    </delete>
 
     <update id="update">
         UPDATE
@@ -103,6 +105,9 @@
             <if test="maritalStatus != null">
                 MARITAL_STATUS = #{maritalStatus},
             </if>
+            <if test="rolesId != null">
+                ROLES_ID = #{rolesId},
+            </if>
             <if test="updateTime != null">
                 UPDATE_TIME = #{updateTime},
             </if>
@@ -126,6 +131,7 @@
         #{gender},
         #{age},
         #{maritalStatus},
+        #{rolesId},
         #{createTime},
         #{updateTime}
         )
