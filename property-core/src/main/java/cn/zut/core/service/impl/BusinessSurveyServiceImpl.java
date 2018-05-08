@@ -1,6 +1,6 @@
 package cn.zut.core.service.impl;
 
-import cn.zut.core.service.SearchService;
+import cn.zut.core.service.BusinessSurveyService;
 import cn.zut.dao.entity.BusinessSurveyAnswersEntity;
 import cn.zut.dao.entity.BusinessSurveyDataEntity;
 import cn.zut.dao.entity.BusinessSurveyEntity;
@@ -22,8 +22,8 @@ import java.util.Map;
 /**
  * @author LiuBowen
  */
-@Service("searchService")
-public class SearchServiceImpl implements SearchService {
+@Service("businessSurveyService")
+public class BusinessSurveyServiceImpl implements BusinessSurveyService {
 
     @Resource
     private BusinessSurveyMapper businessSurveyMapper;

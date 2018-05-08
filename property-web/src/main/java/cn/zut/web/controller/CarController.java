@@ -22,7 +22,7 @@ public class CarController {
     @Resource
     private CarSetService carSetService;
 
-    @RequestMapping("comein")
+    @RequestMapping("comeIn")
     public String comein(CarSetEntity carSetEntity, HttpServletRequest request) {
         if (carSetEntity == null || carSetEntity.getCartype() == null) {
             request.setAttribute("carSetEntity", new CarSetEntity());
@@ -36,7 +36,7 @@ public class CarController {
         return "parameterError";
     }
 
-    @RequestMapping("carlist")
+    @RequestMapping("list")
     @ResponseBody
     public Map<String, Object> carList() {
         List<CarSetEntity> list = carSetService.carList();
@@ -47,7 +47,7 @@ public class CarController {
         return resuletMap;
     }
 
-    @RequestMapping("carsetdetail")
+    @RequestMapping("detail")
     public String carSearch(int id, HttpServletRequest request) {
         CarSetEntity carSetEntity = carSetService.searchCarSet(id);
         request.setAttribute("carSetEntity", carSetEntity);

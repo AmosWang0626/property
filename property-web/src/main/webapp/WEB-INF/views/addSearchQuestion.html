@@ -23,7 +23,7 @@
 
 
 
-<form class="layui-form" action="/search/addQues">
+<form class="layui-form" action="/survey/addQues">
     <input type="text" name="questionid" id="questionid"  th:value="${question.questionid}" autocomplete="off" class="layui-input layui-hide">
     <input type="text" name="surveyid" id="surveyid"  th:value="${question.surveyid}" autocomplete="off" class="layui-input layui-hide">
 
@@ -65,7 +65,7 @@
                     type:2
                     ,area:['40%', '40%']
                     ,title:"添加答案"
-                    ,content: '/search/addAnswers?questionid='+$("#questionid").val()+"&surveyid="+("#surveyid").val()
+                    ,content: '/survey/addAnswers?questionid='+$("#questionid").val()+"&surveyid="+("#surveyid").val()
                 });
             }
         };

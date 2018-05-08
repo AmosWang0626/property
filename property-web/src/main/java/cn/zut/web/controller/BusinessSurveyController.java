@@ -1,6 +1,6 @@
 package cn.zut.web.controller;
 
-import cn.zut.core.service.SearchService;
+import cn.zut.core.service.BusinessSurveyService;
 import cn.zut.dao.entity.BusinessSurveyAnswersEntity;
 import cn.zut.dao.entity.BusinessSurveyDataEntity;
 import cn.zut.dao.entity.BusinessSurveyEntity;
@@ -19,16 +19,16 @@ import java.util.Map;
  * @author LiuBowen
  */
 @Controller
-@RequestMapping("search")
-public class SearchController {
+@RequestMapping("survey")
+public class BusinessSurveyController {
 
     @Resource
-    private SearchService searchService;
+    private BusinessSurveyService businessSurveyService;
 
-    @RequestMapping("searchlist")
+    @RequestMapping("list")
     @ResponseBody
     public Map<String, Object> searchList() {
-        List<BusinessSurveyEntity> list = searchService.findAll();
+        List<BusinessSurveyEntity> list = businessSurveyService.findAll();
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("data", list);
         resultMap.put("msg", "");
@@ -38,21 +38,21 @@ public class SearchController {
 
     @RequestMapping("addSurvey")
     public String addSurvey(HttpServletRequest request) {
-        BusinessSurveyEntity businessSurveyEntity = searchService.addSurvey();
+        BusinessSurveyEntity businessSurveyEntity = businessSurveyService.addSurvey();
         request.setAttribute("search", businessSurveyEntity);
         return "addSearch";
     }
 
     @RequestMapping("addQuestion")
     public String addQuestion(@RequestParam("surveyId") Integer surveyId, HttpServletRequest request) {
-        BusinessSurveyDataEntity businessSurveyDataEntity = searchService.addSurveyData(surveyId);
+        BusinessSurveyDataEntity businessSurveyDataEntity = businessSurveyService.addSurveyData(surveyId);
         request.setAttribute("question", businessSurveyDataEntity);
         return "addSearchQuestion";
     }
 
     @RequestMapping("addAnswers")
     public String addAnswers(BusinessSurveyDataEntity businessSurveyDataEntity, HttpServletRequest request) {
-        BusinessSurveyAnswersEntity businessSurveyAnswersEntity = searchService.addSurveyAnswers(businessSurveyDataEntity);
+        BusinessSurveyAnswersEntity businessSurveyAnswersEntity = businessSurveyService.addSurveyAnswers(businessSurveyDataEntity);
         request.setAttribute("businessSurveyAnswersEntity", businessSurveyAnswersEntity);
         return "addSearchAnswers";
     }
@@ -60,9 +60,9 @@ public class SearchController {
     /**
      * 添加答案选项
      */
-    @RequestMapping("addans")
+    @RequestMapping("addAns")
     public String addAns(BusinessSurveyAnswersEntity businessSurveyAnswersEntity, HttpServletRequest request) {
-        businessSurveyAnswersEntity = searchService.adnSurveyAnswer(businessSurveyAnswersEntity);
+        businessSurveyAnswersEntity = businessSurveyService.adnSurveyAnswer(businessSurveyAnswersEntity);
         if (businessSurveyAnswersEntity != null) {
             request.setAttribute("surveyanswersMsg", "添加成功！");
             request.setAttribute("businessSurveyAnswersEntity", businessSurveyAnswersEntity);
@@ -76,7 +76,7 @@ public class SearchController {
      */
     @RequestMapping("addQues")
     public String addQues(BusinessSurveyDataEntity businessSurveyDataEntity, HttpServletRequest request) {
-        BusinessSurveyDataEntity businessSurveyDataEntity1 = searchService.addSurveyDate(businessSurveyDataEntity);
+        BusinessSurveyDataEntity businessSurveyDataEntity1 = businessSurveyService.addSurveyDate(businessSurveyDataEntity);
         if (businessSurveyDataEntity1 != null) {
             request.setAttribute("questionMsg", "添加成功！");
             request.setAttribute("question", businessSurveyDataEntity1);
@@ -87,7 +87,7 @@ public class SearchController {
 
     @RequestMapping("addSearch")
     public String newSearch(BusinessSurveyEntity businessSurveyEntity, HttpServletRequest request) {
-        BusinessSurveyEntity businessSurveyEntity1 = searchService.addSurveyName(businessSurveyEntity);
+        BusinessSurveyEntity businessSurveyEntity1 = businessSurveyService.addSurveyName(businessSurveyEntity);
         if (businessSurveyEntity1 != null) {
             request.setAttribute("searchMsg", "添加成功！");
             request.setAttribute("search", businessSurveyEntity1);
@@ -99,15 +99,15 @@ public class SearchController {
     @RequestMapping("dosearch")
     public String doSearch(HttpServletRequest request) {
         Map<String, Object> map = new HashMap<>();
-        map = searchService.selectService();
+        map = businessSurveyService.selectService();
         request.setAttribute("searchMsg", map.get("searchMsg"));
         request.setAttribute("question", map.get("question"));
         request.setAttribute("answer", map.get("answer"));
         return "search";
     }
 
-    @RequestMapping("searchdel")
+    @RequestMapping("del")
     public boolean searchDel(int surveyid) {
-        return searchService.delSurvey(surveyid);
+        return businessSurveyService.delSurvey(surveyid);
     }
 }

@@ -71,13 +71,13 @@
         <include refid="condition"/>
     </select>
 
-    <delete id="deleteById" parameterType="cn.zut.dao.entity.MenusExample">
+    <delete id="deleteById">
         DELETE FROM
         <include refid="tableName"/>
         WHERE MENU_ID = #{id}
     </delete>
 
-    <insert id="insert" parameterType="cn.zut.dao.entity.MenusEntity">
+    <insert id="insert">
         INSERT INTO
         <include refid="tableName"/>
         (

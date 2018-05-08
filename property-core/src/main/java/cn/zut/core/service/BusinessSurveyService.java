@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author LiuBowen
  */
-public interface SearchService {
+public interface BusinessSurveyService {
     List<BusinessSurveyEntity> findAll();
 
     BusinessSurveyEntity addSurvey();
