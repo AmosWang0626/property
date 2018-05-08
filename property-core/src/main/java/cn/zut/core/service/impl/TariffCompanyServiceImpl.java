@@ -24,7 +24,7 @@ import java.util.Random;
  * @author DaoYuanWang
  * @date 2018/4/23
  */
-@Service
+@Service("tariffCompanyService")
 public class TariffCompanyServiceImpl implements TariffCompanyService {
 
     @Resource

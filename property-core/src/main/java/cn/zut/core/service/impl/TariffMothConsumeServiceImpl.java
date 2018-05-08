@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * @author LiuBowen
  */
-@Service("usersMemberService")
+@Service("tariffMothConsumeService")
 public class TariffMothConsumeServiceImpl implements TariffMothConsumeService {
 
     @Resource

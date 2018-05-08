@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zut.dao.persistence.BusinessMenusMapper">
+
+    <resultMap id="BaseResultMap" type="cn.zut.dao.entity.BusinessMenusEntity">
+        <result column="MENU_ID" property="menuId"/>
+        <result column="MENU_NAME" property="menuName"/>
+        <result column="MENU_URL" property="menuUrl"/>
+        <result column="FATHER_ID" property="fatherId"/>
+    </resultMap>
+
+    <sql id="tableName">business_menus</sql>
+
+    <sql id="condition">
+        <if test="search != null">
+            <where>
+                <if test="search.menuName != null">AND MENU_NAME = #{search.menuName}</if>
+                <if test="search.menuUrl != null">AND MENU_URL = #{search.menuUrl}</if>
+                <if test="search.fatherId != null">AND FATHER_ID = #{search.fatherId}</if>
+                <if test="search.menuIds != null">
+                    AND MENU_ID IN (<foreach collection="search.menuIds" item="item" separator=",">#{item}</foreach>)
+                </if>
+            </where>
+        </if>
+    </sql>
+
+    <sql id="Base_Column_List">
+      MENU_ID,
+      MENU_NAME,
+      MENU_URL,
+      FATHER_ID
+    </sql>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE MENU_ID = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT 1
+    </select>
+
+    <select id="selectListByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <select id="selectListPageByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT #{firstIndex}, #{rows}
+    </select>
+
+    <select id="selectCountByExample" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE MENU_ID = #{id}
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="Base_Column_List"/>
+        )
+        VALUES
+        (
+        #{menuId},
+        #{menuName},
+        #{menuUrl},
+        #{fatherId}
+        )
+    </insert>
+
+    <update id="update">
+        update
+        <include refid="tableName"/>
+        <set>
+            <if test="menuName != null">
+                menu_name = #{menuName,jdbcType=CHAR},
+            </if>
+            <if test="menuUrl != null">
+                menu_url = #{menuUrl,jdbcType=CHAR},
+            </if>
+            <if test="record.fatherId != null">
+                father_id = #{fatherId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where menu_id = #{menuId}
+    </update>
+</mapper>

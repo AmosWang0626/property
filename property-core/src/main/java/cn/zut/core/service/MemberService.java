@@ -1,7 +1,7 @@
 package cn.zut.core.service;
 
 import cn.zut.common.generic.GenericResponse;
-import cn.zut.dao.entity.MenusEntity;
+import cn.zut.dao.entity.BusinessMenusEntity;
 import cn.zut.facade.request.RegisterRequest;
 
 import java.util.List;
@@ -25,6 +25,6 @@ public interface MemberService {
     /**
      * 根据用户id查找对应菜单表
      */
-    List<MenusEntity> getMenus(Long menuId);
+    List<BusinessMenusEntity> getMenus(Long menuId);
 
 }

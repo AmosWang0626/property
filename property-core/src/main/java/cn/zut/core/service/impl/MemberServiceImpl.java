@@ -5,12 +5,12 @@ import cn.zut.common.security.EncryptionUtil;
 import cn.zut.common.util.RandomUtil;
 import cn.zut.core.constant.PropertyConstant;
 import cn.zut.core.service.MemberService;
-import cn.zut.core.service.MenusService;
-import cn.zut.core.service.RolesMenuService;
-import cn.zut.core.service.RolesUserService;
+import cn.zut.core.service.BusinessMenusService;
+import cn.zut.core.service.BusinessRolesMenuService;
+import cn.zut.core.service.BusinessRolesUserService;
 import cn.zut.dao.entity.LoginInfoEntity;
 import cn.zut.dao.entity.MemberEntity;
-import cn.zut.dao.entity.MenusEntity;
+import cn.zut.dao.entity.BusinessMenusEntity;
 import cn.zut.dao.persistence.LoginInfoMapper;
 import cn.zut.dao.persistence.MemberMapper;
 import cn.zut.facade.request.RegisterRequest;
@@ -29,11 +29,11 @@ import java.util.List;
 @Service("memberService")
 public class MemberServiceImpl implements MemberService {
     @Resource
-    private RolesMenuService rolesMenuService;
+    private BusinessRolesMenuService businessRolesMenuService;
     @Resource
-    private RolesUserService rolesUserService;
+    private BusinessRolesUserService businessRolesUserService;
     @Resource
-    private MenusService menusService;
+    private BusinessMenusService businessMenusService;
 
     @Resource
     private MemberMapper memberMapper;
@@ -64,9 +64,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<MenusEntity> getMenus(Long menuId) {
-        int roleId = rolesUserService.getUserRoles(menuId);
-        List<Integer> list = rolesMenuService.getMenusIdList(roleId);
-        return menusService.getAllMenus(list);
+    public List<BusinessMenusEntity> getMenus(Long menuId) {
+        int roleId = businessRolesUserService.getUserRoles(menuId);
+        List<Integer> list = businessRolesMenuService.getMenusIdList(roleId);
+        return businessMenusService.getAllMenus(list);
     }
 }

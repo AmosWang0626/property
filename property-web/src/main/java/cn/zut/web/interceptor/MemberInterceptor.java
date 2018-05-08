@@ -15,6 +15,9 @@
 package cn.zut.web.interceptor;
 
 import cn.zut.common.api.Token;
+import cn.zut.common.exception.UserTokenException;
+import cn.zut.common.security.DesEncryptionUtil;
+import cn.zut.core.constant.PropertyConstant;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -32,21 +35,21 @@ public class MemberInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        String token = request.getHeader(PropertyConstant.TOKEN);
+        String token = request.getHeader(PropertyConstant.TOKEN);
         /*String deviceId = request.getHeader(PropertyConstant.DEVICE_ID);*/
-//        HandlerMethod handlerMethod = (HandlerMethod) handler;
-//        // 如果不需要校验直接 return true
-//        if (!needTokenCheck(handlerMethod)) {
-//            return true;
-//        }
-//        if (token == null) {
-//            throw new UserTokenException("参数校验异常! 没有登录!");
-//        }
-//        String memberId = DesEncryptionUtil.decrypt(token, PropertyConstant.TOKEN_ENCRYPT);
-//        if (memberId == null) {
-//            throw new UserTokenException("参数校验异常! 用户Token异常!");
-//        }
-//        request.setAttribute(PropertyConstant.MEMBER_ID, memberId);
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        // 如果不需要校验直接 return true
+        if (!needTokenCheck(handlerMethod)) {
+            return true;
+        }
+        if (token == null) {
+            throw new UserTokenException("参数校验异常! 没有登录!");
+        }
+        String memberId = DesEncryptionUtil.decrypt(token, PropertyConstant.TOKEN_ENCRYPT);
+        if (memberId == null) {
+            throw new UserTokenException("参数校验异常! 用户Token异常!");
+        }
+        request.setAttribute(PropertyConstant.MEMBER_ID, memberId);
         return true;
     }
 

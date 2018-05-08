@@ -14,41 +14,41 @@
     <tr>
         <th width="100" class="pad">ID</th>
         <td>
-            <span th:text="${houseRentEntity.id}"></span>
+            <span th:text="${businessHouseRentEntity.id}"></span>
     </tr>
     <tr>
         <th width="100" class="pad">图片</th>
         <td>
-            <img th:src="'../../static/img/'+${houseRentEntity.img}" alt="">
+            <img th:src="'../../static/img/'+${businessHouseRentEntity.img}" alt="">
     </tr>
     <tr>
         <th class="pad">标题</th>
         <td>
-            <p th:text="${houseRentEntity.name}"></p></td>
+            <p th:text="${businessHouseRentEntity.name}"></p></td>
         </td>
     </tr>
     <tr>
         <th class="pad">类型</th>
         <td>
-            <p th:text="${houseRentEntity.type }"></p></td>
+            <p th:text="${businessHouseRentEntity.type }"></p></td>
         </td>
     </tr>
     <tr>
         <th class="pad">大小</th>
         <td>
-            <p th:text="${houseRentEntity.area}"></p></td>
+            <p th:text="${businessHouseRentEntity.area}"></p></td>
     </tr>
     <tr>
         <th class="pad">地址</th>
-        <td><p th:text="${houseRentEntity.address}"></p></td>
+        <td><p th:text="${businessHouseRentEntity.address}"></p></td>
     </tr>
     <tr>
         <th class="pad">金额</th>
-        <td><p th:text="${houseRentEntity.rent}"></p></td>
+        <td><p th:text="${businessHouseRentEntity.rent}"></p></td>
     </tr>
     <tr>
         <th class="pad">详情</th>
-        <td><p th:text="${houseRentEntity.details}"></p></td>
+        <td><p th:text="${businessHouseRentEntity.details}"></p></td>
     </tr>
     </tbody>
 </table>

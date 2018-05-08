@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zut.dao.persistence.BusinessHouseRentMapper">
+
+    <resultMap id="BaseResultMap" type="cn.zut.dao.entity.BusinessHouseRentEntity">
+        <id column="ID" property="id"/>
+        <result column="TYPE" property="type"/>
+        <result column="AREA" property="area"/>
+        <result column="ADDRESS" property="address"/>
+        <result column="RENT" property="rent"/>
+        <result column="DETAILS" property="details"/>
+        <result column="IMG" property="img"/>
+        <result column="NAME" property="name"/>
+    </resultMap>
+
+    <sql id="tableName">business_house_rent</sql>
+
+    <sql id="Base_Column_List">
+        ID,
+        TYPE,
+        AREA,
+        ADDRESS,
+        RENT,
+        DETAILS,
+        IMG,
+        NAME
+    </sql>
+
+    <sql id="condition">
+        <if test="search != null">
+            <where>
+                <if test="search.type != null">AND TYPE = #{search.type}</if>
+                <if test="search.area != null">AND AREA = #{search.area}</if>
+                <if test="search.address != null">AND ADDRESS = #{search.address}</if>
+                <if test="search.rent != null">AND RENT = #{search.rent}</if>
+                <if test="search.details != null">AND DETAILS = #{search.details}</if>
+                <if test="search.img != null">AND IMG = #{search.img}</if>
+                <if test="search.name != null">AND NAME = #{search.name}</if>
+            </where>
+        </if>
+    </sql>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="tableName"/>
+        where ID = #{id}
+    </select>
+
+    <select id="selectByExample" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT 1
+    </select>
+
+    <select id="selectListByExample" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <select id="selectListPageByExample" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT #{firstIndex}, #{rows}
+    </select>
+
+    <select id="selectCountByExample" resultType="java.lang.Integer">
+        select count(*) from
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <delete id="deleteById">
+        delete from
+        <include refid="tableName"/>
+        where id = #{id}
+    </delete>
+
+    <insert id="insert">
+        insert into
+        <include refid="tableName"/>
+        (
+        <include refid="Base_Column_List"/>
+        )
+        values
+        (
+        #{id},
+        #{type},
+        #{area},
+        #{address},
+        #{rent},
+        #{details},
+        #{img},
+        #{name}
+        )
+    </insert>
+
+    <update id="update">
+        update
+        <include refid="tableName"/>
+        <set>
+            <if test="type != null">
+                TYPE = #{type},
+            </if>
+            <if test="area != null">
+                AREA = #{area},
+            </if>
+            <if test="address != null">
+                ADDRESS = #{address},
+            </if>
+            <if test="rent != null">
+                RENT = #{rent},
+            </if>
+            <if test="details != null">
+                DETAILS = #{details},
+            </if>
+            <if test="img != null">
+                IMG = #{img},
+            </if>
+            <if test="name != null">
+                NAME = #{name},
+            </if>
+        </set>
+        where ID = #{id}
+    </update>
+
+</mapper>

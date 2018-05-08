@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.zut.dao.persistence.BusinessCarSetMapper">
+
+    <resultMap id="BaseResultMap" type="cn.zut.dao.entity.BusinessCarSetEntity">
+        <id column="ID" property="id"/>
+        <result column="COME_DATE" property="comeDate"/>
+        <result column="LEAVE_DATE" property="leaveDate"/>
+        <result column="CAR_TYPE" property="carType"/>
+        <result column="CAR_NO" property="carNo"/>
+        <result column="RENT" property="rent"/>
+    </resultMap>
+
+    <sql id="tableName">business_car_set</sql>
+
+    <sql id="Base_Column_List">
+        ID,
+        COME_DATE,
+        LEAVE_DATE,
+        CAR_TYPE,
+        CAR_NO,
+        RENT
+    </sql>
+
+    <sql id="condition">
+        <if test="search != null">
+            <where>
+                <if test="search.comeDate != null">AND COME_DATE = #{search.comeDate}</if>
+                <if test="search.leaveDate != null">AND LEAVE_DATE = #{search.leaveDate}</if>
+                <if test="search.carType != null">AND CAR_TYPE = #{search.carType}</if>
+                <if test="search.carNo != null">AND CAR_NO = #{search.carNo}</if>
+                <if test="search.rent != null">AND RENT = #{search.rent}</if>
+            </where>
+        </if>
+    </sql>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE ID = #{id}
+    </select>
+
+    <select id="selectByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT 1
+    </select>
+
+    <select id="selectListByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <select id="selectCountByExample">
+        SELECT COUNT(*) FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <select id="selectListPageByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT #{firstIndex}, #{rows}
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE ID = #{id}
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO
+        <include refid="tableName"/>
+        <include refid="Base_Column_List"/>
+        VALUES
+        (
+        #{id},
+        #{comeDate},
+        #{leaveDate},
+        #{carType},
+        #{carNo},
+        #{rent}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="comeDate != null">
+                COME_DATE = #{comeDate},
+            </if>
+            <if test="leaveDate != null">
+                LEAVE_DATE = #{leaveDate},
+            </if>
+            <if test="carType != null">
+                CAR_TYPE = #{carType},
+            </if>
+            <if test="carNo != null">
+                CAR_NO = #{carNo},
+            </if>
+            <if test="rent != null">
+                RENT = #{rent},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+</mapper>

@@ -24,14 +24,14 @@
 
 
 <form class="layui-form" action="/car/rentCar">
-    <input type="text"  name="id"  th:value="${carSetEntity.id}" autocomplete="off" class="layui-input layui-hide">
+    <input type="text"  name="id"  th:value="${businessCarSetEntity.id}" autocomplete="off" class="layui-input layui-hide">
 
 
     <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">车辆类型</label>
             <div class="layui-input-inline" style="width: 400px;">
-                <input type="text" name="name"  th:value="${carSetEntity.cartype}" readonly class="layui-input">
+                <input type="text" name="name"  th:value="${businessCarSetEntity.cartype}" readonly class="layui-input">
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">车牌号</label>
             <div class="layui-input-inline">
-                <input type="text" name="name"  th:value="${carSetEntity.carnumber}" readonly class="layui-input">
+                <input type="text" name="name"  th:value="${businessCarSetEntity.carnumber}" readonly class="layui-input">
 
             </div>
         </div>
@@ -52,7 +52,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">进入时间</label>
             <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="comedate" th:value="${carSetEntity.comedate}" id="comedate" lay-verify="comedate " placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                <input type="text" name="comedate" th:value="${businessCarSetEntity.comedate}" id="comedate" lay-verify="comedate " placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
             </div>
         </div>
     </div>
@@ -62,7 +62,7 @@
 
             <label class="layui-form-label">进入时间</label>
             <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="leavedate" th:value="${carSetEntity.leavedate}" id="leavedate" lay-verify="leavedate " placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                <input type="text" name="leavedate" th:value="${businessCarSetEntity.leavedate}" id="leavedate" lay-verify="leavedate " placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
             </div>
         </div>
     </div>
@@ -70,7 +70,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">金额</label>
             <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" name="rent" th:value="${carSetEntity.rent}" placeholder="￥" autocomplete="off" class="layui-input">
+                <input type="text" name="rent" th:value="${businessCarSetEntity.rent}" placeholder="￥" autocomplete="off" class="layui-input">
             </div>
         </div>
     </div>

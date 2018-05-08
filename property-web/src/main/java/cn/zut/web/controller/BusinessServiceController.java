@@ -2,19 +2,17 @@ package cn.zut.web.controller;
 
 import cn.zut.common.dao.PageModel;
 import cn.zut.common.generic.GenericResponse;
+import cn.zut.common.generic.SimplePageResult;
 import cn.zut.core.constant.PropertyConstant;
 import cn.zut.core.service.BusinessService;
 import cn.zut.dao.entity.BusinessServiceEntity;
 import cn.zut.facade.enums.ServiceSatus;
 import cn.zut.facade.enums.ServiceTypeEnum;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * @author LiuBowen
@@ -30,15 +28,17 @@ public class BusinessServiceController {
      * 添加服务
      *
      * @param businessServiceEntity BusinessServiceEntity
-     * @param request       HttpServletRequest
+     * @param request               HttpServletRequest
      */
     @RequestMapping("add")
-    public GenericResponse serviceAdd(BusinessServiceEntity businessServiceEntity, HttpServletRequest request) {
+    public GenericResponse serviceAdd(@RequestBody BusinessServiceEntity businessServiceEntity, HttpServletRequest request) {
         businessServiceEntity.setMemberId(getMemberId(request));
+        if (StringUtils.isEmpty(businessServiceEntity.getDetails())) {
+            return GenericResponse.ERROR_PARAM;
+        }
 
         return businessService.addService(businessServiceEntity);
     }
-
 
     @GetMapping("list")
     public GenericResponse serviceList(@RequestParam(value = "page", required = false) Integer page,
@@ -49,14 +49,14 @@ public class BusinessServiceController {
         PageModel<BusinessServiceEntity> pageModel = new PageModel<>();
         pageModel.setPage(page);
         pageModel.setRows(size);
-        List<BusinessServiceEntity> serviceEntities = businessService.serviceList();
+        SimplePageResult<BusinessServiceEntity> simplePageResult = businessService.serviceList(pageModel);
 
-        serviceEntities.forEach(businessServiceEntity -> {
+        simplePageResult.getRows().forEach(businessServiceEntity -> {
             businessServiceEntity.setType(ServiceTypeEnum.valueOf(businessServiceEntity.getType()).getValue());
             businessServiceEntity.setStatus(ServiceSatus.valueOf(businessServiceEntity.getStatus()).getValue());
         });
 
-        return new GenericResponse<>(serviceEntities);
+        return new GenericResponse<>(simplePageResult);
     }
 
     @RequestMapping("agree")

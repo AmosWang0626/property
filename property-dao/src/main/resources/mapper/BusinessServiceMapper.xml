@@ -54,6 +54,22 @@
         WHERE ID = #{id}
     </select>
 
+    <select id="selectListPageByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT #{firstIndex}, #{rows}
+    </select>
+
+    <select id="selectCountByExample" resultType="java.lang.Integer">
+        SELECT COUNT(0)
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
     <delete id="deleteById">
         DELETE FROM
         <include refid="tableName"/>
@@ -75,7 +91,7 @@
         #{evaluate},
         #{createTime},
         #{detailTime},
-        #{endTime},
+        #{endTime}
         )
     </insert>
 

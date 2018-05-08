@@ -1,9 +1,9 @@
 package cn.zut.core.service;
 
+import cn.zut.common.dao.PageModel;
 import cn.zut.common.generic.GenericResponse;
+import cn.zut.common.generic.SimplePageResult;
 import cn.zut.dao.entity.BusinessServiceEntity;
-
-import java.util.List;
 
 /**
  * @author LiuBowen
@@ -17,7 +17,7 @@ public interface BusinessService {
     /**
      * 查看所有服务
      */
-    List<BusinessServiceEntity> serviceList();
+    SimplePageResult<BusinessServiceEntity> serviceList(PageModel<BusinessServiceEntity> pageModel);
 
     /**
      * 同意服务

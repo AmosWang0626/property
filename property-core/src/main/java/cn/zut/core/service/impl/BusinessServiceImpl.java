@@ -1,8 +1,10 @@
 package cn.zut.core.service.impl;
 
+import cn.zut.common.dao.PageModel;
 import cn.zut.common.exception.ExceptionCode;
 import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
+import cn.zut.common.generic.SimplePageResult;
 import cn.zut.core.service.BusinessService;
 import cn.zut.dao.entity.BusinessServiceEntity;
 import cn.zut.dao.persistence.BusinessServiceMapper;
@@ -42,8 +44,17 @@ public class BusinessServiceImpl implements BusinessService {
      * 服务列表
      */
     @Override
-    public List<BusinessServiceEntity> serviceList() {
-        return businessServiceMapper.selectListByExample(null);
+    public SimplePageResult<BusinessServiceEntity> serviceList(PageModel<BusinessServiceEntity> pageModel) {
+        List<BusinessServiceEntity> tariffCompanyEntities = businessServiceMapper.selectListPageByExample(pageModel);
+        int memberCount = businessServiceMapper.selectCountByExample(pageModel.getSearch());
+        SimplePageResult<BusinessServiceEntity> pageResult = new SimplePageResult<>();
+        // 总记录数量 || 记录数据列表 || 页码 || 记录数量
+        pageResult.setTotal(memberCount);
+        pageResult.setRows(tariffCompanyEntities);
+        pageResult.setPage(pageModel.getPage());
+        pageResult.setSize(pageModel.getRows());
+
+        return pageResult;
     }
 
     /**
