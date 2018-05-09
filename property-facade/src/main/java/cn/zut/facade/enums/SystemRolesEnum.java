@@ -4,23 +4,27 @@ import cn.zut.common.api.Mapping;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * PROJECT: property
- * DATE: 2017/12/15
+ * PROJECT: property2
+ * DESCRIPTION: 系统用户枚举
  *
  * @author DaoYuanWang
+ * @date 2018/5/9
  */
-public enum PaymentStatusEnum implements Mapping<String, String> {
-
+public enum SystemRolesEnum implements Mapping {
     /**
-     * 支付状态
+     * 系统用户
      */
-    PAY_SUCCESS("支付成功"),
-    PAY_FAIL("支付失败"),
-    PAY_PROCESSING("支付处理中");
+    USER(1, "用户"),
+    OWNER(2, "业主"),
+    WORKER(3, "员工"),
+    MANAGER(4, "主管"),
+    ADMIN(5, "管理员"),;
 
+    private final Integer index;
     private final String value;
 
-    PaymentStatusEnum(String value) {
+    SystemRolesEnum(Integer index, String value) {
+        this.index = index;
         this.value = value;
     }
 
@@ -34,21 +38,26 @@ public enum PaymentStatusEnum implements Mapping<String, String> {
         return value;
     }
 
+    public Integer getIndex() {
+        return index;
+    }
+
     /**
      * 传入字符串返回匹配枚举, 使用者要对null进行处理
      *
      * @param value 字符串key
      * @return this
      */
-    public PaymentStatusEnum values2(String value) {
+    public SystemRolesEnum values2(String value) {
         if (StringUtils.isBlank(value)) {
             return null;
         }
-        for (PaymentStatusEnum paymentStatusEnum : PaymentStatusEnum.values()) {
-            if (paymentStatusEnum.getKey().equals(value)) {
-                return paymentStatusEnum;
+        for (SystemRolesEnum baseEnum : SystemRolesEnum.values()) {
+            if (baseEnum.getKey().equals(value)) {
+                return baseEnum;
             }
         }
         return null;
     }
+
 }

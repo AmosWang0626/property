@@ -7,6 +7,8 @@
         <result column="MENU_NAME" property="menuName"/>
         <result column="MENU_URL" property="menuUrl"/>
         <result column="FATHER_ID" property="fatherId"/>
+        <result column="MENU_PRIORITY" property="menuPriority"/>
+        <result column="MENU_ICON" property="menuIcon"/>
     </resultMap>
 
     <sql id="tableName">business_menus</sql>
@@ -28,7 +30,9 @@
       MENU_ID,
       MENU_NAME,
       MENU_URL,
-      FATHER_ID
+      FATHER_ID,
+      MENU_PRIORITY,
+      MENU_ICON
     </sql>
 
     <select id="selectById" resultMap="BaseResultMap">
@@ -36,7 +40,7 @@
         <include refid="Base_Column_List"/>
         FROM
         <include refid="tableName"/>
-        WHERE MENU_ID = #{id,jdbcType=INTEGER}
+        WHERE MENU_ID = #{id}
     </select>
 
     <select id="selectByExample" resultMap="BaseResultMap">
@@ -88,7 +92,9 @@
         #{menuId},
         #{menuName},
         #{menuUrl},
-        #{fatherId}
+        #{fatherId},
+        #{menuPriority},
+        #{menuIcon}
         )
     </insert>
 
@@ -97,15 +103,21 @@
         <include refid="tableName"/>
         <set>
             <if test="menuName != null">
-                menu_name = #{menuName,jdbcType=CHAR},
+                MENU_NAME = #{menuName},
             </if>
             <if test="menuUrl != null">
-                menu_url = #{menuUrl,jdbcType=CHAR},
+                MENU_URL = #{menuUrl},
             </if>
-            <if test="record.fatherId != null">
-                father_id = #{fatherId,jdbcType=INTEGER},
+            <if test="fatherId != null">
+                FATHER_ID = #{fatherId},
+            </if>
+            <if test="menuPriority != null">
+                MENU_PRIORITY = #{menuPriority},
+            </if>
+            <if test="menuIcon != null">
+                MENU_ICON = #{menuIcon},
             </if>
         </set>
-        where menu_id = #{menuId}
+        where MENU_ID = #{menuId}
     </update>
 </mapper>

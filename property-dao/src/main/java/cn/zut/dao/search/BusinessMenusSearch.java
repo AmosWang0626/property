@@ -13,14 +13,21 @@ import java.util.List;
  */
 @Data
 public class BusinessMenusSearch {
+
     /**
      * 多个id
      */
     private List<Integer> menuIds;
-
+    /**
+     * 菜单名称
+     */
     private String menuName;
-
+    /**
+     * 菜单URL
+     */
     private String menuUrl;
-
+    /**
+     * 父级菜单id
+     */
     private Integer fatherId;
 }

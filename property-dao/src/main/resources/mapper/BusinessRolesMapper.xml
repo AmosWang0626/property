@@ -5,13 +5,15 @@
     <resultMap id="BaseResultMap" type="cn.zut.dao.entity.BusinessRolesEntity">
         <result column="ROLES_ID" property="rolesId"/>
         <result column="ROLES_NAME" property="rolesName"/>
+        <result column="ROLES_DESC" property="rolesDesc"/>
     </resultMap>
 
     <sql id="tableName">business_roles</sql>
 
     <sql id="Base_Column_List">
       ROLES_ID,
-      ROLES_NAME
+      ROLES_NAME,
+      ROLES_DESC
     </sql>
 
     <select id="selectById" resultMap="BaseResultMap">
@@ -19,14 +21,22 @@
         <include refid="Base_Column_List"/>
         from
         <include refid="tableName"/>
-        WHERE roles_id = #{rolesId},
+        WHERE ROLES_ID = #{id}
+    </select>
+
+    <select id="selectByExample" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="tableName"/>
+        WHERE ROLES_NAME = #{search.rolesName}
     </select>
 
     <delete id="deleteById">
         DELETE
         FROM
         <include refid="tableName"/>
-        WHERE roles_id = #{rolesId},
+        WHERE ROLES_ID = #{id}
     </delete>
 
     <insert id="insert">
@@ -38,8 +48,25 @@
         VALUES
         (
         #{rolesId},
-        #{rolesName}
+        #{rolesName},
+        #{rolesDesc}
         )
+    </insert>
+
+    <insert id="batchInsert">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="Base_Column_List"/>
+        )
+        VALUES
+        <foreach collection="list" item="item" separator="," index="index">
+            (
+            #{item.rolesId},
+            #{item.rolesName},
+            #{item.rolesDesc}
+            )
+        </foreach>
     </insert>
 
     <update id="update">
@@ -47,10 +74,13 @@
         <include refid="tableName"/>
         <set>
             <if test="rolesName != null">
-                roles_name = #{rolesName},
+                ROLES_NAME = #{rolesName},
+            </if>
+            <if test="rolesDesc != null">
+                ROLES_DESC = #{rolesDesc},
             </if>
         </set>
-        WHERE roles_id = #{rolesId},
+        WHERE ROLES_ID = #{rolesId}
     </update>
 
 </mapper>

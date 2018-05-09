@@ -4,21 +4,29 @@ import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.security.EncryptionUtil;
 import cn.zut.common.util.RandomUtil;
 import cn.zut.core.constant.PropertyConstant;
-import cn.zut.core.service.MemberService;
 import cn.zut.core.service.BusinessMenusService;
-import cn.zut.core.service.BusinessRolesMenuService;
-import cn.zut.core.service.BusinessRolesUserService;
+import cn.zut.core.service.MemberService;
+import cn.zut.dao.entity.BusinessMenusEntity;
+import cn.zut.dao.entity.BusinessRolesEntity;
 import cn.zut.dao.entity.LoginInfoEntity;
 import cn.zut.dao.entity.MemberEntity;
-import cn.zut.dao.entity.BusinessMenusEntity;
+import cn.zut.dao.persistence.BusinessRolesMapper;
 import cn.zut.dao.persistence.LoginInfoMapper;
 import cn.zut.dao.persistence.MemberMapper;
+import cn.zut.facade.enums.SystemRolesEnum;
 import cn.zut.facade.request.RegisterRequest;
+import cn.zut.facade.response.MenuFirstLevelVO;
+import cn.zut.facade.response.MenuSecondLevelVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * PROJECT: property
@@ -29,10 +37,6 @@ import java.util.List;
 @Service("memberService")
 public class MemberServiceImpl implements MemberService {
     @Resource
-    private BusinessRolesMenuService businessRolesMenuService;
-    @Resource
-    private BusinessRolesUserService businessRolesUserService;
-    @Resource
     private BusinessMenusService businessMenusService;
 
     @Resource
@@ -40,13 +44,24 @@ public class MemberServiceImpl implements MemberService {
     @Resource
     private LoginInfoMapper loginInfoMapper;
 
+    @Resource
+    private BusinessRolesMapper businessRolesMapper;
+
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public GenericResponse<Long> save(RegisterRequest registerRequest) {
+    public GenericResponse<MemberEntity> save(RegisterRequest registerRequest) {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.init();
         memberEntity.setPhoneNo(registerRequest.getPhoneNo());
         memberEntity.setNickName(registerRequest.getNickName());
+
+        // 设置用户默认权限
+        BusinessRolesEntity businessRolesEntity = new BusinessRolesEntity();
+        businessRolesEntity.setRolesName(SystemRolesEnum.USER.name());
+        businessRolesEntity = businessRolesMapper.selectByExample(businessRolesEntity);
+        if (businessRolesEntity != null) {
+            memberEntity.setRolesId(businessRolesEntity.getRolesId());
+        }
         memberMapper.insert(memberEntity);
 
         LoginInfoEntity loginInfoEntity = new LoginInfoEntity();
@@ -60,13 +75,51 @@ public class MemberServiceImpl implements MemberService {
 
         loginInfoMapper.insert(loginInfoEntity);
 
-        return new GenericResponse<>(memberEntity.getMemberId());
+        return new GenericResponse<>(memberEntity);
     }
 
     @Override
-    public List<BusinessMenusEntity> getMenus(Long menuId) {
-        int roleId = businessRolesUserService.getUserRoles(menuId);
-        List<Integer> list = businessRolesMenuService.getMenusIdList(roleId);
-        return businessMenusService.getAllMenus(list);
+    public GenericResponse<List<MenuFirstLevelVO>> getMenus(Long memberId) {
+        MemberEntity memberEntity = memberMapper.selectById(memberId);
+
+        // First Menu List
+        List<MenuFirstLevelVO> menuFirstLevelVOList = new ArrayList<>();
+
+        // Second Menu List By FatherId
+        Map<Integer, List<MenuSecondLevelVO>> secondMenuMapByFatherId = new HashMap<>();
+
+        List<BusinessMenusEntity> allMenus = businessMenusService.getAllMenus(memberEntity.getRolesId());
+        if (CollectionUtils.isEmpty(allMenus)) {
+            return null;
+        }
+
+        allMenus.forEach(businessMenusEntity -> {
+
+            // Check is First Level Menu ?
+            if (businessMenusEntity.getFatherId() == 0) {
+                MenuFirstLevelVO menuFirstLevelVO = new MenuFirstLevelVO();
+                menuFirstLevelVO.setMenuId(businessMenusEntity.getMenuId());
+                menuFirstLevelVO.setMenuIcon(businessMenusEntity.getMenuIcon());
+                menuFirstLevelVO.setMenuName(businessMenusEntity.getMenuName());
+                menuFirstLevelVO.setMenuPriority(businessMenusEntity.getMenuPriority());
+                menuFirstLevelVOList.add(menuFirstLevelVO);
+            } else {
+                MenuSecondLevelVO menuSecondLevelVO = new MenuSecondLevelVO();
+                BeanUtils.copyProperties(businessMenusEntity, menuSecondLevelVO);
+
+                List<MenuSecondLevelVO> menuSecondLevelVOS = secondMenuMapByFatherId.get(businessMenusEntity.getFatherId());
+                if (menuSecondLevelVOS == null) {
+                    menuSecondLevelVOS = new ArrayList<>();
+                }
+                menuSecondLevelVOS.add(menuSecondLevelVO);
+                secondMenuMapByFatherId.put(businessMenusEntity.getFatherId(), menuSecondLevelVOS);
+            }
+        });
+
+        menuFirstLevelVOList.forEach(menuFirstLevelVO -> {
+            menuFirstLevelVO.setMenuSecondLevelVOS(secondMenuMapByFatherId.get(menuFirstLevelVO.getMenuId()));
+        });
+
+        return new GenericResponse<>(menuFirstLevelVOList);
     }
 }

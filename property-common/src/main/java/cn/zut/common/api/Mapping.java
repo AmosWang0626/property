@@ -1,4 +1,4 @@
-package cn.zut.facade.api;
+package cn.zut.common.api;
 
 /**
  * PROJECT: property

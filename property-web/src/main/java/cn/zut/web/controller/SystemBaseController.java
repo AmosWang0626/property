@@ -1,7 +1,7 @@
 package cn.zut.web.controller;
 
 import cn.zut.common.generic.GenericResponse;
-import cn.zut.facade.api.ComboVO;
+import cn.zut.common.api.ComboVO;
 import cn.zut.facade.enums.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

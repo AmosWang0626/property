@@ -8,7 +8,6 @@ import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.business.MemberBusiness;
 import cn.zut.core.constant.PropertyConstant;
 import cn.zut.core.service.MemberService;
-import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.persistence.MemberMapper;
 import cn.zut.dao.search.MemberSearch;
 import cn.zut.facade.request.LoginRequest;
@@ -18,15 +17,11 @@ import cn.zut.facade.request.UserInfoRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * PROJECT: property
@@ -67,20 +62,9 @@ public class MemberController {
      *
      * @return 登录状态
      */
-    @RequestMapping(value = "menu")
-    @Token(check = false)
-    public ModelAndView login(HttpServletRequest request) {
-        MemberSearch memberSearch = new MemberSearch();
-        memberSearch.setPhoneNo("18937128861");
-        MemberEntity memberEntity = memberMapper.selectByExample(memberSearch);
-
-        HttpSession session = request.getSession();
-        session.setAttribute("member", memberEntity);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("menus", memberService.getMenus(memberEntity.getMemberId()));
-        modelAndView.setViewName("index1");
-
-        return modelAndView;
+    @RequestMapping(value = "menu", method = RequestMethod.GET)
+    public GenericResponse menu(HttpServletRequest request) {
+        return memberService.getMenus(getMemberId(request));
     }
 
     /**
@@ -162,18 +146,5 @@ public class MemberController {
 
     private Long getMemberId(HttpServletRequest request) {
         return Long.valueOf((String) request.getAttribute(PropertyConstant.MEMBER_ID));
-    }
-
-    @RequestMapping("memberlist")
-    @ResponseBody
-    public Map<String, Object> memberList() {
-        PageModel<MemberSearch> pageModel = new PageModel<>();
-        pageModel.setPage(1);
-        pageModel.setRows(100);
-        Map<String, Object> resuletMap = new HashMap<>();
-        resuletMap.put("data", memberBusiness.pageMemberByModel(pageModel));
-        resuletMap.put("msg", "");
-        resuletMap.put("code", "0");
-        return resuletMap;
     }
 }

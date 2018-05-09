@@ -28,6 +28,10 @@ public interface PropertyConstant {
      */
     String TOKEN = "token";
     /**
+     * Header -- 用户权限id
+     */
+    String ROLES = "rolesId";
+    /**
      * Header -- 用户设备编号
      */
     String DEVICE_ID = "deviceId";

@@ -28,4 +28,8 @@ public class LoginResponse implements Serializable {
      * 用户昵称
      */
     private String nickName;
+    /**
+     * 用户权限编号
+     */
+    private Integer rolesId;
 }

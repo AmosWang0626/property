@@ -1,12 +1,16 @@
-package cn.zut.dao.entity;
+package cn.zut.facade.response;
 
 import lombok.Data;
 
 /**
- * @author LiuBowen
+ * PROJECT: property2
+ * DESCRIPTION: 类说明
+ *
+ * @author DaoYuanWang
+ * @date 2018/5/9
  */
 @Data
-public class BusinessMenusEntity {
+public class MenuSecondLevelVO {
 
     /**
      * 菜单编号

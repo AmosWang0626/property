@@ -1,6 +1,6 @@
 package cn.zut.facade.enums;
 
-import cn.zut.facade.api.Mapping;
+import cn.zut.common.api.Mapping;
 import org.apache.commons.lang3.StringUtils;
 
 public enum  ServiceSatus implements Mapping<String, String> {

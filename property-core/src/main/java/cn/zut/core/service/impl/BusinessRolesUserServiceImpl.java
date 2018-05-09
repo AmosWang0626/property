@@ -3,8 +3,8 @@ package cn.zut.core.service.impl;
 import cn.zut.core.service.BusinessRolesUserService;
 import cn.zut.dao.entity.BusinessRolesEntity;
 import cn.zut.dao.entity.MemberEntity;
-import cn.zut.dao.persistence.MemberMapper;
 import cn.zut.dao.persistence.BusinessRolesMapper;
+import cn.zut.dao.persistence.MemberMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,12 +19,6 @@ public class BusinessRolesUserServiceImpl implements BusinessRolesUserService {
     private MemberMapper memberMapper;
     @Resource
     private BusinessRolesMapper businessRolesMapper;
-
-    @Override
-    public Integer getUserRoles(Long memberId) {
-        MemberEntity memberEntity = memberMapper.selectById(memberId);
-        return memberEntity.getRolesId();
-    }
 
     @Override
     public BusinessRolesEntity getRoles(Long memberId) {

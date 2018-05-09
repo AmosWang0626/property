@@ -66,13 +66,14 @@ public class MemberBusinessImpl implements MemberBusiness {
             return new GenericResponse<>(new ExceptionMessage(ExceptionCode.PLEASE_INPUT_PROPER_VERIFY_CODE, phoneNo));
         }
 
-        GenericResponse<Long> save = memberService.save(registerRequest);
-        if (save.success()) {
-            Long memberId = save.getBody();
+        GenericResponse<MemberEntity> saveMemberResponse = memberService.save(registerRequest);
+        if (saveMemberResponse.success()) {
+            MemberEntity memberEntity = saveMemberResponse.getBody();
             LoginResponse loginResponse = new LoginResponse();
             loginResponse.setNickName(registerRequest.getNickName());
             loginResponse.setPhoneNo(EncryptUtil.encryptPhoneNo(phoneNo));
-            loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberId), PropertyConstant.TOKEN_ENCRYPT));
+            loginResponse.setRolesId(memberEntity.getRolesId());
+            loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberEntity.getMemberId()), PropertyConstant.TOKEN_ENCRYPT));
 
             return new GenericResponse<>(loginResponse);
         }
@@ -107,6 +108,7 @@ public class MemberBusinessImpl implements MemberBusiness {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setNickName(memberEntity.getNickName());
         loginResponse.setPhoneNo(EncryptUtil.encryptPhoneNo(phoneNo));
+        loginResponse.setRolesId(memberEntity.getRolesId());
         loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberEntity.getMemberId()), PropertyConstant.TOKEN_ENCRYPT));
 
         return new GenericResponse<>(loginResponse);
@@ -139,6 +141,7 @@ public class MemberBusinessImpl implements MemberBusiness {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setNickName(memberEntity.getNickName());
         loginResponse.setPhoneNo(EncryptUtil.encryptPhoneNo(phoneNo));
+        loginResponse.setRolesId(memberEntity.getRolesId());
         loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberEntity.getMemberId()), PropertyConstant.TOKEN_ENCRYPT));
 
         return new GenericResponse<>(loginResponse);

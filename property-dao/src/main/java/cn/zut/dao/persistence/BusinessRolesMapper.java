@@ -5,10 +5,10 @@ import cn.zut.dao.entity.BusinessRolesEntity;
 
 public interface BusinessRolesMapper extends
         Insert<BusinessRolesEntity>,
+        BatchInsert<BusinessRolesEntity>,
         Update<BusinessRolesEntity>,
         DeleteById<Integer>,
         SelectById<BusinessRolesEntity, Integer>,
-        SelectCountByExample<BusinessRolesEntity>,
-        SelectListPageByExample<BusinessRolesEntity, BusinessRolesEntity> {
+        SelectByExample<BusinessRolesEntity, BusinessRolesEntity> {
 
 }
