@@ -7,7 +7,7 @@
         <result column="MENU_NAME" property="menuName"/>
         <result column="MENU_URL" property="menuUrl"/>
         <result column="FATHER_ID" property="fatherId"/>
-        <result column="MENU_PRIORITY" property="menuPriority"/>
+        <result column="PRIORITY" property="priority"/>
         <result column="MENU_ICON" property="menuIcon"/>
     </resultMap>
 
@@ -31,7 +31,7 @@
       MENU_NAME,
       MENU_URL,
       FATHER_ID,
-      MENU_PRIORITY,
+      PRIORITY,
       MENU_ICON
     </sql>
 
@@ -93,7 +93,7 @@
         #{menuName},
         #{menuUrl},
         #{fatherId},
-        #{menuPriority},
+        #{priority},
         #{menuIcon}
         )
     </insert>
@@ -111,8 +111,8 @@
             <if test="fatherId != null">
                 FATHER_ID = #{fatherId},
             </if>
-            <if test="menuPriority != null">
-                MENU_PRIORITY = #{menuPriority},
+            <if test="priority != null">
+                PRIORITY = #{priority},
             </if>
             <if test="menuIcon != null">
                 MENU_ICON = #{menuIcon},

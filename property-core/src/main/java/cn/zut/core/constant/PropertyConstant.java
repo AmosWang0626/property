@@ -30,7 +30,7 @@ public interface PropertyConstant {
     /**
      * Header -- 用户权限id
      */
-    String ROLES = "rolesId";
+    String ROLES_ID = "rolesId";
     /**
      * Header -- 用户设备编号
      */

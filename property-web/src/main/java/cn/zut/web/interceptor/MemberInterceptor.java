@@ -43,14 +43,14 @@ public class MemberInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader(PropertyConstant.TOKEN);
-        String roles = request.getHeader(PropertyConstant.ROLES);
+        String rolesId = request.getHeader(PropertyConstant.ROLES_ID);
         /*String deviceId = request.getHeader(PropertyConstant.DEVICE_ID);*/
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         // 如果不需要校验直接 return true
         if (!needTokenCheck(handlerMethod)) {
             return true;
         }
-        if (StringUtils.isEmpty(token) || StringUtils.isEmpty(roles)) {
+        if (StringUtils.isEmpty(token) || StringUtils.isEmpty(rolesId)) {
             throw new UserTokenException("参数校验异常! 没有登录!");
         }
         String memberId = DesEncryptionUtil.decrypt(token, PropertyConstant.TOKEN_ENCRYPT);
@@ -61,7 +61,7 @@ public class MemberInterceptor implements HandlerInterceptor {
 
         // 安全校验,防止用户修改请求的角色编号
         MemberEntity memberEntity = memberMapper.selectById(Long.valueOf(memberId));
-        if (memberEntity == null || !memberEntity.getRolesId().equals(Integer.valueOf(roles))) {
+        if (memberEntity == null || !memberEntity.getRolesId().equals(Integer.valueOf(rolesId))) {
             throw new UserTokenException("参数校验异常! 用户Token异常!");
         }
 

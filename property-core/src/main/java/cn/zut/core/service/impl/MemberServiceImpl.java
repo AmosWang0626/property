@@ -101,7 +101,7 @@ public class MemberServiceImpl implements MemberService {
                 menuFirstLevelVO.setMenuId(businessMenusEntity.getMenuId());
                 menuFirstLevelVO.setMenuIcon(businessMenusEntity.getMenuIcon());
                 menuFirstLevelVO.setMenuName(businessMenusEntity.getMenuName());
-                menuFirstLevelVO.setMenuPriority(businessMenusEntity.getMenuPriority());
+                menuFirstLevelVO.setPriority(businessMenusEntity.getPriority());
                 menuFirstLevelVOList.add(menuFirstLevelVO);
             } else {
                 MenuSecondLevelVO menuSecondLevelVO = new MenuSecondLevelVO();
@@ -117,7 +117,7 @@ public class MemberServiceImpl implements MemberService {
         });
 
         menuFirstLevelVOList.forEach(menuFirstLevelVO -> {
-            menuFirstLevelVO.setMenuSecondLevelVOS(secondMenuMapByFatherId.get(menuFirstLevelVO.getMenuId()));
+            menuFirstLevelVO.setSecondLevel(secondMenuMapByFatherId.get(menuFirstLevelVO.getMenuId()));
         });
 
         return new GenericResponse<>(menuFirstLevelVOList);

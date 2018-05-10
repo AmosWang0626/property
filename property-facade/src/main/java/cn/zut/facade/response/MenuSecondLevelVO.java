@@ -31,7 +31,7 @@ public class MenuSecondLevelVO {
     /**
      * 菜单优先级
      */
-    private Integer menuPriority;
+    private Integer priority;
     /**
      * 菜单图标
      */
