@@ -366,4 +366,15 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
         return tariffBillEntity;
     }
 
+    @Override
+    public GenericResponse updateOverDueBillPlan() {
+        TariffBillPlanEntity search = new TariffBillPlanEntity();
+        search.setBillStatus(BillStatusEnum.OVERDUE);
+        List<TariffBillPlanEntity> tariffBillPlanEntities = tariffBillPlanMapper.selectListByExample(search);
+        tariffBillPlanEntities.forEach(tariffBillPlanEntity -> {
+//            tariffBillPlanEntity
+        });
+
+        return null;
+    }
 }

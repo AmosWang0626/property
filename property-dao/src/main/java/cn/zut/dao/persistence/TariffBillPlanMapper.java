@@ -15,6 +15,7 @@ public interface TariffBillPlanMapper extends
         Update<TariffBillPlanEntity>,
         SelectById<TariffBillPlanEntity, Long>,
         SelectByExample<TariffBillPlanEntity, TariffBillPlanEntity>,
+        SelectListByExample<TariffBillPlanEntity, TariffBillPlanEntity>,
         SelectCountByExample<TariffBillPlanEntity>,
         SelectListPageByExample<TariffBillPlanEntity, TariffBillPlanEntity> {
 }

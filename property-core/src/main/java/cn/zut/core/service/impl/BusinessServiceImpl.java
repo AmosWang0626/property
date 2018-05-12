@@ -66,10 +66,15 @@ public class BusinessServiceImpl implements BusinessService {
         if (businessServiceEntity == null) {
             return false;
         }
-        businessServiceEntity.setStatus(ServiceSatus.IN_DEAL.getKey());
-        int x = businessServiceMapper.update(businessServiceEntity);
+        if (ServiceSatus.IN_APPLY.name().equals(businessServiceEntity.getStatus())) {
+            businessServiceEntity.setStatus(ServiceSatus.IN_DEAL.getKey());
+            businessServiceEntity.setDetailTime(new Date());
+            int x = businessServiceMapper.update(businessServiceEntity);
 
-        return x > 0;
+            return x > 0;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -81,9 +86,14 @@ public class BusinessServiceImpl implements BusinessService {
         if (businessServiceEntity == null) {
             return false;
         }
-        businessServiceEntity.setStatus(ServiceSatus.NO_CONSENT.getKey());
-        int x = businessServiceMapper.update(businessServiceEntity);
+        if (ServiceSatus.IN_APPLY.name().equals(businessServiceEntity.getStatus())) {
+            businessServiceEntity.setStatus(ServiceSatus.NO_CONSENT.getKey());
+            businessServiceEntity.setDetailTime(new Date());
+            int x = businessServiceMapper.update(businessServiceEntity);
 
-        return x > 0;
+            return x > 0;
+        } else {
+            return true;
+        }
     }
 }

@@ -7,6 +7,5 @@
 </head>
 <body>
 <h1>中工大学科技园物业管理系统</h1>
-<a href="passport/menu">登录进入菜单</a>
 </body>
 </html>

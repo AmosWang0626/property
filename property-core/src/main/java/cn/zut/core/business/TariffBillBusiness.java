@@ -5,9 +5,9 @@ import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.generic.SimplePageResult;
 import cn.zut.dao.entity.TariffBillEntity;
 import cn.zut.dao.entity.TariffBillPlanEntity;
-import cn.zut.facade.request.TariffBillPaymentRequest;
 import cn.zut.facade.request.ConsumeConfirmRequest;
 import cn.zut.facade.request.ConsumePreviewRequest;
+import cn.zut.facade.request.TariffBillPaymentRequest;
 import cn.zut.facade.request.TariffBillRequest;
 import cn.zut.facade.response.TariffBillDetailVO;
 import cn.zut.facade.response.TariffBillPlanVO;
@@ -39,20 +39,6 @@ public interface TariffBillBusiness {
      * @return 通用返回结果
      */
     GenericResponse consumeConfirm(Long operatorMemberId, ConsumeConfirmRequest consumeConfirmRequest);
-
-    /**
-     * 生成月度账单
-     *
-     * @return GenericResponse
-     */
-    GenericResponse generateMonthBill();
-
-    /**
-     * 生成账单还款计划
-     *
-     * @return GenericResponse
-     */
-    GenericResponse generateBillPlan();
 
     /**
      * 手动录入账单
@@ -95,4 +81,25 @@ public interface TariffBillBusiness {
      * @return GenericResponse
      */
     GenericResponse<TariffBillDetailVO> billDetail(Long billNo);
+
+    /**
+     * 生成月度账单
+     *
+     * @return GenericResponse
+     */
+    GenericResponse generateMonthBill();
+
+    /**
+     * 生成账单还款计划
+     *
+     * @return GenericResponse
+     */
+    GenericResponse generateBillPlan();
+
+    /**
+     * 每天更新逾期费
+     *
+     * @return GenericResponse
+     */
+    GenericResponse updateOverDueBillPlan();
 }

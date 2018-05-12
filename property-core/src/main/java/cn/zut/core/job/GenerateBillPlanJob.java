@@ -38,4 +38,16 @@ public class GenerateBillPlanJob {
         LOGGER.info("-------------- End of generation plan execution! Time-consuming[ " +
                 (System.currentTimeMillis() - startTime) + " milliseconds]--------");
     }
+
+    /**
+     * 每天更新逾期费
+     */
+    @Scheduled(cron = "0 0,20,40 1 * * ?")
+    public void updateOverDueBillPlan() {
+        long startTime = System.currentTimeMillis();
+        LOGGER.info("-------------- Update Overdue Bill to start execution! --------");
+        tariffBillBusiness.updateOverDueBillPlan();
+        LOGGER.info("-------------- End of Update Overdue Bill execution! Time-consuming[ " +
+                (System.currentTimeMillis() - startTime) + " milliseconds]--------");
+    }
 }

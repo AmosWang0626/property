@@ -59,14 +59,14 @@ public class BusinessServiceController {
         return new GenericResponse<>(simplePageResult);
     }
 
-    @RequestMapping("agree")
-    public boolean agreeService(int serviceId) {
-        return businessService.agreeService(serviceId);
+    @RequestMapping(value = "agree", method = RequestMethod.POST)
+    public boolean agreeService(@RequestBody BusinessServiceEntity businessServiceEntity) {
+        return businessService.agreeService(businessServiceEntity.getId());
     }
 
-    @RequestMapping("disagree")
-    public boolean disAgreeService(int serviceId) {
-        return businessService.disAgreeService(serviceId);
+    @RequestMapping(value = "disAgree", method = RequestMethod.POST)
+    public boolean disAgreeService(@RequestBody BusinessServiceEntity businessServiceEntity) {
+        return businessService.disAgreeService(businessServiceEntity.getId());
     }
 
     private Long getMemberId(HttpServletRequest request) {
