@@ -11,6 +11,7 @@ import cn.zut.dao.entity.TariffCompanyEntity;
 import cn.zut.dao.entity.TariffStandardEntity;
 import cn.zut.dao.persistence.TariffCompanyMapper;
 import cn.zut.dao.persistence.TariffStandardMapper;
+import cn.zut.facade.enums.BusinessTypeEnum;
 import cn.zut.facade.request.TariffCompanyRequest;
 import cn.zut.facade.request.TariffStandardRequest;
 import cn.zut.facade.response.TariffStandardVO;
@@ -40,11 +41,24 @@ public class TariffStaticBusinessImpl implements TariffStaticBusiness {
 
     @Override
     public GenericResponse addCompany(TariffCompanyRequest tariffCompanyRequest) {
+        BusinessTypeEnum business = tariffCompanyRequest.getBusiness();
+        if (business == null) {
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.TARIFF_BUSINESS_NOT_NULL));
+        }
+
         TariffCompanyEntity tariffCompanyEntity = new TariffCompanyEntity();
+        tariffCompanyEntity.setBusiness(business);
+        tariffCompanyEntity = tariffCompanyMapper.selectByExample(tariffCompanyEntity);
+        if (tariffCompanyEntity != null) {
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.TARIFF_COMPANY_ONLY_ONE));
+        }
+
+        tariffCompanyEntity = new TariffCompanyEntity();
         BeanUtils.copyProperties(tariffCompanyRequest, tariffCompanyEntity);
         tariffCompanyEntity.setStatus(true);
         tariffCompanyEntity.setCreateTime(new Date());
         tariffCompanyMapper.insert(tariffCompanyEntity);
+
         return GenericResponse.SUCCESS;
     }
 

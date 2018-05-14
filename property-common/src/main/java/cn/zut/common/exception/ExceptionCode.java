@@ -41,6 +41,8 @@ public enum ExceptionCode implements Message {
     TARIFF_BILL_EXCEPTION_NOT_EXIST("T0003", "数据异常: 账单不存在"),
     TARIFF_BILL_EXCEPTION_PLAN_NOT_EXIST("T0004", "数据异常: 账单计划不存在"),
     TARIFF_BILL_ONLY_SUPPORT_FULL_REPAYMENT("T0005", "目前仅支持全额还款"),
+    TARIFF_COMPANY_ONLY_ONE("T0006", "暂仅支持一个业务对应一个收费公司"),
+    TARIFF_BUSINESS_NOT_NULL("T0007", "业务类型不能为空"),
 
     /**
      * 资费管理模块 -- 交易失败错误码
