@@ -33,6 +33,10 @@ public class TariffStandardEntity {
      */
     private BigDecimal unitPrice;
     /**
+     * 缴费单价
+     */
+    private String businessUnit;
+    /**
      * 逾期利率
      */
     private BigDecimal overdueRate;

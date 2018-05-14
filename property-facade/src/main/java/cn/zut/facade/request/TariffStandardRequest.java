@@ -33,6 +33,10 @@ public class TariffStandardRequest {
      */
     private BigDecimal unitPrice;
     /**
+     * 单价单位
+     */
+    private String businessUnit;
+    /**
      * 逾期利率
      */
     private BigDecimal overdueRate;

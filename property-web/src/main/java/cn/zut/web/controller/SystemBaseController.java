@@ -1,7 +1,7 @@
 package cn.zut.web.controller;
 
-import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.api.ComboVO;
+import cn.zut.common.generic.GenericResponse;
 import cn.zut.facade.enums.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -104,6 +104,37 @@ public class SystemBaseController {
         }
 
         return new GenericResponse<>(comboVOList);
+    }
+
+    @GetMapping("getBusinessUnit")
+    public GenericResponse getBusinessUnit(@RequestParam(value = "business", required = false) BusinessTypeEnum business) {
+        if (business == null) {
+            return GenericResponse.ERROR_PARAM;
+        }
+
+        switch (business) {
+
+            case WATER:
+                return new GenericResponse<>(BusinessUnitEnum.getComboVO(BusinessUnitEnum.UNIT_WATER));
+
+            case ELECTRICITY:
+                return new GenericResponse<>(BusinessUnitEnum.getComboVO(BusinessUnitEnum.UNIT_ELECTRICITY));
+
+            case PROPERTY:
+                return new GenericResponse<>(BusinessUnitEnum.getComboVO(BusinessUnitEnum.UNIT_PROPERTY));
+
+            case SITE:
+                return new GenericResponse<>(BusinessUnitEnum.getComboVO(BusinessUnitEnum.UNIT_SITE));
+
+            case NETWORK:
+                return new GenericResponse<>(BusinessUnitEnum.getComboVO(BusinessUnitEnum.UNIT_NETWORK));
+
+            case PARKING:
+                return new GenericResponse<>(BusinessUnitEnum.getComboVO(BusinessUnitEnum.UNIT_PARKING));
+
+            default:
+                return GenericResponse.ERROR_PARAM;
+        }
     }
 
     @GetMapping("getServiceType")

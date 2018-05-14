@@ -82,6 +82,7 @@ public class TariffStaticController {
         PageModel<TariffStandardEntity> pageModel = new PageModel<>();
         pageModel.setPage(page);
         pageModel.setRows(size);
+
         return new GenericResponse<>(tariffStaticBusiness.pageStandardByModel(pageModel));
     }
 

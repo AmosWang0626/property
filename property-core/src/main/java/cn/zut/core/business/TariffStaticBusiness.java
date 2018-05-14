@@ -7,6 +7,7 @@ import cn.zut.dao.entity.TariffCompanyEntity;
 import cn.zut.dao.entity.TariffStandardEntity;
 import cn.zut.facade.request.TariffCompanyRequest;
 import cn.zut.facade.request.TariffStandardRequest;
+import cn.zut.facade.response.TariffStandardVO;
 
 /**
  * PROJECT: property
@@ -111,5 +112,5 @@ public interface TariffStaticBusiness {
      * @param pageModel 分页查询对象
      * @return GenericResponse
      */
-    SimplePageResult<TariffStandardEntity> pageStandardByModel(PageModel<TariffStandardEntity> pageModel);
+    SimplePageResult<TariffStandardVO> pageStandardByModel(PageModel<TariffStandardEntity> pageModel);
 }

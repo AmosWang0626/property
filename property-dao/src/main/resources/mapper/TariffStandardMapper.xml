@@ -7,6 +7,7 @@
         <result column="BUSINESS" property="business"/>
         <result column="LEVEL" property="level"/>
         <result column="UNIT_PRICE" property="unitPrice"/>
+        <result column="BUSINESS_UNIT" property="businessUnit"/>
         <result column="OVERDUE_RATE" property="overdueRate"/>
         <result column="START_TIME" property="startTime"/>
         <result column="END_TIME" property="endTime"/>
@@ -22,6 +23,7 @@
         BUSINESS,
         LEVEL,
         UNIT_PRICE,
+        BUSINESS_UNIT,
         OVERDUE_RATE,
         START_TIME,
         END_TIME,
@@ -83,6 +85,9 @@
             <if test="unitPrice != null">
                 UNIT_PRICE = #{unitPrice},
             </if>
+            <if test="businessUnit != null">
+                BUSINESS_UNIT = #{businessUnit},
+            </if>
             <if test="overdueRate != null">
                 OVERDUE_RATE = #{overdueRate},
             </if>
@@ -114,6 +119,7 @@
         #{business},
         #{level},
         #{unitPrice},
+        #{businessUnit},
         #{overdueRate},
         #{startTime},
         #{endTime},

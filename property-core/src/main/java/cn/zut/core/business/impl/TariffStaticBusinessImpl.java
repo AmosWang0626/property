@@ -13,10 +13,13 @@ import cn.zut.dao.persistence.TariffCompanyMapper;
 import cn.zut.dao.persistence.TariffStandardMapper;
 import cn.zut.facade.request.TariffCompanyRequest;
 import cn.zut.facade.request.TariffStandardRequest;
+import cn.zut.facade.response.TariffStandardVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -154,15 +157,37 @@ public class TariffStaticBusinessImpl implements TariffStaticBusiness {
     }
 
     @Override
-    public SimplePageResult<TariffStandardEntity> pageStandardByModel(PageModel<TariffStandardEntity> pageModel) {
+    public SimplePageResult<TariffStandardVO> pageStandardByModel(PageModel<TariffStandardEntity> pageModel) {
         List<TariffStandardEntity> tariffStandardEntities = tariffStandardMapper.selectListPageByExample(pageModel);
+
+        if (CollectionUtils.isEmpty(tariffStandardEntities)) {
+            SimplePageResult<TariffStandardVO> pageResult = new SimplePageResult<>();
+            // 总记录数量 || 记录数据列表 || 页码 || 记录数量
+            pageResult.setTotal(0);
+            pageResult.setRows(null);
+            pageResult.setPage(pageModel.getPage());
+            pageResult.setSize(pageModel.getRows());
+            return pageResult;
+        }
+
+        List<TariffStandardVO> tariffStandardVOS = new ArrayList<>();
+        tariffStandardEntities.forEach(tariffStandardEntity -> {
+            TariffStandardVO tariffStandardVO = new TariffStandardVO();
+            BeanUtils.copyProperties(tariffStandardEntity, tariffStandardVO);
+            tariffStandardVO.setBusinessDesc(tariffStandardEntity.getBusiness().getValue());
+            tariffStandardVO.setLevelDesc(tariffStandardEntity.getLevel().getValue());
+
+            tariffStandardVOS.add(tariffStandardVO);
+        });
+
         int countByExample = tariffStandardMapper.selectCountByExample(pageModel.getSearch());
-        SimplePageResult<TariffStandardEntity> pageResult = new SimplePageResult<>();
+        SimplePageResult<TariffStandardVO> pageResult = new SimplePageResult<>();
         // 总记录数量 || 记录数据列表 || 页码 || 记录数量
         pageResult.setTotal(countByExample);
-        pageResult.setRows(tariffStandardEntities);
+        pageResult.setRows(tariffStandardVOS);
         pageResult.setPage(pageModel.getPage());
         pageResult.setSize(pageModel.getRows());
+
         return pageResult;
     }
 }
