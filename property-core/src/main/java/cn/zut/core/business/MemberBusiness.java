@@ -5,10 +5,7 @@ import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.generic.SimplePageResult;
 import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.search.MemberSearch;
-import cn.zut.facade.request.LoginRequest;
-import cn.zut.facade.request.RegisterRequest;
-import cn.zut.facade.request.ResetPasswordRequest;
-import cn.zut.facade.request.UserInfoRequest;
+import cn.zut.facade.request.*;
 import cn.zut.facade.response.LoginResponse;
 
 /**
@@ -40,7 +37,16 @@ public interface MemberBusiness {
      * @param resetPasswordRequest 忘记密码表单
      * @return 通用
      */
-    GenericResponse<LoginResponse> updatePwd(ResetPasswordRequest resetPasswordRequest);
+    GenericResponse<LoginResponse> forgetPassword(ResetPasswordRequest resetPasswordRequest);
+
+    /**
+     * 用户修改密码
+     *
+     * @param updatePasswordRequest 修改密码表单
+     * @param memberId              用户编号
+     * @return 通用
+     */
+    GenericResponse updatePassword(UpdatePasswordRequest updatePasswordRequest, Long memberId);
 
     /**
      * 获取用户信息用户

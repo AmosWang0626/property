@@ -18,10 +18,7 @@ import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.persistence.LoginInfoMapper;
 import cn.zut.dao.persistence.MemberMapper;
 import cn.zut.dao.search.MemberSearch;
-import cn.zut.facade.request.LoginRequest;
-import cn.zut.facade.request.RegisterRequest;
-import cn.zut.facade.request.ResetPasswordRequest;
-import cn.zut.facade.request.UserInfoRequest;
+import cn.zut.facade.request.*;
 import cn.zut.facade.response.LoginResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
@@ -115,7 +112,7 @@ public class MemberBusinessImpl implements MemberBusiness {
     }
 
     @Override
-    public GenericResponse<LoginResponse> updatePwd(ResetPasswordRequest resetPasswordRequest) {
+    public GenericResponse<LoginResponse> forgetPassword(ResetPasswordRequest resetPasswordRequest) {
         String phoneNo = resetPasswordRequest.getPhoneNo();
 
         MemberEntity memberEntity = getMemberByPhoneNo(phoneNo);
@@ -145,6 +142,43 @@ public class MemberBusinessImpl implements MemberBusiness {
         loginResponse.setToken(DesEncryptionUtil.encrypt(String.valueOf(memberEntity.getMemberId()), PropertyConstant.TOKEN_ENCRYPT));
 
         return new GenericResponse<>(loginResponse);
+    }
+
+    @Override
+    public GenericResponse updatePassword(UpdatePasswordRequest updatePasswordRequest, Long memberId) {
+        if (memberId == null) {
+            return GenericResponse.ERROR_PARAM;
+        }
+
+        // 旧密码 || 新密码 || 确认的密码
+        String oldPassword = updatePasswordRequest.getOldPassword();
+        String newPassword = updatePasswordRequest.getNewPassword();
+        String confirmPassword = updatePasswordRequest.getConfirmPassword();
+
+        // 校验短信验证码是否正确
+        if (!newPassword.equals(confirmPassword)) {
+            return new GenericResponse<>(new ExceptionMessage(ExceptionCode.MEMBER_PASSWORD_CONFIRM_ERROR));
+        }
+
+        LoginInfoEntity loginInfoEntity = loginInfoMapper.selectById(memberId);
+        if (loginInfoEntity == null) {
+            return GenericResponse.ERROR_PARAM;
+        }
+
+        String encryptPassword = EncryptionUtil.encrypt(loginInfoEntity.getSalt() + oldPassword, EncryptionUtil.MD5);
+        if (!loginInfoEntity.getPassword().equals(encryptPassword)) {
+            return new GenericResponse<>(new ExceptionMessage(ExceptionCode.MEMBER_PASSWORD_OLD_ERROR));
+        }
+
+        // 生成密码盐
+        String salt = RandomUtil.generateLetterString(PropertyConstant.SALT_LENGTH);
+        encryptPassword = EncryptionUtil.encrypt(salt + newPassword, EncryptionUtil.MD5);
+        loginInfoEntity.setSalt(salt);
+        loginInfoEntity.setPassword(encryptPassword);
+        loginInfoEntity.setLastLoginTime(new Date());
+        loginInfoMapper.update(loginInfoEntity);
+
+        return GenericResponse.SUCCESS;
     }
 
     @Override

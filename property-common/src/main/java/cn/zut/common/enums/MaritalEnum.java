@@ -1,12 +1,14 @@
 package cn.zut.common.enums;
 
+import cn.zut.common.api.Mapping;
+
 /**
  * PROJECT: property
  * DATE: 2017/11/20
  *
  * @author DaoYuanWang
  */
-public enum MaritalEnum implements IEnum {
+public enum MaritalEnum implements Mapping<String, String> {
     /**
      * 婚姻枚举
      */

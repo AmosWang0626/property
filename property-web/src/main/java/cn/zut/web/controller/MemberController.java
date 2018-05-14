@@ -10,10 +10,7 @@ import cn.zut.core.constant.PropertyConstant;
 import cn.zut.core.service.MemberService;
 import cn.zut.dao.persistence.MemberMapper;
 import cn.zut.dao.search.MemberSearch;
-import cn.zut.facade.request.LoginRequest;
-import cn.zut.facade.request.RegisterRequest;
-import cn.zut.facade.request.ResetPasswordRequest;
-import cn.zut.facade.request.UserInfoRequest;
+import cn.zut.facade.request.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -96,7 +93,31 @@ public class MemberController {
             return new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage()));
         }
 
-        return memberBusiness.updatePwd(resetPasswordRequest);
+        return memberBusiness.forgetPassword(resetPasswordRequest);
+    }
+
+    /**
+     * 用户修改密码
+     */
+    @RequestMapping(value = "updatePassword", method = RequestMethod.POST)
+    public GenericResponse updatePassword(@RequestBody @Valid UpdatePasswordRequest updatePasswordRequest,
+                                          BindingResult bindingResult, HttpServletRequest request) {
+        // 参数校验
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> list = bindingResult.getAllErrors();
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage()));
+        }
+
+        return memberBusiness.updatePassword(updatePasswordRequest, getMemberId(request));
+    }
+
+    /**
+     * 获取用户信息
+     */
+    @RequestMapping(value = "getUserInfo", method = RequestMethod.GET)
+    public GenericResponse getUserInfo(HttpServletRequest request) {
+
+        return new GenericResponse<>(memberMapper.selectById(getMemberId(request)));
     }
 
     /**

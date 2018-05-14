@@ -26,6 +26,8 @@ public enum ExceptionCode implements Message {
     PLEASE_INPUT_PHONE_NO_AND_PASSWORD("M2008", "请输入手机号和密码"),
     UPLOAD_FILE_IS_NULL("M2009", "上传的文件不能为空"),
     LAST_DATE_NOT_SMALL_PRE_DATE("M2010", "结束日期不能大于开始日期"),
+    MEMBER_PASSWORD_CONFIRM_ERROR("M2011", "两次密码输入不一致"),
+    MEMBER_PASSWORD_OLD_ERROR("M2012", "旧密码输入错误"),
 
     /**
      * 综合业务模块错误码

@@ -1,6 +1,7 @@
 package cn.zut.web.controller;
 
 import cn.zut.common.api.ComboVO;
+import cn.zut.common.enums.MaritalEnum;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.facade.enums.*;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -111,24 +112,17 @@ public class SystemBaseController {
         if (business == null) {
             return GenericResponse.ERROR_PARAM;
         }
-
         switch (business) {
-
             case WATER:
                 return new GenericResponse<>(BusinessUnitEnum.getComboVO(BusinessUnitEnum.UNIT_WATER));
-
             case ELECTRICITY:
                 return new GenericResponse<>(BusinessUnitEnum.getComboVO(BusinessUnitEnum.UNIT_ELECTRICITY));
-
             case PROPERTY:
                 return new GenericResponse<>(BusinessUnitEnum.getComboVO(BusinessUnitEnum.UNIT_PROPERTY));
-
             case SITE:
                 return new GenericResponse<>(BusinessUnitEnum.getComboVO(BusinessUnitEnum.UNIT_SITE));
-
             case NETWORK:
                 return new GenericResponse<>(BusinessUnitEnum.getComboVO(BusinessUnitEnum.UNIT_NETWORK));
-
             case PARKING:
                 return new GenericResponse<>(BusinessUnitEnum.getComboVO(BusinessUnitEnum.UNIT_PARKING));
 
@@ -141,6 +135,16 @@ public class SystemBaseController {
     public GenericResponse getServiceType() {
         List<ComboVO> comboVOList = new ArrayList<>();
         for (ServiceTypeEnum singleEnum : ServiceTypeEnum.values()) {
+            comboVOList.add(new ComboVO<>(singleEnum));
+        }
+
+        return new GenericResponse<>(comboVOList);
+    }
+
+    @GetMapping("getMaritalStatus")
+    public GenericResponse getMaritalStatus() {
+        List<ComboVO> comboVOList = new ArrayList<>();
+        for (MaritalEnum singleEnum : MaritalEnum.values()) {
             comboVOList.add(new ComboVO<>(singleEnum));
         }
 
