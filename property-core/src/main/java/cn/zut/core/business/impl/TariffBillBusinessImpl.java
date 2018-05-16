@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -59,9 +60,15 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
 
     @Override
     public GenericResponse getUnitPrice(ConsumePreviewRequest consumePreviewRequest) {
+        String business = consumePreviewRequest.getBusiness();
+        String level = consumePreviewRequest.getLevel();
+        if (StringUtils.isEmpty(business) || StringUtils.isEmpty(level)) {
+            return new GenericResponse<>(BigDecimal.ZERO);
+        }
+
         TariffStandardEntity tariffStandardEntity = new TariffStandardEntity();
-        tariffStandardEntity.setBusiness(consumePreviewRequest.getBusiness());
-        tariffStandardEntity.setLevel(consumePreviewRequest.getLevel());
+        tariffStandardEntity.setBusiness(BusinessTypeEnum.values2(consumePreviewRequest.getBusiness()));
+        tariffStandardEntity.setLevel(BusinessLevelEnum.values2(consumePreviewRequest.getLevel()));
         tariffStandardEntity = tariffStandardMapper.selectByExample(tariffStandardEntity);
         if (tariffStandardEntity == null) {
             return new GenericResponse(new ExceptionMessage(ExceptionCode.TARIFF_STANDARD_IS_NOT_EXIST));

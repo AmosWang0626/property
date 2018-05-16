@@ -36,13 +36,7 @@ public class TariffBillController {
     private TariffBillBusiness tariffBillBusiness;
 
     @PostMapping("unitPrice")
-    public GenericResponse getUnitPrice(@RequestBody @Valid ConsumePreviewRequest consumePreviewRequest,
-                                        BindingResult bindingResult) {
-        // 参数校验
-        if (bindingResult.hasErrors()) {
-            List<ObjectError> list = bindingResult.getAllErrors();
-            return new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage()));
-        }
+    public GenericResponse getUnitPrice(@RequestBody ConsumePreviewRequest consumePreviewRequest) {
 
         return tariffBillBusiness.getUnitPrice(consumePreviewRequest);
     }

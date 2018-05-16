@@ -75,7 +75,7 @@ public enum BusinessLevelEnum implements Mapping<String, String> {
      * @param value 字符串key
      * @return this
      */
-    public BusinessLevelEnum values2(String value) {
+    public static BusinessLevelEnum values2(String value) {
         if (StringUtils.isBlank(value)) {
             return null;
         }
