@@ -74,14 +74,15 @@ public class SystemBaseController {
     }
 
     @GetMapping("getBusinessLevel")
-    public GenericResponse getBusinessLevel(@RequestParam(value = "business", required = false) BusinessTypeEnum business) {
-        if (business == null) {
+    public GenericResponse getBusinessLevel(@RequestParam(value = "business", required = false) String business) {
+        BusinessTypeEnum businessTypeEnum = BusinessTypeEnum.values2(business);
+        if (businessTypeEnum == null) {
             return GenericResponse.SUCCESS;
         }
 
         List<ComboVO> comboVOList = null;
 
-        switch (business) {
+        switch (businessTypeEnum) {
             case WATER:
                 comboVOList = BusinessLevelEnum.getWaterList();
                 break;
@@ -108,11 +109,12 @@ public class SystemBaseController {
     }
 
     @GetMapping("getBusinessUnit")
-    public GenericResponse getBusinessUnit(@RequestParam(value = "business", required = false) BusinessTypeEnum business) {
-        if (business == null) {
-            return GenericResponse.ERROR_PARAM;
+    public GenericResponse getBusinessUnit(@RequestParam(value = "business", required = false) String business) {
+        BusinessTypeEnum businessTypeEnum = BusinessTypeEnum.values2(business);
+        if (businessTypeEnum == null) {
+            return GenericResponse.SUCCESS;
         }
-        switch (business) {
+        switch (businessTypeEnum) {
             case WATER:
                 return new GenericResponse<>(BusinessUnitEnum.getComboVO(BusinessUnitEnum.UNIT_WATER));
             case ELECTRICITY:

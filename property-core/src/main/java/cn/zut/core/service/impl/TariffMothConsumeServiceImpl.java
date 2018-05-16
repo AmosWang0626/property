@@ -63,7 +63,7 @@ public class TariffMothConsumeServiceImpl implements TariffMothConsumeService {
      * 修改指定用户网费业务
      */
     @Override
-    public boolean updateByInternet(Integer memberId, BigDecimal internet) {
+    public boolean updateByInternet(Integer memberId, Boolean internet) {
         TariffMonthConsumeEntity tariffMonthConsumeEntity = tariffMonthConsumeMapper.selectById(memberId);
         tariffMonthConsumeEntity.setNetwork(internet);
         int flag = tariffMonthConsumeMapper.update(tariffMonthConsumeEntity);

@@ -43,7 +43,7 @@ public enum BusinessTypeEnum implements Mapping<String, String> {
      * @param value 字符串key
      * @return this
      */
-    public BusinessTypeEnum values2(String value) {
+    public static BusinessTypeEnum values2(String value) {
         if (StringUtils.isBlank(value)) {
             return null;
         }

@@ -36,9 +36,9 @@ public class TariffMonthConsumeEntity {
      */
     private BigDecimal electric;
     /**
-     * 月度用网量
+     * 网络是否开启
      */
-    private BigDecimal network;
+    private Boolean network;
     /**
      * 房屋面积
      */

@@ -53,7 +53,7 @@ public class BusinessInformationController {
 
     @RequestMapping("updateByInternet")
     @ResponseBody
-    public boolean updateByInternet(Integer memberId, BigDecimal internet) {
+    public boolean updateByInternet(Integer memberId, Boolean internet) {
         return tariffMothConsumeService.updateByInternet(memberId, internet);
     }
 }

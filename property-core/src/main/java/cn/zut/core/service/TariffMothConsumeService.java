@@ -18,6 +18,6 @@ public interface TariffMothConsumeService {
 
     boolean updateByProperty(Integer memberId, BigDecimal property);
 
-    boolean updateByInternet(Integer memberId, BigDecimal internet);
+    boolean updateByInternet(Integer memberId, Boolean internet);
 
 }
