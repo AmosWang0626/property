@@ -1,97 +1,70 @@
 package cn.zut.dao.entity;
 
+import cn.zut.facade.enums.HouseRentStatusEnum;
+import cn.zut.facade.enums.HouseTypeEnum;
+import lombok.Data;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * 加上@Data,不用写get set方法,也不用写toString方法
+ *
+ * @author LiuBowen
+ */
+@Data
 public class BusinessHouseRentEntity {
+    /**
+     * 房屋编号
+     */
     private Integer id;
-
-    private String type;
-
-    private Double area;
-
-    private String address;
-
-    private Double rent;
-
-    private String details;
-
-    private String img;
-
+    /**
+     * 房屋名字
+     */
     private String name;
+    /**
+     * 房屋名字
+     */
+    private String houseNo;
+    /**
+     * 房屋类型
+     */
+    private HouseTypeEnum type;
+    /**
+     * 房屋面积
+     */
+    private Double area;
+    /**
+     * 房屋地址
+     */
+    private String address;
+    /**
+     * 房屋租售金额
+     */
+    private BigDecimal rent;
+    /**
+     * 房屋详情
+     */
+    private String details;
+    /**
+     * 房屋图片
+     */
+    private String img;
+    /**
+     * 业主编号
+     */
+    private Long memberId;
+    /**
+     * 房屋租售状态
+     */
+    private HouseRentStatusEnum rentStatus;
+    /**
+     * 房屋创建时间
+     */
+    private Date createTime;
+    /**
+     * 房屋更新时间
+     */
+    private Date updateTime;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Double getArea() {
-        return area;
-    }
-
-    public void setArea(Double area) {
-        this.area = area;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Double getRent() {
-        return rent;
-    }
-
-    public void setRent(Double rent) {
-        this.rent = rent;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "BusinessHouseRentEntity{" +
-                "id=" + id +
-                ", type='" + type + '\'' +
-                ", area=" + area +
-                ", address='" + address + '\'' +
-                ", rent=" + rent +
-                ", details='" + details + '\'' +
-                ", img='" + img + '\'' +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }

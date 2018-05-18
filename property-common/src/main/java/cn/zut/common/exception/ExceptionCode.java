@@ -33,6 +33,7 @@ public enum ExceptionCode implements Message {
      * 综合业务模块错误码
      */
     BUSINESS_SERVICE_ADD_FAIL("B0001", "服务申请失败"),
+    BUSINESS_ADD_HOUSE_RENT_FAIL("B0002", "添加房屋失败,原因[{0}]"),
 
     /**
      * 资费管理模块错误码

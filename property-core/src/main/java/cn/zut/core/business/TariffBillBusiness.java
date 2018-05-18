@@ -83,23 +83,11 @@ public interface TariffBillBusiness {
     GenericResponse<TariffBillDetailVO> billDetail(Long billNo);
 
     /**
-     * 生成月度账单
+     * 生成账单
      *
-     * @return GenericResponse
+     * @param tariffBillRequest 生成账单表单
+     * @return TariffBillEntity
      */
-    GenericResponse generateMonthBill();
+    TariffBillEntity generateBill(TariffBillRequest tariffBillRequest);
 
-    /**
-     * 生成账单还款计划
-     *
-     * @return GenericResponse
-     */
-    GenericResponse generateBillPlan();
-
-    /**
-     * 每天更新逾期费
-     *
-     * @return GenericResponse
-     */
-    GenericResponse updateOverDueBillPlan();
 }

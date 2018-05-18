@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -28,7 +27,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 /**
  * PROJECT: property
@@ -133,79 +131,8 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
     }
 
     @Override
-    public GenericResponse generateMonthBill() {
-        // 生成月度账单（物业费 / 水费 / 电费 / 网费）
-
-        // 遍历房间: 拿到房间面积,计算物业费; 拿到水/电/网使用量,计算相应费用
-        BigDecimal useTotal = new BigDecimal(new Random().nextInt(30) + 50);
-
-        TariffBillRequest tariffBillRequest = new TariffBillRequest();
-        // 房间号 || 业主编号
-        tariffBillRequest.setHouseNo("1#101");
-        tariffBillRequest.setMemberId(10000L);
-        // 使用量(暂时随机)
-        tariffBillRequest.setUsedTotal(useTotal);
-        // 业务类型 + 业务等级
-        tariffBillRequest.setBusiness(BusinessTypeEnum.PROPERTY);
-        tariffBillRequest.setLevel(BusinessLevelEnum.PROPERTY_ONE);
-
-        TariffBillEntity tariffBillEntity;
-        try {
-            tariffBillEntity = generateBill(tariffBillRequest);
-        } catch (RuntimeException e) {
-            LOGGER.error("当前资费标准不存在", e);
-            return new GenericResponse(new ExceptionMessage(ExceptionCode.TARIFF_STANDARD_IS_NOT_EXIST));
-        }
-
-        tariffBillMapper.insert(tariffBillEntity);
-
-        return GenericResponse.SUCCESS;
-    }
-
-    @Override
-    public GenericResponse generateBillPlan() {
-        List<TariffBillPlanEntity> tariffBillPlanEntities = new ArrayList<>();
-
-        List<TariffBillEntity> tariffBillEntities = tariffBillMapper.selectListByExample(null);
-        for (TariffBillEntity tariffBillEntity : tariffBillEntities) {
-            TariffBillPlanEntity tariffBillPlanEntity = new TariffBillPlanEntity();
-            tariffBillPlanEntity.setBillNo(tariffBillEntity.getBillNo());
-            tariffBillPlanEntity = tariffBillPlanMapper.selectByExample(tariffBillPlanEntity);
-            if (tariffBillPlanEntity != null) {
-                continue;
-            }
-
-            tariffBillPlanEntity = new TariffBillPlanEntity();
-
-            tariffBillPlanEntity.setBillNo(tariffBillEntity.getBillNo());
-            tariffBillPlanEntity.setMemberId(tariffBillEntity.getMemberId());
-            tariffBillPlanEntity.setBillStatus(tariffBillEntity.getBillStatus());
-            tariffBillPlanEntity.setBillAmount(tariffBillEntity.getBillAmount());
-            // 获取应还日期 每月10日
-            tariffBillPlanEntity.setRepayDate(DateUtil.getDateByMonthAndDay(tariffBillEntity.getBillMonth(), 10));
-
-            // 账单逾期天数 || 初始化逾期/减免金额
-            tariffBillPlanEntity.setOverdueDays(0);
-            tariffBillPlanEntity.setBillAmountPaid(BigDecimal.ZERO);
-            tariffBillPlanEntity.setBillAmountOffer(BigDecimal.ZERO);
-            tariffBillPlanEntity.setLateChargeAmt(BigDecimal.ZERO);
-            tariffBillPlanEntity.setLateChargeAmtPaid(BigDecimal.ZERO);
-            tariffBillPlanEntity.setLateChargeAmtOffer(BigDecimal.ZERO);
-            tariffBillPlanEntity.setCreateTime(new Date());
-
-            tariffBillPlanEntities.add(tariffBillPlanEntity);
-        }
-        if (CollectionUtils.isEmpty(tariffBillPlanEntities)) {
-            return GenericResponse.SUCCESS;
-        }
-        tariffBillPlanMapper.batchInsert(tariffBillPlanEntities);
-
-        return GenericResponse.SUCCESS;
-    }
-
-    @Override
     public GenericResponse billEntry(Long operatorMemberId, TariffBillRequest tariffBillRequest) {
-        // 根据户号,设置memberId
+        // TODO 根据户号,设置memberId
         String houseNo = tariffBillRequest.getHouseNo();
         Long memberId = 10008L;
         tariffBillRequest.setMemberId(memberId);
@@ -337,7 +264,8 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
         return new GenericResponse<>(tariffBillDetailVO);
     }
 
-    private TariffBillEntity generateBill(TariffBillRequest tariffBillRequest) throws RuntimeException {
+    @Override
+    public TariffBillEntity generateBill(TariffBillRequest tariffBillRequest) {
         TariffBillEntity tariffBillEntity = new TariffBillEntity();
 
         // 房间号 || 业主用户编号 || 面积或使用量 || 业务类型 || 业务等级 || 备注
@@ -371,17 +299,5 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
         tariffBillEntity.setCreateTime(new Date());
 
         return tariffBillEntity;
-    }
-
-    @Override
-    public GenericResponse updateOverDueBillPlan() {
-        TariffBillPlanEntity search = new TariffBillPlanEntity();
-        search.setBillStatus(BillStatusEnum.OVERDUE);
-        List<TariffBillPlanEntity> tariffBillPlanEntities = tariffBillPlanMapper.selectListByExample(search);
-        tariffBillPlanEntities.forEach(tariffBillPlanEntity -> {
-//            tariffBillPlanEntity
-        });
-
-        return null;
     }
 }

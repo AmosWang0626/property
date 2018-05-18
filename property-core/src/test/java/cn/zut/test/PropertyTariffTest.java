@@ -162,7 +162,7 @@ public class PropertyTariffTest {
 
     @Test
     public void generateTariffBill() {
-        tariffBillBusiness.generateMonthBill();
+//        tariffBillBusiness.generateMonthBill();
     }
 
     @Resource

@@ -11,6 +11,11 @@
         <result column="DETAILS" property="details"/>
         <result column="IMG" property="img"/>
         <result column="NAME" property="name"/>
+        <result column="HOUSE_NO" property="houseNo"/>
+        <result column="MEMBER_ID" property="memberId"/>
+        <result column="RENT_STATUS" property="rentStatus"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
     </resultMap>
 
     <sql id="tableName">business_house_rent</sql>
@@ -23,7 +28,12 @@
         RENT,
         DETAILS,
         IMG,
-        NAME
+        NAME,
+        HOUSE_NO,
+        MEMBER_ID,
+        RENT_STATUS,
+        CREATE_TIME,
+        UPDATE_TIME
     </sql>
 
     <sql id="condition">
@@ -36,6 +46,9 @@
                 <if test="search.details != null">AND DETAILS = #{search.details}</if>
                 <if test="search.img != null">AND IMG = #{search.img}</if>
                 <if test="search.name != null">AND NAME = #{search.name}</if>
+                <if test="search.memberId != null">AND MEMBER_ID = #{search.memberId}</if>
+                <if test="search.rentStatus != null">AND RENT_STATUS = #{search.rentStatus}</if>
+                <if test="search.houseNo != null">AND HOUSE_NO = #{search.houseNo}</if>
             </where>
         </if>
     </sql>
@@ -101,7 +114,12 @@
         #{rent},
         #{details},
         #{img},
-        #{name}
+        #{name},
+        #{houseNo},
+        #{memberId},
+        #{rentStatus},
+        #{createTime},
+        #{updateTime}
         )
     </insert>
 
@@ -129,6 +147,18 @@
             </if>
             <if test="name != null">
                 NAME = #{name},
+            </if>
+            <if test="houseNo != null">
+                HOUSE_NO = #{houseNo},
+            </if>
+            <if test="memberId != null">
+                MEMBER_ID = #{memberId},
+            </if>
+            <if test="rentStatus != null">
+                RENT_STATUS = #{rentStatus},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime},
             </if>
         </set>
         where ID = #{id}
