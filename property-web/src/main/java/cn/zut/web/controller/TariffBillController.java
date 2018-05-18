@@ -8,10 +8,7 @@ import cn.zut.core.business.TariffBillBusiness;
 import cn.zut.core.constant.PropertyConstant;
 import cn.zut.dao.entity.TariffBillEntity;
 import cn.zut.dao.entity.TariffBillPlanEntity;
-import cn.zut.facade.request.ConsumeConfirmRequest;
-import cn.zut.facade.request.ConsumePreviewRequest;
-import cn.zut.facade.request.TariffBillPaymentRequest;
-import cn.zut.facade.request.TariffBillRequest;
+import cn.zut.facade.request.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +48,18 @@ public class TariffBillController {
         }
 
         return tariffBillBusiness.consumeConfirm(getMemberId(request), consumeConfirmRequest);
+    }
+
+    @RequestMapping("monthConsumeConfirm")
+    public GenericResponse monthConsumeConfirm(@RequestBody @Valid TariffMonthConsumeConfirmRequest monthConsumeConfirm,
+                                          BindingResult bindingResult, HttpServletRequest request) {
+        // 参数校验
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> list = bindingResult.getAllErrors();
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage()));
+        }
+
+        return tariffBillBusiness.monthConsumeConfirm(getMemberId(request), monthConsumeConfirm);
     }
 
     @RequestMapping("billEntry")

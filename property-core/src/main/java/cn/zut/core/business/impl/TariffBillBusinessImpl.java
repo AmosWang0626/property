@@ -50,6 +50,8 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
     private TariffStandardMapper tariffStandardMapper;
     @Resource
     private TariffCompanyMapper tariffCompanyMapper;
+    @Resource
+    private TariffMonthConsumeMapper tariffMonthConsumeMapper;
 
     @Resource
     private TariffCompanyService tariffCompanyService;
@@ -299,5 +301,16 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
         tariffBillEntity.setCreateTime(new Date());
 
         return tariffBillEntity;
+    }
+
+    @Override
+    public GenericResponse monthConsumeConfirm(Long memberId, TariffMonthConsumeConfirmRequest monthConsumeConfirm) {
+        TariffMonthConsumeEntity monthConsumeEntity = new TariffMonthConsumeEntity();
+        monthConsumeEntity.setMonth(DateUtil.getPreMonth());
+        monthConsumeEntity.setOperator(monthConsumeConfirm.getOperator() + "[" + memberId + "]");
+        monthConsumeEntity.setCreateTime(new Date());
+        BeanUtils.copyProperties(monthConsumeConfirm, monthConsumeEntity);
+
+        return tariffMonthConsumeMapper.insert(monthConsumeEntity) > 0 ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 }

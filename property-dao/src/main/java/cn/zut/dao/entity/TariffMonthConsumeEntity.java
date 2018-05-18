@@ -16,13 +16,13 @@ public class TariffMonthConsumeEntity {
      */
     private Long id;
     /**
-     * 用户编号
+     * 操作人
      */
-    private Long memberId;
+    private String operator;
     /**
      * 房屋编号
      */
-    private Long houseNo;
+    private String houseNo;
     /**
      * 账单月份
      */
@@ -40,10 +40,6 @@ public class TariffMonthConsumeEntity {
      */
     private Boolean network;
     /**
-     * 房屋面积
-     */
-    private BigDecimal property;
-    /**
      * 拓展字段
      */
     private String expand;
@@ -54,6 +50,6 @@ public class TariffMonthConsumeEntity {
     /**
      * 修改时间
      */
-    private String updateTime;
+    private Date updateTime;
 
 }

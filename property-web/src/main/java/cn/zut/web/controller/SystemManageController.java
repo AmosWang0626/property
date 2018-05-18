@@ -1,7 +1,7 @@
 package cn.zut.web.controller;
 
 import cn.zut.common.generic.GenericResponse;
-import cn.zut.core.business.TariffBillBusiness;
+import cn.zut.core.business.PropertyJobBusiness;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,17 +19,17 @@ import javax.annotation.Resource;
 public class SystemManageController {
 
     @Resource
-    private TariffBillBusiness tariffBillBusiness;
+    private PropertyJobBusiness propertyJobBusiness;
 
     @RequestMapping("billJob")
     public GenericResponse generateBillJob() {
 
-        return tariffBillBusiness.generateMonthBill();
+        return propertyJobBusiness.generateMonthBill();
     }
 
     @RequestMapping("billPlanJob")
     public GenericResponse generateBillPlanJob() {
 
-        return tariffBillBusiness.generateBillPlan();
+        return propertyJobBusiness.generateBillPlan();
     }
 }

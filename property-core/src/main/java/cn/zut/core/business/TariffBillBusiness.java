@@ -5,10 +5,7 @@ import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.generic.SimplePageResult;
 import cn.zut.dao.entity.TariffBillEntity;
 import cn.zut.dao.entity.TariffBillPlanEntity;
-import cn.zut.facade.request.ConsumeConfirmRequest;
-import cn.zut.facade.request.ConsumePreviewRequest;
-import cn.zut.facade.request.TariffBillPaymentRequest;
-import cn.zut.facade.request.TariffBillRequest;
+import cn.zut.facade.request.*;
 import cn.zut.facade.response.TariffBillDetailVO;
 import cn.zut.facade.response.TariffBillPlanVO;
 
@@ -90,4 +87,12 @@ public interface TariffBillBusiness {
      */
     TariffBillEntity generateBill(TariffBillRequest tariffBillRequest);
 
+    /**
+     * 创建月度账单
+     *
+     * @param memberId            用户编号
+     * @param monthConsumeConfirm 月度账单表单
+     * @return 通用
+     */
+    GenericResponse monthConsumeConfirm(Long memberId, TariffMonthConsumeConfirmRequest monthConsumeConfirm);
 }

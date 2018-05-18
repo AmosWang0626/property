@@ -4,13 +4,11 @@
 
     <resultMap id="BaseResultMap" type="cn.zut.dao.entity.TariffMonthConsumeEntity">
         <id column="ID" property="id"/>
-        <result column="MEMBER_ID" property="memberId"/>
         <result column="HOUSE_NO" property="houseNo"/>
         <result column="MONTH" property="month"/>
         <result column="WATER" property="water"/>
         <result column="ELECTRIC" property="electric"/>
         <result column="NETWORK" property="network"/>
-        <result column="PROPERTY" property="property"/>
         <result column="EXPAND" property="expand"/>
         <result column="CREATE_TIME" property="createTime"/>
         <result column="UPDATE_TIME" property="updateTime"/>
@@ -20,13 +18,11 @@
 
     <sql id="Base_Column_List">
         ID,
-        MEMBER_ID,
         HOUSE_NO,
         MONTH,
         WATER,
         ELECTRIC,
         NETWORK,
-        PROPERTY,
         EXPAND,
         CREATE_TIME,
         UPDATE_TIME
@@ -35,7 +31,6 @@
     <sql id="condition">
         <if test="search != null">
             <where>
-                <if test="search.memberId != null">AND MEMBER_ID = #{search.memberId}</if>
                 <if test="search.houseNo != null">AND HOUSE_NO = #{search.houseNo}</if>
                 <if test="search.month != null">AND MONTH REGEXP #{search.month}</if>
             </where>
@@ -72,13 +67,11 @@
         )
         VALUES (
         #{id},
-        #{memberId},
         #{houseNo},
         #{month},
         #{water},
         #{electric},
         #{network},
-        #{property},
         #{expand},
         #{createTime},
         #{updateTime}
@@ -97,9 +90,6 @@
             </if>
             <if test="network != null">
                 NETWORK = #{network},
-            </if>
-            <if test="property != null">
-                PROPERTY = #{property},
             </if>
             <if test="expand != null">
                 EXPAND = #{expand},

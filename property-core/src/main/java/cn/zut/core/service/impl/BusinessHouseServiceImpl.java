@@ -53,12 +53,7 @@ public class BusinessHouseServiceImpl implements BusinessHouseService {
             }
         }
 
-        int insert = businessHouseRentMapper.insert(businessHouseRentEntity);
-        if (insert > 0) {
-            return GenericResponse.SUCCESS;
-        } else {
-            return GenericResponse.FAIL;
-        }
+        return businessHouseRentMapper.insert(businessHouseRentEntity) > 0 ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 
     /**
@@ -79,12 +74,7 @@ public class BusinessHouseServiceImpl implements BusinessHouseService {
 
     @Override
     public GenericResponse modifyHouse(BusinessHouseRentEntity businessHouseRentEntity) {
-        int i = businessHouseRentMapper.update(businessHouseRentEntity);
-        if (i > 0) {
-            return GenericResponse.SUCCESS;
-        } else {
-            return GenericResponse.FAIL;
-        }
+        return businessHouseRentMapper.update(businessHouseRentEntity) > 0 ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 
     /**
@@ -92,11 +82,6 @@ public class BusinessHouseServiceImpl implements BusinessHouseService {
      */
     @Override
     public GenericResponse deleteById(Integer id) {
-        int i = businessHouseRentMapper.deleteById(id);
-        if (i > 0) {
-            return GenericResponse.SUCCESS;
-        } else {
-            return GenericResponse.FAIL;
-        }
+        return businessHouseRentMapper.deleteById(id) > 0 ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 }
