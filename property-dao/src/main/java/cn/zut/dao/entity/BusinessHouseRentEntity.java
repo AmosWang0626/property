@@ -33,7 +33,7 @@ public class BusinessHouseRentEntity {
     /**
      * 房屋面积
      */
-    private Double area;
+    private BigDecimal area;
     /**
      * 房屋地址
      */

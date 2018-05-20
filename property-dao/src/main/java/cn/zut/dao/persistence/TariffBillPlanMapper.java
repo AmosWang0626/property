@@ -13,6 +13,7 @@ public interface TariffBillPlanMapper extends
         Insert<TariffBillPlanEntity>,
         BatchInsert<TariffBillPlanEntity>,
         Update<TariffBillPlanEntity>,
+        BatchUpdate<TariffBillPlanEntity>,
         SelectById<TariffBillPlanEntity, Long>,
         SelectByExample<TariffBillPlanEntity, TariffBillPlanEntity>,
         SelectListByExample<TariffBillPlanEntity, TariffBillPlanEntity>,

@@ -63,7 +63,7 @@
         <include refid="columns"/>
         FROM
         <include refid="tableName"/>
-        WHERE BILL_NO = #{billNo}
+        WHERE BILL_NO = #{id}
     </select>
 
     <select id="selectByExample" resultMap="baseResultMap">
@@ -142,5 +142,51 @@
         #{updateTime}
         )
     </insert>
+
+    <insert id="batchInsert">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="columns"/>
+        )
+        VALUES
+        <foreach collection="list" item="item" separator="," index="index">
+            (
+            #{item.billNo},
+            #{item.memberId},
+            #{item.houseNo},
+            #{item.business},
+            #{item.level},
+            #{item.standardId},
+            #{item.billStatus},
+            #{item.usedTotal},
+            #{item.unitPrice},
+            #{item.billAmount},
+            #{item.overdueRate},
+            #{item.billMonth},
+            #{item.billStartDate},
+            #{item.billEndDate},
+            #{item.expand},
+            #{item.createTime},
+            #{item.updateTime}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate">
+        <foreach collection="list" item="item" separator=";">
+            UPDATE
+            <include refid="tableName"/>
+            <set>
+                <if test="item.billStatus != null">
+                    BILL_STATUS = #{item.billStatus},
+                </if>
+                <if test="item.updateTime != null">
+                    UPDATE_TIME = #{item.updateTime},
+                </if>
+            </set>
+            WHERE BILL_NO = #{item.billNo}
+        </foreach>
+    </update>
 
 </mapper>

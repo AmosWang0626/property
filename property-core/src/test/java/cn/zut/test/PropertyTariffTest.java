@@ -1,6 +1,6 @@
 package cn.zut.test;
 
-import cn.zut.core.business.TariffBillBusiness;
+import cn.zut.core.business.PropertyJobBusiness;
 import cn.zut.core.service.TariffCompanyService;
 import cn.zut.dao.entity.*;
 import cn.zut.dao.persistence.*;
@@ -158,11 +158,14 @@ public class PropertyTariffTest {
     }
 
     @Resource
-    private TariffBillBusiness tariffBillBusiness;
+    private PropertyJobBusiness propertyJobBusiness;
 
     @Test
     public void generateTariffBill() {
-//        tariffBillBusiness.generateMonthBill();
+//        propertyJobBusiness.generateMonthBill();
+//        propertyJobBusiness.generateBillPlan();
+//        propertyJobBusiness.updateOverDueBillPlan();
+        propertyJobBusiness.updateBillPlan2OverDue();
     }
 
     @Resource

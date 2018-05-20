@@ -1,20 +1,21 @@
 package cn.zut.core.business.impl;
 
-import cn.zut.common.exception.ExceptionCode;
-import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.util.DateUtil;
 import cn.zut.core.business.PropertyJobBusiness;
 import cn.zut.core.business.TariffBillBusiness;
+import cn.zut.dao.entity.BusinessHouseRentEntity;
 import cn.zut.dao.entity.TariffBillEntity;
 import cn.zut.dao.entity.TariffBillPlanEntity;
 import cn.zut.dao.entity.TariffMonthConsumeEntity;
+import cn.zut.dao.persistence.BusinessHouseRentMapper;
 import cn.zut.dao.persistence.TariffBillMapper;
 import cn.zut.dao.persistence.TariffBillPlanMapper;
 import cn.zut.dao.persistence.TariffMonthConsumeMapper;
 import cn.zut.facade.enums.BillStatusEnum;
 import cn.zut.facade.enums.BusinessLevelEnum;
 import cn.zut.facade.enums.BusinessTypeEnum;
+import cn.zut.facade.enums.HouseRentStatusEnum;
 import cn.zut.facade.request.TariffBillRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,8 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
     @Resource
     private TariffBillMapper tariffBillMapper;
     @Resource
+    private BusinessHouseRentMapper businessHouseRentMapper;
+    @Resource
     private TariffMonthConsumeMapper tariffMonthConsumeMapper;
     @Resource
     private TariffBillPlanMapper tariffBillPlanMapper;
@@ -58,25 +61,118 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
         search.setMonth(DateUtil.getPreMonth());
         List<TariffMonthConsumeEntity> tariffMonthConsumeEntities = tariffMonthConsumeMapper.selectListByExample(search);
 
-        TariffBillRequest tariffBillRequest = new TariffBillRequest();
-        // 房间号 || 业主编号
-        tariffBillRequest.setHouseNo("1#101");
-        tariffBillRequest.setMemberId(10000L);
-        // 使用量(暂时随机)
-//        tariffBillRequest.setUsedTotal(useTotal);
-        // 业务类型 + 业务等级
-        tariffBillRequest.setBusiness(BusinessTypeEnum.PROPERTY);
-        tariffBillRequest.setLevel(BusinessLevelEnum.PROPERTY_ONE);
+        List<TariffBillEntity> tariffBillEntities = new ArrayList<>();
 
-        TariffBillEntity tariffBillEntity;
-        try {
-            tariffBillEntity = tariffBillBusiness.generateBill(tariffBillRequest);
-        } catch (RuntimeException e) {
-            LOGGER.error("当前资费标准不存在", e);
-            return new GenericResponse(new ExceptionMessage(ExceptionCode.TARIFF_STANDARD_IS_NOT_EXIST));
+        tariffMonthConsumeEntities.forEach(tariffMonthConsumeEntity -> {
+            // TODO 此处注意,月度有消费不能退房,除非完全结清
+            BusinessHouseRentEntity houseRentEntity = new BusinessHouseRentEntity();
+            houseRentEntity.setHouseNo(tariffMonthConsumeEntity.getHouseNo());
+            houseRentEntity.setRentStatus(HouseRentStatusEnum.RENT_ED);
+            houseRentEntity = businessHouseRentMapper.selectByExample(houseRentEntity);
+            if (houseRentEntity == null) {
+                LOGGER.error("账单异常,租售房屋找不到,账单编号[{}], 房屋编号[{}]",
+                        tariffMonthConsumeEntity.getId(),
+                        tariffMonthConsumeEntity.getHouseNo());
+                return;
+            }
+            String houseNo = houseRentEntity.getHouseNo();
+            Long memberId = houseRentEntity.getMemberId();
+
+            BigDecimal area = houseRentEntity.getArea();
+            BigDecimal water = tariffMonthConsumeEntity.getWater();
+            BigDecimal electric = tariffMonthConsumeEntity.getElectric();
+            Boolean network = tariffMonthConsumeEntity.getNetwork();
+
+            // 物业费
+            if (BigDecimal.ZERO.compareTo(area) < 0) {
+                TariffBillRequest tariffBillRequest = new TariffBillRequest();
+                // 房间号 || 业主编号 || 使用量 || 业务类型 || 业务等级
+                tariffBillRequest.setHouseNo(houseNo);
+                tariffBillRequest.setMemberId(memberId);
+                tariffBillRequest.setUsedTotal(area);
+                // 业务类型 + 业务等级
+                tariffBillRequest.setBusiness(BusinessTypeEnum.PROPERTY);
+                tariffBillRequest.setLevel(BusinessLevelEnum.PROPERTY_ONE);
+
+                try {
+                    TariffBillEntity tariffBillEntity = tariffBillBusiness.generateBill(tariffBillRequest);
+                    if (tariffBillEntity != null) {
+                        tariffBillEntities.add(tariffBillEntity);
+                    }
+                } catch (RuntimeException e) {
+                    LOGGER.error("当前资费标准不存在", e);
+                }
+            }
+
+            // 水费
+            if (BigDecimal.ZERO.compareTo(water) < 0) {
+                TariffBillRequest tariffBillRequest = new TariffBillRequest();
+                // 房间号 || 业主编号 || 使用量 || 业务类型 || 业务等级
+                tariffBillRequest.setHouseNo(houseNo);
+                tariffBillRequest.setMemberId(memberId);
+                tariffBillRequest.setUsedTotal(water);
+                // 业务类型 + 业务等级
+                tariffBillRequest.setBusiness(BusinessTypeEnum.WATER);
+                tariffBillRequest.setLevel(BusinessLevelEnum.WATER_COMPANY);
+
+                try {
+                    TariffBillEntity tariffBillEntity = tariffBillBusiness.generateBill(tariffBillRequest);
+                    if (tariffBillEntity != null) {
+                        tariffBillEntities.add(tariffBillEntity);
+                    }
+                } catch (RuntimeException e) {
+                    LOGGER.error("当前资费标准不存在", e);
+                }
+            }
+
+            // 电费
+            if (BigDecimal.ZERO.compareTo(electric) < 0) {
+                TariffBillRequest tariffBillRequest = new TariffBillRequest();
+                // 房间号 || 业主编号 || 使用量 || 业务类型 || 业务等级
+                tariffBillRequest.setHouseNo(houseNo);
+                tariffBillRequest.setMemberId(memberId);
+                tariffBillRequest.setUsedTotal(electric);
+                // 业务类型 + 业务等级
+                tariffBillRequest.setBusiness(BusinessTypeEnum.ELECTRICITY);
+                tariffBillRequest.setLevel(BusinessLevelEnum.ELECTRICITY_COMPANY);
+
+                try {
+                    TariffBillEntity tariffBillEntity = tariffBillBusiness.generateBill(tariffBillRequest);
+                    if (tariffBillEntity != null) {
+                        tariffBillEntities.add(tariffBillEntity);
+                    }
+                } catch (RuntimeException e) {
+                    LOGGER.error("当前资费标准不存在", e);
+                }
+            }
+
+            // 网费
+            if (network != null && network) {
+                TariffBillRequest tariffBillRequest = new TariffBillRequest();
+                // 房间号 || 业主编号 || 使用量 || 业务类型 || 业务等级
+                tariffBillRequest.setHouseNo(houseNo);
+                tariffBillRequest.setMemberId(memberId);
+                tariffBillRequest.setUsedTotal(new BigDecimal(1));
+                // 业务类型 + 业务等级
+                tariffBillRequest.setBusiness(BusinessTypeEnum.NETWORK);
+                tariffBillRequest.setLevel(BusinessLevelEnum.NETWORK_COMPANY);
+
+                try {
+                    TariffBillEntity tariffBillEntity = tariffBillBusiness.generateBill(tariffBillRequest);
+                    if (tariffBillEntity != null) {
+                        tariffBillEntities.add(tariffBillEntity);
+                    }
+                } catch (RuntimeException e) {
+                    LOGGER.error("当前资费标准不存在", e);
+                }
+            }
+        });
+
+        if (CollectionUtils.isEmpty(tariffBillEntities)) {
+            return GenericResponse.SUCCESS;
         }
 
-        tariffBillMapper.insert(tariffBillEntity);
+        tariffBillMapper.batchInsert(tariffBillEntities);
 
         return GenericResponse.SUCCESS;
     }
@@ -101,7 +197,7 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
             tariffBillPlanEntity.setBillStatus(tariffBillEntity.getBillStatus());
             tariffBillPlanEntity.setBillAmount(tariffBillEntity.getBillAmount());
             // 获取应还日期 每月10日
-            tariffBillPlanEntity.setRepayDate(DateUtil.getDateByMonthAndDay(tariffBillEntity.getBillMonth(), 10));
+            tariffBillPlanEntity.setRepayDate(DateUtil.getDateByMonthAndDay(tariffBillEntity.getBillMonth(), 15));
 
             // 账单逾期天数 || 初始化逾期/减免金额
             tariffBillPlanEntity.setOverdueDays(0);
@@ -124,20 +220,71 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
 
     @Override
     public GenericResponse updateBillPlan2OverDue() {
+        List<TariffBillPlanEntity> updateTariffBillPlanEntities = new ArrayList<>();
+        List<TariffBillEntity> updateTariffBillEntities = new ArrayList<>();
 
-        return null;
+        TariffBillPlanEntity search = new TariffBillPlanEntity();
+        search.setBillStatus(BillStatusEnum.REPAYING);
+        List<TariffBillPlanEntity> tariffBillPlanEntities = tariffBillPlanMapper.selectListByExample(search);
+        tariffBillPlanEntities.forEach(tariffBillPlanEntity -> {
+            Date repayDate = tariffBillPlanEntity.getRepayDate();
+            Integer days = DateUtil.daysBetween(repayDate, new Date());
+            if (days <= 0) {
+                return;
+            }
+
+            // 计算逾期费
+            Long billNo = tariffBillPlanEntity.getBillNo();
+            TariffBillEntity tariffBillEntity = tariffBillMapper.selectById(billNo);
+            tariffBillEntity.setBillStatus(BillStatusEnum.OVERDUE);
+            tariffBillEntity.setUpdateTime(new Date());
+
+            BigDecimal overdueRate = tariffBillEntity.getOverdueRate();
+            BigDecimal billAmount = tariffBillPlanEntity.getBillAmount();
+            BigDecimal overdueAmount = billAmount.multiply(overdueRate).multiply(BigDecimal.valueOf(days));
+            tariffBillPlanEntity.setBillStatus(BillStatusEnum.OVERDUE);
+            tariffBillPlanEntity.setOverdueDays(days);
+            tariffBillPlanEntity.setLateChargeAmt(overdueAmount);
+            tariffBillPlanEntity.setUpdateTime(new Date());
+
+            updateTariffBillEntities.add(tariffBillEntity);
+            updateTariffBillPlanEntities.add(tariffBillPlanEntity);
+        });
+
+        tariffBillMapper.batchUpdate(updateTariffBillEntities);
+        tariffBillPlanMapper.batchUpdate(updateTariffBillPlanEntities);
+
+        return GenericResponse.SUCCESS;
     }
 
     @Override
     public GenericResponse updateOverDueBillPlan() {
+        List<TariffBillPlanEntity> updateTariffBillPlanEntities = new ArrayList<>();
+
         TariffBillPlanEntity search = new TariffBillPlanEntity();
         search.setBillStatus(BillStatusEnum.OVERDUE);
         List<TariffBillPlanEntity> tariffBillPlanEntities = tariffBillPlanMapper.selectListByExample(search);
         tariffBillPlanEntities.forEach(tariffBillPlanEntity -> {
             Date repayDate = tariffBillPlanEntity.getRepayDate();
-            int days = DateUtil.daysBetween(repayDate, new Date());
+            Integer days = DateUtil.daysBetween(repayDate, new Date());
+            if (days <= 0) {
+                return;
+            }
+            // 计算逾期费
+            Long billNo = tariffBillPlanEntity.getBillNo();
+            TariffBillEntity tariffBillEntity = tariffBillMapper.selectById(billNo);
+            BigDecimal overdueRate = tariffBillEntity.getOverdueRate();
+            BigDecimal billAmount = tariffBillPlanEntity.getBillAmount();
 
+            BigDecimal overdueAmount = billAmount.multiply(overdueRate).multiply(BigDecimal.valueOf(days));
+            tariffBillPlanEntity.setOverdueDays(days);
+            tariffBillPlanEntity.setLateChargeAmt(overdueAmount);
+            tariffBillPlanEntity.setUpdateTime(new Date());
+
+            updateTariffBillPlanEntities.add(tariffBillPlanEntity);
         });
+
+        tariffBillPlanMapper.batchUpdate(updateTariffBillPlanEntities);
 
         return GenericResponse.SUCCESS;
     }

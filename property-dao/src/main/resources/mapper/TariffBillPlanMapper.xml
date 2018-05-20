@@ -193,11 +193,20 @@
             UPDATE
             <include refid="tableName"/>
             <set>
+                <if test="item.billStatus != null">
+                    BILL_STATUS = #{item.billStatus},
+                </if>
+                <if test="item.overdueDays != null">
+                    OVERDUE_DAYS = #{item.overdueDays},
+                </if>
+                <if test="item.lateChargeAmt != null">
+                    LATE_CHARGE_AMT = #{item.lateChargeAmt},
+                </if>
                 <if test="item.updateTime != null">
                     UPDATE_TIME = #{item.updateTime},
                 </if>
             </set>
-            WHERE ID = #{item.id}
+            WHERE PLAN_NO = #{item.planNo}
         </foreach>
     </update>
 

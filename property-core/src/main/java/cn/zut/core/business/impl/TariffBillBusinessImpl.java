@@ -268,8 +268,18 @@ public class TariffBillBusinessImpl implements TariffBillBusiness {
 
     @Override
     public TariffBillEntity generateBill(TariffBillRequest tariffBillRequest) {
-        TariffBillEntity tariffBillEntity = new TariffBillEntity();
+        // 幂等性校验
+        TariffBillEntity billSearch = new TariffBillEntity();
+        billSearch.setBillMonth(DateUtil.getMonth());
+        billSearch.setHouseNo(tariffBillRequest.getHouseNo());
+        billSearch.setBusiness(tariffBillRequest.getBusiness());
+        billSearch.setLevel(tariffBillRequest.getLevel());
+        billSearch = tariffBillMapper.selectByExample(billSearch);
+        if (billSearch != null) {
+            return null;
+        }
 
+        TariffBillEntity tariffBillEntity = new TariffBillEntity();
         // 房间号 || 业主用户编号 || 面积或使用量 || 业务类型 || 业务等级 || 备注
         tariffBillEntity.setHouseNo(tariffBillRequest.getHouseNo());
         tariffBillEntity.setMemberId(tariffBillRequest.getMemberId());

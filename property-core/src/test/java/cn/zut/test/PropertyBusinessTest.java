@@ -35,7 +35,7 @@ public class PropertyBusinessTest {
         businessHouseRentEntity.setName("居民住宅");
         businessHouseRentEntity.setCreateTime(new Date());
         businessHouseRentEntity.setAddress("中原西路146号");
-        businessHouseRentEntity.setArea(150D);
+        businessHouseRentEntity.setArea(new BigDecimal(129));
         businessHouseRentEntity.setRent(new BigDecimal(500));
         businessHouseRentEntity.setRentStatus(HouseRentStatusEnum.UN_RENT);
         businessHouseRentEntity.setType(HouseTypeEnum.HOUSE);
