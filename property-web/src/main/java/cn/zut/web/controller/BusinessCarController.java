@@ -1,8 +1,10 @@
 package cn.zut.web.controller;
 
+import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.service.BusinessCarSetService;
 import cn.zut.dao.entity.BusinessCarSetEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,18 +24,15 @@ public class BusinessCarController {
     @Resource
     private BusinessCarSetService businessCarSetService;
 
+    /**
+     * 主要三个参数
+     * 车牌号/车类型/进入时间
+     */
     @RequestMapping("comeIn")
-    public String comeIn(BusinessCarSetEntity businessCarSetEntity, HttpServletRequest request) {
-        if (businessCarSetEntity == null || businessCarSetEntity.getCarType() == null) {
-            request.setAttribute("businessCarSetEntity", new BusinessCarSetEntity());
-            return "carsetadd";
-        }
-        boolean flag = businessCarSetService.addCarSet(businessCarSetEntity);
-        request.setAttribute("carMsg", "添加成功！");
-        if (flag) {
-            return "carsetadd";
-        }
-        return "parameterError";
+    @ResponseBody
+    public GenericResponse comeIn(@RequestBody BusinessCarSetEntity businessCarSetEntity) {
+
+        return businessCarSetService.addCarSet(businessCarSetEntity) ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 
     @RequestMapping("list")

@@ -22,8 +22,7 @@ public class BusinessCarSetServiceImpl implements BusinessCarSetService {
      */
     @Override
     public boolean addCarSet(BusinessCarSetEntity businessCarSetEntity) {
-        int x = businessCarSetMapper.insert(businessCarSetEntity);
-        return x > 0;
+        return businessCarSetMapper.insert(businessCarSetEntity) > 0;
     }
 
     /**

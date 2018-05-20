@@ -83,7 +83,9 @@
     <insert id="insert">
         INSERT INTO
         <include refid="tableName"/>
+        (
         <include refid="Base_Column_List"/>
+        )
         VALUES
         (
         #{id},

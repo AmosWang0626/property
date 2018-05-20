@@ -48,10 +48,10 @@ public enum BusinessLevelEnum implements Mapping<String, String> {
     /**
      * 停车费标准
      */
-    PARKING_LIGHT_ONE_2_FOUR_HOUR("停车费-白天-地上3元"),
-    PARKING_LIGHT_FOUR_2_TWELVE_HOUR("停车费-白天-地上6元"),
-    PARKING_NIGHT_ONE_2_FOUR_HOUR("停车费-晚上-地上4元"),
-    PARKING_NIGHT_FOUR_2_TWELVE_HOUR("停车费-晚上-地上8元"),;
+    PARKING_LIGHT_ONE_2_FOUR_HOUR("停车费-白天-地上"),
+    PARKING_LIGHT_FOUR_2_TWELVE_HOUR("停车费-白天-地上"),
+    PARKING_NIGHT_ONE_2_FOUR_HOUR("停车费-晚上-地上"),
+    PARKING_NIGHT_FOUR_2_TWELVE_HOUR("停车费-晚上-地上"),;
 
     private final String value;
 
