@@ -61,10 +61,9 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
         search.setMonth(DateUtil.getPreMonth());
         List<TariffMonthConsumeEntity> tariffMonthConsumeEntities = tariffMonthConsumeMapper.selectListByExample(search);
 
-        List<TariffBillEntity> tariffBillEntities = new ArrayList<>();
+        List<TariffBillRequest> billRequests = new ArrayList<>();
 
         tariffMonthConsumeEntities.forEach(tariffMonthConsumeEntity -> {
-            // TODO 此处注意,月度有消费不能退房,除非完全结清
             BusinessHouseRentEntity houseRentEntity = new BusinessHouseRentEntity();
             houseRentEntity.setHouseNo(tariffMonthConsumeEntity.getHouseNo());
             houseRentEntity.setRentStatus(HouseRentStatusEnum.RENT_ED);
@@ -94,14 +93,7 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
                 tariffBillRequest.setBusiness(BusinessTypeEnum.PROPERTY);
                 tariffBillRequest.setLevel(BusinessLevelEnum.PROPERTY_ONE);
 
-                try {
-                    TariffBillEntity tariffBillEntity = tariffBillBusiness.generateBill(tariffBillRequest);
-                    if (tariffBillEntity != null) {
-                        tariffBillEntities.add(tariffBillEntity);
-                    }
-                } catch (RuntimeException e) {
-                    LOGGER.error("当前资费标准不存在", e);
-                }
+                billRequests.add(tariffBillRequest);
             }
 
             // 水费
@@ -115,14 +107,7 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
                 tariffBillRequest.setBusiness(BusinessTypeEnum.WATER);
                 tariffBillRequest.setLevel(BusinessLevelEnum.WATER_COMPANY);
 
-                try {
-                    TariffBillEntity tariffBillEntity = tariffBillBusiness.generateBill(tariffBillRequest);
-                    if (tariffBillEntity != null) {
-                        tariffBillEntities.add(tariffBillEntity);
-                    }
-                } catch (RuntimeException e) {
-                    LOGGER.error("当前资费标准不存在", e);
-                }
+                billRequests.add(tariffBillRequest);
             }
 
             // 电费
@@ -136,14 +121,7 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
                 tariffBillRequest.setBusiness(BusinessTypeEnum.ELECTRICITY);
                 tariffBillRequest.setLevel(BusinessLevelEnum.ELECTRICITY_COMPANY);
 
-                try {
-                    TariffBillEntity tariffBillEntity = tariffBillBusiness.generateBill(tariffBillRequest);
-                    if (tariffBillEntity != null) {
-                        tariffBillEntities.add(tariffBillEntity);
-                    }
-                } catch (RuntimeException e) {
-                    LOGGER.error("当前资费标准不存在", e);
-                }
+                billRequests.add(tariffBillRequest);
             }
 
             // 网费
@@ -157,17 +135,11 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
                 tariffBillRequest.setBusiness(BusinessTypeEnum.NETWORK);
                 tariffBillRequest.setLevel(BusinessLevelEnum.NETWORK_COMPANY);
 
-                try {
-                    TariffBillEntity tariffBillEntity = tariffBillBusiness.generateBill(tariffBillRequest);
-                    if (tariffBillEntity != null) {
-                        tariffBillEntities.add(tariffBillEntity);
-                    }
-                } catch (RuntimeException e) {
-                    LOGGER.error("当前资费标准不存在", e);
-                }
+                billRequests.add(tariffBillRequest);
             }
         });
 
+        List<TariffBillEntity> tariffBillEntities = generateBillList(billRequests);
         if (CollectionUtils.isEmpty(tariffBillEntities)) {
             return GenericResponse.SUCCESS;
         }
@@ -183,6 +155,7 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
 
         List<TariffBillEntity> tariffBillEntities = tariffBillMapper.selectListByExample(null);
         for (TariffBillEntity tariffBillEntity : tariffBillEntities) {
+            // 幂等性校验
             TariffBillPlanEntity tariffBillPlanEntity = new TariffBillPlanEntity();
             tariffBillPlanEntity.setBillNo(tariffBillEntity.getBillNo());
             tariffBillPlanEntity = tariffBillPlanMapper.selectByExample(tariffBillPlanEntity);
@@ -210,16 +183,18 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
 
             tariffBillPlanEntities.add(tariffBillPlanEntity);
         }
+
         if (CollectionUtils.isEmpty(tariffBillPlanEntities)) {
             return GenericResponse.SUCCESS;
         }
+
         tariffBillPlanMapper.batchInsert(tariffBillPlanEntities);
 
         return GenericResponse.SUCCESS;
     }
 
     @Override
-    public GenericResponse updateBillPlan2OverDue() {
+    public GenericResponse updateBillPlanStatus() {
         List<TariffBillPlanEntity> updateTariffBillPlanEntities = new ArrayList<>();
         List<TariffBillEntity> updateTariffBillEntities = new ArrayList<>();
 
@@ -232,7 +207,6 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
             if (days <= 0) {
                 return;
             }
-
             // 计算逾期费
             Long billNo = tariffBillPlanEntity.getBillNo();
             TariffBillEntity tariffBillEntity = tariffBillMapper.selectById(billNo);
@@ -251,6 +225,11 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
             updateTariffBillPlanEntities.add(tariffBillPlanEntity);
         });
 
+        if (CollectionUtils.isEmpty(updateTariffBillEntities)
+                || CollectionUtils.isEmpty(updateTariffBillPlanEntities)) {
+            return GenericResponse.SUCCESS;
+        }
+
         tariffBillMapper.batchUpdate(updateTariffBillEntities);
         tariffBillPlanMapper.batchUpdate(updateTariffBillPlanEntities);
 
@@ -258,7 +237,7 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
     }
 
     @Override
-    public GenericResponse updateOverDueBillPlan() {
+    public GenericResponse updateBillPlanAmount() {
         List<TariffBillPlanEntity> updateTariffBillPlanEntities = new ArrayList<>();
 
         TariffBillPlanEntity search = new TariffBillPlanEntity();
@@ -284,8 +263,34 @@ public class PropertyJobBusinessImpl implements PropertyJobBusiness {
             updateTariffBillPlanEntities.add(tariffBillPlanEntity);
         });
 
+        if (CollectionUtils.isEmpty(updateTariffBillPlanEntities)) {
+            return GenericResponse.SUCCESS;
+        }
         tariffBillPlanMapper.batchUpdate(updateTariffBillPlanEntities);
 
         return GenericResponse.SUCCESS;
+    }
+
+    /**
+     * 根据请求表单生成账单
+     *
+     * @param tariffBillRequests TariffBillRequest
+     * @return List<TariffBillEntity>
+     */
+    private List<TariffBillEntity> generateBillList(List<TariffBillRequest> tariffBillRequests) {
+        List<TariffBillEntity> tariffBillEntities = new ArrayList<>();
+
+        for (TariffBillRequest tariffBillRequest : tariffBillRequests) {
+            try {
+                TariffBillEntity tariffBillEntity = tariffBillBusiness.generateBill(tariffBillRequest);
+                if (tariffBillEntity != null) {
+                    tariffBillEntities.add(tariffBillEntity);
+                }
+            } catch (RuntimeException e) {
+                LOGGER.error("当前资费标准不存在", e);
+            }
+        }
+
+        return tariffBillEntities;
     }
 }

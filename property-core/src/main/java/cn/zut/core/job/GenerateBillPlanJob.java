@@ -2,6 +2,7 @@ package cn.zut.core.job;
 
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.business.PropertyJobBusiness;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -39,6 +40,7 @@ public class GenerateBillPlanJob {
         GenericResponse genericResponse = propertyJobBusiness.generateMonthBill();
         LOGGER.info("-------------- End of generation plan execution! Time-consuming[ " +
                 (System.currentTimeMillis() - startTime) + " milliseconds]--------");
+        LOGGER.info("---------------Run Result: " + JSON.toJSONString(genericResponse));
     }
 
     /**
@@ -51,6 +53,7 @@ public class GenerateBillPlanJob {
         GenericResponse genericResponse = propertyJobBusiness.generateBillPlan();
         LOGGER.info("-------------- End of generation plan execution! Time-consuming[ " +
                 (System.currentTimeMillis() - startTime) + " milliseconds]--------");
+        LOGGER.info("---------------Run Result: " + JSON.toJSONString(genericResponse));
     }
 
     /**
@@ -60,9 +63,10 @@ public class GenerateBillPlanJob {
     public void updateBillPlan2OverDue() {
         long startTime = System.currentTimeMillis();
         LOGGER.info("-------------- Update Repaying to Overdue Bill to start execution! --------");
-        GenericResponse genericResponse = propertyJobBusiness.updateBillPlan2OverDue();
+        GenericResponse genericResponse = propertyJobBusiness.updateBillPlanStatus();
         LOGGER.info("-------------- End of Update Repaying to Overdue Bill execution! Time-consuming[ " +
                 (System.currentTimeMillis() - startTime) + " milliseconds]--------");
+        LOGGER.info("---------------Run Result: " + JSON.toJSONString(genericResponse));
     }
 
     /**
@@ -72,9 +76,9 @@ public class GenerateBillPlanJob {
     public void updateOverDueBillPlan() {
         long startTime = System.currentTimeMillis();
         LOGGER.info("-------------- Update Overdue Bill to start execution! --------");
-        GenericResponse genericResponse = propertyJobBusiness.updateOverDueBillPlan();
+        GenericResponse genericResponse = propertyJobBusiness.updateBillPlanAmount();
         LOGGER.info("-------------- End of Update Overdue Bill execution! Time-consuming[ " +
                 (System.currentTimeMillis() - startTime) + " milliseconds]--------");
-        LOGGER.info("");
+        LOGGER.info("---------------Run Result: " + JSON.toJSONString(genericResponse));
     }
 }

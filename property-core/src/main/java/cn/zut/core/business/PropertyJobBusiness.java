@@ -4,7 +4,7 @@ import cn.zut.common.generic.GenericResponse;
 
 /**
  * PROJECT: property
- * DESCRIPTION: 类说明
+ * DESCRIPTION: 账单相关业务JOB
  *
  * @author DaoYuanWang
  * @date 2018/5/18
@@ -30,13 +30,13 @@ public interface PropertyJobBusiness {
      *
      * @return GenericResponse
      */
-    GenericResponse updateBillPlan2OverDue();
+    GenericResponse updateBillPlanStatus();
 
     /**
      * 每天更新逾期费
      *
      * @return GenericResponse
      */
-    GenericResponse updateOverDueBillPlan();
+    GenericResponse updateBillPlanAmount();
 
 }

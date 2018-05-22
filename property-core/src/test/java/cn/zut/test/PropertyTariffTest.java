@@ -164,8 +164,8 @@ public class PropertyTariffTest {
     public void generateTariffBill() {
 //        propertyJobBusiness.generateMonthBill();
 //        propertyJobBusiness.generateBillPlan();
-//        propertyJobBusiness.updateOverDueBillPlan();
-        propertyJobBusiness.updateBillPlan2OverDue();
+//        propertyJobBusiness.updateBillPlanAmount();
+        propertyJobBusiness.updateBillPlanStatus();
     }
 
     @Resource
