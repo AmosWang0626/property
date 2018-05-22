@@ -3,6 +3,8 @@
 
 -- -------------------------- 资费管理模块 SQL ------------------------------------------------
 
+-- SQL 更新于2018年5月22日
+
 CREATE TABLE `tariff_bill` (
   `BILL_NO` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '账单编号',
   `HOUSE_NO` varchar(32) NOT NULL COMMENT '户号',
