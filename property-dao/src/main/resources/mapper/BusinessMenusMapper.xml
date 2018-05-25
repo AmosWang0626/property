@@ -19,6 +19,7 @@
                 <if test="search.menuName != null">AND MENU_NAME = #{search.menuName}</if>
                 <if test="search.menuUrl != null">AND MENU_URL = #{search.menuUrl}</if>
                 <if test="search.fatherId != null">AND FATHER_ID = #{search.fatherId}</if>
+                <if test="search.haveFatherId">AND FATHER_ID != 0 ORDER BY FATHER_ID</if>
                 <if test="search.menuIds != null">
                     AND MENU_ID IN (<foreach collection="search.menuIds" item="item" separator=",">#{item}</foreach>)
                 </if>

@@ -1,9 +1,16 @@
 package cn.zut.test;
 
+import cn.zut.common.generic.GenericResponse;
+import cn.zut.core.service.BusinessMenusService;
+import cn.zut.core.service.BusinessRolesUserService;
 import cn.zut.dao.entity.BusinessHouseRentEntity;
+import cn.zut.dao.entity.BusinessMenusEntity;
 import cn.zut.dao.persistence.BusinessHouseRentMapper;
+import cn.zut.dao.persistence.BusinessRolesMapper;
 import cn.zut.facade.enums.HouseRentStatusEnum;
 import cn.zut.facade.enums.HouseTypeEnum;
+import cn.zut.facade.response.MenuFirstLevelVO;
+import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,6 +34,12 @@ public class PropertyBusinessTest {
 
     @Resource
     private BusinessHouseRentMapper businessHouseRentMapper;
+    @Resource
+    private BusinessRolesMapper businessRolesMapper;
+    @Resource
+    private BusinessMenusService businessMenusService;
+    @Resource
+    private BusinessRolesUserService businessRolesUserService;
 
     @Test
     public void addHouseRent() {
@@ -62,6 +75,24 @@ public class PropertyBusinessTest {
         businessHouseRentEntity.setRentStatus(HouseRentStatusEnum.UN_RENT);
         businessHouseRentEntity = businessHouseRentMapper.selectByExample(businessHouseRentEntity);
         System.out.println(businessHouseRentEntity);
+    }
+
+
+    @Test
+    public void testMenus() {
+        GenericResponse<List<MenuFirstLevelVO>> menus = businessRolesUserService.getMenus(10000L);
+        System.out.println(JSON.toJSON(menus));
+    }
+
+    @Test
+    public void getAllMenus() {
+        List<BusinessMenusEntity> allMenus = businessMenusService.haveFatherIdMenus();
+        System.out.println(JSON.toJSON(allMenus));
+    }
+
+    @Test
+    public void getAllRole() {
+        System.out.println(JSON.toJSON(businessRolesMapper.selectListByExample(null)));
     }
 
     /**

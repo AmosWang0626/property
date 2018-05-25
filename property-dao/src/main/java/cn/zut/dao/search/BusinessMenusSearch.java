@@ -30,4 +30,8 @@ public class BusinessMenusSearch {
      * 父级菜单id
      */
     private Integer fatherId;
+    /**
+     * 父菜单 id 不为 0
+     */
+    private Boolean haveFatherId;
 }

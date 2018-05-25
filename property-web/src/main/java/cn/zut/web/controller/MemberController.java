@@ -7,7 +7,6 @@ import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.business.MemberBusiness;
 import cn.zut.core.constant.PropertyConstant;
-import cn.zut.core.service.MemberService;
 import cn.zut.dao.persistence.MemberMapper;
 import cn.zut.dao.search.MemberSearch;
 import cn.zut.facade.request.*;
@@ -34,8 +33,6 @@ public class MemberController {
     private MemberBusiness memberBusiness;
     @Resource
     private MemberMapper memberMapper;
-    @Resource
-    private MemberService memberService;
 
     /**
      * 用户注册
@@ -52,16 +49,6 @@ public class MemberController {
         }
 
         return memberBusiness.register(registerRequest);
-    }
-
-    /**
-     * 用户登录
-     *
-     * @return 登录状态
-     */
-    @RequestMapping(value = "menu", method = RequestMethod.GET)
-    public GenericResponse menu(HttpServletRequest request) {
-        return memberService.getMenus(getMemberId(request));
     }
 
     /**

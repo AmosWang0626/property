@@ -32,6 +32,13 @@
         WHERE ROLES_NAME = #{search.rolesName}
     </select>
 
+    <select id="selectListByExample" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="tableName"/>
+    </select>
+
     <delete id="deleteById">
         DELETE
         FROM

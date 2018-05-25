@@ -28,7 +28,7 @@ public class BusinessMenusServiceImpl implements BusinessMenusService {
     private BusinessMenuRolesMapper businessMenuRolesMapper;
 
     @Override
-    public List<BusinessMenusEntity> getAllMenus(Integer rolesId) {
+    public List<BusinessMenusEntity> menus(Integer rolesId) {
         BusinessRolesEntity businessRolesEntity = businessRolesMapper.selectById(rolesId);
         if (businessRolesEntity == null) {
             return null;
@@ -39,6 +39,18 @@ public class BusinessMenusServiceImpl implements BusinessMenusService {
         BusinessMenusSearch businessMenusSearch = new BusinessMenusSearch();
         businessMenusSearch.setMenuIds(menusIdList);
         return businessMenusMapper.selectListByExample(businessMenusSearch);
+    }
+
+    @Override
+    public List<BusinessMenusEntity> haveFatherIdMenus() {
+        BusinessMenusSearch businessMenusSearch = new BusinessMenusSearch();
+        businessMenusSearch.setHaveFatherId(true);
+        return businessMenusMapper.selectListByExample(businessMenusSearch);
+    }
+
+    @Override
+    public List<BusinessRolesEntity> allRole() {
+        return businessRolesMapper.selectListByExample(null);
     }
 
     /**

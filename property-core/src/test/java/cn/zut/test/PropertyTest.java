@@ -1,15 +1,11 @@
 package cn.zut.test;
 
 import cn.zut.common.enums.BankEnum;
-import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.redis.RedisComponent;
 import cn.zut.common.util.GenericIdUtil;
 import cn.zut.core.business.HttpBusiness;
-import cn.zut.core.service.MemberService;
 import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.persistence.MemberMapper;
-import cn.zut.facade.response.MenuFirstLevelVO;
-import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +15,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * PROJECT: property
@@ -40,15 +35,6 @@ public class PropertyTest {
     private HttpBusiness httpBusiness;
     @Resource
     private RedisComponent redisComponent;
-
-    @Resource
-    private MemberService memberService;
-
-    @Test
-    public void testMenus() {
-        GenericResponse<List<MenuFirstLevelVO>> menus = memberService.getMenus(10000L);
-        LOGGER.info(JSON.toJSONString(menus.getBody()));
-    }
 
     @Test
     public void checkConfig() {

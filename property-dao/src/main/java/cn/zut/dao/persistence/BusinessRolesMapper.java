@@ -9,6 +9,7 @@ public interface BusinessRolesMapper extends
         Update<BusinessRolesEntity>,
         DeleteById<Integer>,
         SelectById<BusinessRolesEntity, Integer>,
-        SelectByExample<BusinessRolesEntity, BusinessRolesEntity> {
+        SelectByExample<BusinessRolesEntity, BusinessRolesEntity>,
+        SelectListByExample<BusinessRolesEntity, BusinessRolesEntity> {
 
 }
