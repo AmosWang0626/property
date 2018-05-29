@@ -1,9 +1,14 @@
 package cn.zut.web.controller;
 
+import cn.zut.common.dao.PageModel;
 import cn.zut.common.generic.GenericResponse;
+import cn.zut.core.business.CarBusiness;
+import cn.zut.core.business.HouseBusiness;
 import cn.zut.core.service.BusinessHouseService;
+import cn.zut.dao.entity.BusinessCarSetEntity;
 import cn.zut.dao.entity.BusinessHouseRentEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +24,8 @@ public class BusinessHouseController {
 
     @Resource
     private BusinessHouseService businessHouseService;
+    @Resource
+    private HouseBusiness houseBusiness;
 
     @RequestMapping("add")
     public GenericResponse houseAdd(BusinessHouseRentEntity businessHouseRentEntity) {
@@ -57,4 +64,17 @@ public class BusinessHouseController {
         }
         return businessHouseService.deleteById(id);
     }
+    @GetMapping("pagehouse")
+    public GenericResponse pageApply(@RequestParam(value = "page", required = false) Integer page,
+                                     @RequestParam(value = "size", required = false) Integer size) {
+        if (page == null || size == null) {
+            return GenericResponse.SUCCESS;
+        }
+        PageModel<BusinessHouseRentEntity> pageModel = new PageModel<>();
+        pageModel.setPage(page);
+        pageModel.setRows(size);
+        return new GenericResponse<>(houseBusiness.pageMemberByModel(pageModel));
+    }
+
+
 }

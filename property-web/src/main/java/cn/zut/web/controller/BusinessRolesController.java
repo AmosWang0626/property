@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ public class BusinessRolesController {
      * @return 登录状态
      */
     @RequestMapping(value = "menu", method = RequestMethod.GET)
+    @ResponseBody
     public GenericResponse menu(HttpServletRequest request) {
         return businessRolesUserService.getMenus(getMemberId(request));
     }
