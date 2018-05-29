@@ -2,11 +2,8 @@ package cn.zut.core.business.impl;
 
 import cn.zut.common.dao.PageModel;
 import cn.zut.common.generic.SimplePageResult;
-import cn.zut.core.business.CarBusiness;
 import cn.zut.core.business.HouseBusiness;
-import cn.zut.dao.entity.BusinessCarSetEntity;
 import cn.zut.dao.entity.BusinessHouseRentEntity;
-import cn.zut.dao.persistence.BusinessCarSetMapper;
 import cn.zut.dao.persistence.BusinessHouseRentMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +20,7 @@ public class HouseBusinessImpl implements HouseBusiness {
     @Resource
     private BusinessHouseRentMapper businessHouseRentMapper;
 
-
     @Transactional(rollbackFor = Exception.class)
-
     @Override
     public SimplePageResult<BusinessHouseRentEntity> pageMemberByModel(PageModel<BusinessHouseRentEntity> pageModel) {
         List<BusinessHouseRentEntity> applyEntities = businessHouseRentMapper.selectListPageByExample(pageModel);

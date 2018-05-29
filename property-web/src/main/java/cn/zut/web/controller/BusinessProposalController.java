@@ -1,10 +1,11 @@
 package cn.zut.web.controller;
 
+import cn.zut.common.dao.PageModel;
+import cn.zut.common.generic.GenericResponse;
+import cn.zut.core.business.ProposalBusiness;
 import cn.zut.core.service.BusinessProposalService;
 import cn.zut.dao.entity.BusinessProposalEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -15,12 +16,14 @@ import java.util.Map;
 /**
  * @author LiuBowen
  */
-@Controller
+@RestController
 @RequestMapping("proposal")
 public class BusinessProposalController {
 
     @Resource
     private BusinessProposalService businessProposalService;
+    @Resource
+    private ProposalBusiness proposalBusiness;
 
     /**
      * 保存建议
@@ -53,5 +56,19 @@ public class BusinessProposalController {
     @ResponseBody
     public BusinessProposalEntity search(int id) {
         return businessProposalService.search(id);
+    }
+
+
+    //得到意见建议
+    @GetMapping("pageproposal")
+    public GenericResponse pageApply(@RequestParam(value = "page", required = false) Integer page,
+                                     @RequestParam(value = "size", required = false) Integer size) {
+        if (page == null || size == null) {
+            return GenericResponse.SUCCESS;
+        }
+        PageModel<BusinessProposalEntity> pageModel = new PageModel<>();
+        pageModel.setPage(page);
+        pageModel.setRows(size);
+        return new GenericResponse<>(proposalBusiness.pageMemberByModel(pageModel));
     }
 }

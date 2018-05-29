@@ -1,9 +1,10 @@
 package cn.zut.core.business;
 
 import cn.zut.common.dao.PageModel;
+import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.generic.SimplePageResult;
-import cn.zut.dao.entity.BusinessCarSetEntity;
 import cn.zut.dao.entity.BusinessHouseRentEntity;
+import cn.zut.facade.request.UserInfoRequest;
 
 /**
  *
@@ -20,5 +21,10 @@ public interface HouseBusiness {
      * @return 通用
      */
     SimplePageResult<BusinessHouseRentEntity> pageMemberByModel(PageModel<BusinessHouseRentEntity> pageModel);
+
+
+  //  GenericResponse modifyUserInfo(UserInfoRequest userInfoRequest);
+
+
 
 }
