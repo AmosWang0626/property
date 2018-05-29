@@ -9,7 +9,7 @@
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
           init-method="init" destroy-method="close">
         <property name="url"
-                  value="jdbc:mysql://112.74.57.49:3306/zut_property?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=true"/>
+                  value="jdbc:mysql://112.74.57.49:3306/zut_property?useUnicode=true&amp;allowMultiQueries=true&amp;characterEncoding=utf-8&amp;useSSL=true"/>
         <property name="username" value="root"/>
         <property name="password" value="SoftZzti2018"/>
         <!-- 配置初始化大小、最小、最大 -->

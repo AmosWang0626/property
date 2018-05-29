@@ -9,6 +9,7 @@ import cn.zut.dao.persistence.BusinessMenusMapper;
 import cn.zut.dao.persistence.BusinessRolesMapper;
 import cn.zut.dao.search.BusinessMenusSearch;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -35,6 +36,10 @@ public class BusinessMenusServiceImpl implements BusinessMenusService {
         }
 
         List<Integer> menusIdList = getMenusIdList(rolesId);
+
+        if (CollectionUtils.isEmpty(menusIdList)) {
+            return null;
+        }
 
         BusinessMenusSearch businessMenusSearch = new BusinessMenusSearch();
         businessMenusSearch.setMenuIds(menusIdList);

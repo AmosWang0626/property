@@ -35,4 +35,10 @@ public interface PropertyConstant {
      * Header -- 用户设备编号
      */
     String DEVICE_ID = "deviceId";
+
+    /**
+     * 左右
+     */
+    String LEFT = "left";
+    String RIGHT = "right";
 }

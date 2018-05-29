@@ -2,6 +2,7 @@ package cn.zut.core.service;
 
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.dao.entity.BusinessRolesEntity;
+import cn.zut.facade.request.ManageRoleChangeRequest;
 import cn.zut.facade.response.MenuFirstLevelVO;
 
 import java.util.List;
@@ -18,6 +19,14 @@ public interface BusinessRolesUserService {
      * @return BusinessRolesEntity
      */
     BusinessRolesEntity getRoles(Long memberId);
+
+    /**
+     * 修改角色权限对应菜单
+     *
+     * @param manageRoleChangeRequest 改变的菜单表单
+     * @return 设置成功与否
+     */
+    boolean updateRoleMenes(ManageRoleChangeRequest manageRoleChangeRequest);
 
     /**
      * 修改用户对应角色

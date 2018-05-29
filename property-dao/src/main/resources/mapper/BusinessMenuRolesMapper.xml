@@ -33,4 +33,66 @@
         #{menuId}
         )
     </insert>
+
+    <insert id="batchInsert">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        roles_id,
+        menu_id
+        )
+        VALUES
+        <foreach collection="list" item="item" separator="," index="index">
+            (
+            #{item.rolesId},
+            #{item.menuId}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="batchDelete">
+        <foreach collection="list" item="item" separator=";">
+            DELETE FROM
+            <include refid="tableName"/>
+            WHERE roles_id = #{item.rolesId} AND menu_id = #{item.menuId}
+        </foreach>
+    </delete>
+
+    <select id="needFirstMenus" resultType="java.lang.Integer">
+        SELECT
+        FATHER_ID
+        FROM
+        business_menus
+        WHERE
+        MENU_ID IN (
+            SELECT
+            MENU_ID
+            FROM
+            business_menu_roles
+            WHERE
+            ROLES_ID = #{id}
+        )
+        GROUP BY
+        FATHER_ID
+    </select>
+
+    <select id="selectFirstMenus" resultType="java.lang.Integer">
+        SELECT
+        MENU_ID
+        FROM
+        business_menus
+        WHERE
+        FATHER_ID = 0
+    </select>
+
+    <delete id="deleteFirstMenus">
+        DELETE
+        FROM
+        business_menu_roles
+        WHERE
+        ROLES_ID = #{id}
+        AND MENU_ID IN (
+        <foreach collection="menuIds" item="item" separator=",">#{item}</foreach>
+        )
+    </delete>
 </mapper>

@@ -1,13 +1,17 @@
 package cn.zut.core.service.impl;
 
 import cn.zut.common.generic.GenericResponse;
+import cn.zut.core.constant.PropertyConstant;
 import cn.zut.core.service.BusinessMenusService;
 import cn.zut.core.service.BusinessRolesUserService;
+import cn.zut.dao.entity.BusinessMenuRolesEntity;
 import cn.zut.dao.entity.BusinessMenusEntity;
 import cn.zut.dao.entity.BusinessRolesEntity;
 import cn.zut.dao.entity.MemberEntity;
+import cn.zut.dao.persistence.BusinessMenuRolesMapper;
 import cn.zut.dao.persistence.BusinessRolesMapper;
 import cn.zut.dao.persistence.MemberMapper;
+import cn.zut.facade.request.ManageRoleChangeRequest;
 import cn.zut.facade.response.MenuFirstLevelVO;
 import cn.zut.facade.response.MenuSecondLevelVO;
 import org.springframework.beans.BeanUtils;
@@ -31,12 +35,34 @@ public class BusinessRolesUserServiceImpl implements BusinessRolesUserService {
     @Resource
     private BusinessRolesMapper businessRolesMapper;
     @Resource
+    private BusinessMenuRolesMapper businessMenuRolesMapper;
+    @Resource
     private BusinessMenusService businessMenusService;
 
     @Override
     public BusinessRolesEntity getRoles(Long memberId) {
         MemberEntity memberEntity = memberMapper.selectById(memberId);
         return businessRolesMapper.selectById(memberEntity.getRolesId());
+    }
+
+    @Override
+    public boolean updateRoleMenes(ManageRoleChangeRequest manageRoleChangeRequest) {
+        int changeColumn = 0;
+        String direction = manageRoleChangeRequest.getDirection();
+        Integer rolesId = manageRoleChangeRequest.getRolesId();
+        List<Integer> menuIds = manageRoleChangeRequest.getMenuIds();
+
+        List<BusinessMenuRolesEntity> list = new ArrayList<>();
+        menuIds.forEach(menuId -> list.add(new BusinessMenuRolesEntity(rolesId, menuId)));
+
+        // left 为取消授权, right 为增加授权
+        if (PropertyConstant.LEFT.equals(direction)) {
+            changeColumn = businessMenuRolesMapper.batchDelete(list);
+        } else if (PropertyConstant.RIGHT.equals(direction)) {
+            changeColumn = businessMenuRolesMapper.batchInsert(list);
+        }
+
+        return changeColumn > 0;
     }
 
     @Override

@@ -6,6 +6,11 @@ public class BusinessMenuRolesEntity {
 
     private Integer menuId;
 
+    public BusinessMenuRolesEntity(Integer rolesId, Integer menuId) {
+        this.rolesId = rolesId;
+        this.menuId = menuId;
+    }
+
     public Integer getRolesId() {
         return rolesId;
     }
