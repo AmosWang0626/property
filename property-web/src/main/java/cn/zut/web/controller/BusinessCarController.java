@@ -1,12 +1,11 @@
 package cn.zut.web.controller;
 
+import cn.zut.common.dao.PageModel;
 import cn.zut.common.generic.GenericResponse;
+import cn.zut.core.business.CarBusiness;
 import cn.zut.core.service.BusinessCarSetService;
 import cn.zut.dao.entity.BusinessCarSetEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -17,12 +16,15 @@ import java.util.Map;
 /**
  * @author LiuBowen
  */
-@Controller
+@RestController
 @RequestMapping("car")
 public class BusinessCarController {
 
     @Resource
     private BusinessCarSetService businessCarSetService;
+
+    @Resource
+    private CarBusiness carBusiness;
 
     /**
      * 主要三个参数
@@ -70,5 +72,18 @@ public class BusinessCarController {
             return "getrent";
         }
         return "parameterError";
+    }
+
+    @GetMapping("pagecar")
+    public GenericResponse pageApply(@RequestParam(value = "page", required = false) Integer page,
+                                     @RequestParam(value = "size", required = false) Integer size) {
+        if (page == null || size == null) {
+            return GenericResponse.SUCCESS;
+        }
+        PageModel<BusinessCarSetEntity> pageModel = new PageModel<>();
+        pageModel.setPage(page);
+        pageModel.setRows(size);
+        return new GenericResponse<>(carBusiness.pageMemberByModel(pageModel));
+
     }
 }

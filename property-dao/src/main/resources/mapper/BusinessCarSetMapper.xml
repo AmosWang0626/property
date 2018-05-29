@@ -59,7 +59,7 @@
         <include refid="condition"/>
     </select>
 
-    <select id="selectCountByExample">
+    <select id="selectCountByExample" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM
         <include refid="tableName"/>
         <include refid="condition"/>
