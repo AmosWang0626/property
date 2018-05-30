@@ -14,5 +14,5 @@ public class BusinessSurveyDataEntity {
 
     private String question;
 
-    private Boolean answerType;
+    private String answerType;
 }

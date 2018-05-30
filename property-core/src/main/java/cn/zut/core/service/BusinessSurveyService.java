@@ -1,31 +1,68 @@
 package cn.zut.core.service;
 
+import cn.zut.common.generic.GenericResponse;
 import cn.zut.dao.entity.BusinessSurveyAnswersEntity;
 import cn.zut.dao.entity.BusinessSurveyDataEntity;
 import cn.zut.dao.entity.BusinessSurveyEntity;
+import cn.zut.facade.response.SurveyAllVO;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author LiuBowen
  */
 public interface BusinessSurveyService {
-    List<BusinessSurveyEntity> findAll();
 
-    BusinessSurveyEntity addSurvey();
+    /**
+     * 查询所有问卷
+     *
+     * @return 问卷List
+     */
+    List<BusinessSurveyEntity> findAllSurvey();
 
-    BusinessSurveyDataEntity addSurveyData(Integer surveyId);
+    /**
+     * 添加问卷
+     *
+     * @param businessSurveyEntity 问卷实体
+     * @return 添加状态
+     */
+    GenericResponse addSurvey(BusinessSurveyEntity businessSurveyEntity);
 
-    BusinessSurveyAnswersEntity addSurveyAnswers(BusinessSurveyDataEntity businessSurveyDataEntity);
+    /**
+     * 添加问题
+     *
+     * @param businessSurveyDataEntity 问题实体
+     * @return 添加状态
+     */
+    GenericResponse addSurveyDate(BusinessSurveyDataEntity businessSurveyDataEntity);
 
-    BusinessSurveyAnswersEntity adnSurveyAnswer(BusinessSurveyAnswersEntity businessSurveyAnswersEntity);
+    /**
+     * 添加回答
+     *
+     * @param businessSurveyAnswersEntity 回答实体
+     * @return 添加状态
+     */
+    GenericResponse addSurveyAnswers(BusinessSurveyAnswersEntity businessSurveyAnswersEntity);
 
-    BusinessSurveyDataEntity addSurveyDate(BusinessSurveyDataEntity businessSurveyDataEntity);
+    /**
+     * 删除问卷
+     *
+     * @param surveyId 问卷编号
+     * @return 删除状态
+     */
+    boolean delSurvey(Integer surveyId);
 
-    BusinessSurveyEntity addSurveyName(BusinessSurveyEntity businessSurveyEntity);
+    /**
+     * 查看所有问卷 + 问题
+     *
+     * @return 问卷以及问题以及回答
+     */
+    GenericResponse<List<SurveyAllVO>> allSurveyBaseData();
 
-    boolean delSurvey(Integer surveyid);
-
-    Map<String, Object> selectService();
+    /**
+     * 查看所有问卷 + 问题( + 回答)
+     *
+     * @return 问卷以及问题以及回答
+     */
+    GenericResponse<List<SurveyAllVO>> allSurveyData();
 }

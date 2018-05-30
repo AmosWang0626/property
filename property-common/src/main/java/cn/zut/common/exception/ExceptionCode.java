@@ -68,7 +68,7 @@ public enum ExceptionCode implements Message {
 
     DEMO("0", "666"),
     FILE_UPLOAD_ERROR("O2000", "上传图片失败,请重试"),
-    ;
+    SURVEY_ONLY_INPUT_ONCE("O2001", "您已经回答过了,请完成其他题目"),;
 
     private final String respCode;
     private final String respMsg;
