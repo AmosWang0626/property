@@ -63,15 +63,9 @@ public class BusinessCarController {
     }
 
     @RequestMapping("rentCar")
-    public String rentCar(BusinessCarSetEntity businessCarSetEntity, HttpServletRequest request) {
+    public GenericResponse rentCar(@RequestBody BusinessCarSetEntity businessCarSetEntity) {
         boolean flag = businessCarSetService.rentCar(businessCarSetEntity);
-        if (flag) {
-            BusinessCarSetEntity newCarSet = businessCarSetService.searchCarSet(businessCarSetEntity.getId());
-            request.setAttribute("carMsg", "操作成功！");
-            request.setAttribute("businessCarSetEntity", newCarSet);
-            return "getrent";
-        }
-        return "parameterError";
+        return flag ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 
     @GetMapping("pagecar")
