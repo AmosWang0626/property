@@ -6,6 +6,7 @@ import cn.zut.core.service.BusinessRolesUserService;
 import cn.zut.dao.entity.BusinessHouseRentEntity;
 import cn.zut.dao.entity.BusinessMenusEntity;
 import cn.zut.dao.persistence.BusinessHouseRentMapper;
+import cn.zut.dao.persistence.BusinessMenuRolesMapper;
 import cn.zut.dao.persistence.BusinessRolesMapper;
 import cn.zut.facade.enums.HouseRentStatusEnum;
 import cn.zut.facade.enums.HouseTypeEnum;
@@ -40,6 +41,22 @@ public class PropertyBusinessTest {
     private BusinessMenusService businessMenusService;
     @Resource
     private BusinessRolesUserService businessRolesUserService;
+    @Resource
+    private BusinessMenuRolesMapper businessMenuRolesMapper;
+
+    @Test
+    public void hello() {
+        List<Integer> integers = businessMenuRolesMapper.needFirstMenus(5);
+        System.out.printf("JSON.toJSONString(integers): " + JSON.toJSONString(integers));
+    }
+
+    @Test
+    public void hello12() {
+        List<Integer> integers = businessMenuRolesMapper.selectFirstMenus();
+//        System.out.println(integers);
+        Integer a = businessMenuRolesMapper.deleteFirstMenus(3, integers);
+        System.out.println("----------" + a);
+    }
 
     @Test
     public void addHouseRent() {

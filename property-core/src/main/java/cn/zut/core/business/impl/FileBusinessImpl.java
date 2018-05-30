@@ -1,5 +1,7 @@
 package cn.zut.core.business.impl;
 
+import cn.zut.common.exception.ExceptionCode;
+import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.business.FileBusiness;
 import cn.zut.core.config.PropertyConfig;
@@ -28,7 +30,7 @@ public class FileBusinessImpl implements FileBusiness {
     private PropertyConfig propertyConfig;
 
     @Override
-    public GenericResponse upload(MultipartFile partFile) {
+    public GenericResponse<String> upload(MultipartFile partFile) {
         // 初始化图片名字以及设置自定义文件夹
         String basePathAndFileName = initBasePathAndFileName(partFile);
         // 图片访问路径
@@ -42,6 +44,7 @@ public class FileBusinessImpl implements FileBusiness {
             Runtime.getRuntime().exec("chmod 644 " + filePath);
         } catch (IOException e) {
             e.printStackTrace();
+            return new GenericResponse<>(new ExceptionMessage(ExceptionCode.FILE_UPLOAD_ERROR));
         }
         return new GenericResponse<>(accessPath);
     }

@@ -1,22 +1,27 @@
 package cn.zut.web.controller;
 
+import cn.zut.common.api.ComboVO;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.constant.PropertyConstant;
 import cn.zut.core.service.BusinessMenusService;
 import cn.zut.core.service.BusinessRolesUserService;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import cn.zut.dao.entity.BusinessMenusEntity;
+import cn.zut.dao.entity.BusinessRolesEntity;
+import cn.zut.facade.request.ManageRoleChangeRequest;
+import cn.zut.facade.response.ManageRoleMenus;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author LiuBowen
  */
-@Controller
+@RestController
 @RequestMapping("roles")
 public class BusinessRolesController {
 
@@ -27,35 +32,87 @@ public class BusinessRolesController {
     private BusinessRolesUserService businessRolesUserService;
 
     /**
-     * 用户登录
-     *
-     * @return 登录状态
+     * 根据用户编号动态获得菜单
      */
     @RequestMapping(value = "menu", method = RequestMethod.GET)
-    @ResponseBody
     public GenericResponse menu(HttpServletRequest request) {
         return businessRolesUserService.getMenus(getMemberId(request));
     }
 
+    /**
+     * 获取所有含有父 menu 的菜单
+     */
     @RequestMapping("hasFatherMenus")
     public GenericResponse hasFatherMenus() {
-        return new GenericResponse<>(businessMenusService.haveFatherIdMenus());
+        List<ManageRoleMenus> manageRoleMenus = new ArrayList<>();
+        List<BusinessMenusEntity> businessMenusEntities = businessMenusService.haveFatherIdMenus();
+        businessMenusEntities.forEach(businessMenusEntity ->
+                manageRoleMenus.add(
+                        new ManageRoleMenus(
+                                businessMenusEntity.getMenuId(),
+                                businessMenusEntity.getFatherId() + businessMenusEntity.getMenuName() + businessMenusEntity.getMenuId()
+                        )
+                )
+        );
+        return new GenericResponse<>(manageRoleMenus);
     }
 
+    /**
+     * 根据角色id获取授权的菜单
+     *
+     * @param rolesId 角色id
+     */
     @RequestMapping("menusByRole")
     public GenericResponse menusByRole(@RequestParam("rolesId") Integer rolesId) {
-        return new GenericResponse<>(businessMenusService.menus(rolesId));
+        List<Integer> manageRoleMenus = new ArrayList<>();
+        List<BusinessMenusEntity> menus = businessMenusService.menus(rolesId);
+        if (menus == null) {
+            return GenericResponse.SUCCESS;
+        }
+        menus.forEach(businessMenusEntity -> manageRoleMenus.add(businessMenusEntity.getMenuId()));
+        return new GenericResponse<>(manageRoleMenus);
     }
 
+    /**
+     * 获取所有角色
+     */
     @RequestMapping("allRole")
-    public GenericResponse menusByRole() {
-        return new GenericResponse<>(businessMenusService.allRole());
+    public GenericResponse allRole() {
+        List<ComboVO> comboVOList = new ArrayList<>();
+        List<BusinessRolesEntity> businessRolesEntities = businessMenusService.allRole();
+        for (BusinessRolesEntity rolesEntity : businessRolesEntities) {
+            comboVOList.add(new ComboVO<>(rolesEntity.getRolesId(), rolesEntity.getRolesDesc()));
+        }
+        return new GenericResponse<>(comboVOList);
     }
 
+    /**
+     * 改变用户角色
+     *
+     * @return 改变结果
+     */
     @RequestMapping("changeRole")
-    public GenericResponse roleChange(Integer roleId, Long memberId) {
+    public GenericResponse changeRole(Integer roleId, Long memberId) {
 
         return businessRolesUserService.updateRoles(roleId, memberId) ?
+                GenericResponse.SUCCESS : GenericResponse.FAIL;
+    }
+
+    /**
+     * 改变角色支持操作的菜单
+     *
+     * @return 改变结果
+     */
+    @RequestMapping(value = "changeRoleMenus", method = RequestMethod.POST)
+    public GenericResponse changeRoleMenus(@RequestBody ManageRoleChangeRequest manageRoleChangeRequest) {
+        // 检验参数
+        if (StringUtils.isEmpty(manageRoleChangeRequest.getDirection())
+                || manageRoleChangeRequest.getRolesId() == null
+                || CollectionUtils.isEmpty(manageRoleChangeRequest.getMenuIds())) {
+            return GenericResponse.ERROR_PARAM;
+        }
+
+        return businessRolesUserService.updateRoleMenes(manageRoleChangeRequest) ?
                 GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 

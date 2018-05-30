@@ -17,5 +17,5 @@ public interface FileBusiness {
      * @param partFile 文件
      * @return 通用
      */
-    GenericResponse upload(MultipartFile partFile);
+    GenericResponse<String> upload(MultipartFile partFile);
 }
