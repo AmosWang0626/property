@@ -1,25 +1,15 @@
 package cn.zut.web.controller;
 
 import cn.zut.common.dao.PageModel;
-import cn.zut.common.exception.ExceptionCode;
-import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
-import cn.zut.core.business.CarBusiness;
 import cn.zut.core.business.HouseBusiness;
 import cn.zut.core.constant.PropertyConstant;
 import cn.zut.core.service.BusinessHouseService;
-import cn.zut.dao.entity.BusinessCarSetEntity;
 import cn.zut.dao.entity.BusinessHouseRentEntity;
-import cn.zut.facade.request.UserInfoRequest;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @author LiuBowen
@@ -34,12 +24,12 @@ public class BusinessHouseController {
     private HouseBusiness houseBusiness;
 
     @RequestMapping("add")
-    public GenericResponse houseAdd(BusinessHouseRentEntity businessHouseRentEntity) {
+    public GenericResponse houseAdd(@RequestBody BusinessHouseRentEntity businessHouseRentEntity) {
         return businessHouseService.addHouse(businessHouseRentEntity);
     }
 
     @RequestMapping("modify")
-    public GenericResponse houseModify(BusinessHouseRentEntity businessHouseRentEntity) {
+    public GenericResponse houseModify(@RequestBody BusinessHouseRentEntity businessHouseRentEntity) {
         if (businessHouseRentEntity.getId() == null) {
             return GenericResponse.ERROR_PARAM;
         }
@@ -57,19 +47,18 @@ public class BusinessHouseController {
     }
 
     @RequestMapping("houseList")
-    @ResponseBody
     public GenericResponse houseRentList() {
         return businessHouseService.houseRentList();
     }
 
     @RequestMapping("delete")
-    @ResponseBody
     public GenericResponse houseDel(@RequestParam("id") Integer id) {
         if (id == null) {
             return GenericResponse.ERROR_PARAM;
         }
         return businessHouseService.deleteById(id);
     }
+
     @GetMapping("pagehouse")
     public GenericResponse pageApply(@RequestParam(value = "page", required = false) Integer page,
                                      @RequestParam(value = "size", required = false) Integer size) {

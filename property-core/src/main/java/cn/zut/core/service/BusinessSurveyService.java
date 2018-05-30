@@ -51,6 +51,7 @@ public interface BusinessSurveyService {
      * @return 删除状态
      */
     boolean delSurvey(Integer surveyId);
+    boolean getSurvey(Integer surveyId);
 
     /**
      * 查看所有问卷 + 问题
@@ -58,6 +59,13 @@ public interface BusinessSurveyService {
      * @return 问卷以及问题以及回答
      */
     GenericResponse<List<SurveyAllVO>> allSurveyBaseData();
+
+    /**
+     * 查看所有问卷 + 问题
+     *
+     * @return 问卷以及问题以及回答
+     */
+    GenericResponse<SurveyAllVO> surveyDataBySurveyId(Integer surveyId);
 
     /**
      * 查看所有问卷 + 问题( + 回答)

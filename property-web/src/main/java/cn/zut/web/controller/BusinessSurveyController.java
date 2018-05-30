@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author LiuBowen
@@ -78,8 +79,8 @@ public class BusinessSurveyController {
      * @return GenericResponse
      */
     @RequestMapping("allSurveyData")
-    public GenericResponse allSurveyData(HttpServletRequest request) {
-        return businessSurveyService.allSurveyData();
+    public List<BusinessSurveyEntity> allSurveyData(HttpServletRequest request) {
+        return businessSurveyService.findAllSurvey();
     }
 
     /**
@@ -95,12 +96,24 @@ public class BusinessSurveyController {
     /**
      * 删除问卷
      *
-     * @param surveyId 问卷编号
+     * @param businessSurveyEntity 问卷编号
      */
     @RequestMapping("del")
-    public boolean searchDel(int surveyId) {
-        return businessSurveyService.delSurvey(surveyId);
+    public GenericResponse searchDel(@RequestBody BusinessSurveyEntity businessSurveyEntity) {
+        return businessSurveyService.delSurvey(businessSurveyEntity.getSurveyId())? GenericResponse.SUCCESS:GenericResponse.FAIL;
     }
+
+/*
+*
+* 获取
+*
+* */
+    @RequestMapping("getQuestion")
+    public GenericResponse searchGet(@RequestBody BusinessSurveyEntity businessSurveyEntity) {
+        return new GenericResponse<>(businessSurveyService.getSurvey(businessSurveyEntity.getSurveyId()));
+    }
+
+
 
     private Long getMemberId(HttpServletRequest request) {
         return Long.valueOf((String) request.getAttribute(PropertyConstant.MEMBER_ID));
