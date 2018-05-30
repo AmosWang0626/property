@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @author LiuBowen
+ * @author YangShangYu
  */
 @Service("manageEnterpriseService")
 public class ManageEnterpriseServiceImpl implements ManageEnterpriseService {
@@ -47,7 +47,7 @@ public class ManageEnterpriseServiceImpl implements ManageEnterpriseService {
      * 获取车辆信息
      */
     @Override
-    public ManageEnterpriseEntity searchEnterprise(String id) {
+    public ManageEnterpriseEntity searchEnterprise(Long id) {
         return manageEnterpriseMapper.selectById(id);
     }
 

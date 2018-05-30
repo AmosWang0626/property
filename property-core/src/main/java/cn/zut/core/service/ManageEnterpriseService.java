@@ -12,7 +12,7 @@ public interface ManageEnterpriseService {
 
     List<ManageEnterpriseEntity> enterpriseList();
 
-    ManageEnterpriseEntity searchEnterprise(String id);
+    ManageEnterpriseEntity searchEnterprise(Long id);
 
     boolean rentEnterprise(ManageEnterpriseEntity businessCarSetEntity);
 }

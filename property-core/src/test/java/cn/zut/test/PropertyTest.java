@@ -1,10 +1,13 @@
 package cn.zut.test;
 
+import cn.zut.common.dao.PageModel;
 import cn.zut.common.enums.BankEnum;
 import cn.zut.common.redis.RedisComponent;
 import cn.zut.common.util.GenericIdUtil;
 import cn.zut.core.business.HttpBusiness;
+import cn.zut.dao.entity.ManageEnterpriseEntity;
 import cn.zut.dao.entity.MemberEntity;
+import cn.zut.dao.persistence.ManageEnterpriseMapper;
 import cn.zut.dao.persistence.MemberMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -15,6 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * PROJECT: property
@@ -35,6 +39,19 @@ public class PropertyTest {
     private HttpBusiness httpBusiness;
     @Resource
     private RedisComponent redisComponent;
+    @Resource
+    private ManageEnterpriseMapper manageEnterpriseMapper;
+
+    @Test
+    public void manageEnterpriseMapper() {
+//        ManageEnterpriseEntity manageEnterpriseEntity = manageEnterpriseMapper.selectByExample(null);
+//        System.out.printf("manage: " + manageEnterpriseEntity);
+        PageModel<ManageEnterpriseEntity> pageModel = new PageModel();
+        pageModel.setPage(1);
+        pageModel.setRows(10);
+        List<ManageEnterpriseEntity> manageEnterpriseEntities = manageEnterpriseMapper.selectListPageByExample(pageModel);
+        System.out.printf("manage: " + manageEnterpriseEntities);
+    }
 
     @Test
     public void checkConfig() {

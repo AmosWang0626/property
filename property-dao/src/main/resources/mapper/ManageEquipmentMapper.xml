@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zut.dao.persistence.ManageEquipmentEntity">
+
+    <resultMap id="BaseResultMap" type="cn.zut.dao.entity.ManageEquipmentEntity">
+        <result column="ID" property="id"/>
+        <result column="TYPES" property="types"/>
+        <result column="AMOUNT" property="amount"/>
+    </resultMap>
+
+    <sql id="tableName">manage_equipment</sql>
+
+    <sql id="columns">
+        ID,
+        TYPES,
+        AMOUNT,
+    </sql>
+
+    <sql id="condition">
+        <if test="search != null">
+            <where>
+                <if test="search.equipmentName != null">AND NAME = #{search.equipmentName}</if>
+            </where>
+        </if>
+    </sql>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE ID = #{id}
+    </select>
+
+    <select id="selectByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT 1
+    </select>
+
+    <select id="selectListPageByExample" resultMap="BaseResultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+        LIMIT #{firstIndex}, #{rows}
+    </select>
+
+    <select id="selectCountByExample" resultType="java.lang.Integer">
+        SELECT COUNT(0)
+        FROM
+        <include refid="tableName"/>
+        <include refid="condition"/>
+    </select>
+
+    <update id="update">
+        UPDATE
+        <include refid="tableName"/>
+        <set>
+            <if test="name != null">
+                NAME = #{name},
+            </if>
+        </set>
+        WHERE ID = #{id}
+    </update>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        <include refid="tableName"/>
+        (
+        <include refid="columns"/>
+        )
+        VALUES
+        (
+        #{id},
+        #{types},
+        #{amount},
+        )
+    </insert>
+
+</mapper>

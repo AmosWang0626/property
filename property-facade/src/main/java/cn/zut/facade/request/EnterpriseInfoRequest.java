@@ -3,10 +3,11 @@ package cn.zut.facade.request;
 import lombok.Data;
 
 /**
- * @author DaoyuanWang
+ * @author YangShangYu
  */
 @Data
 public class EnterpriseInfoRequest {
+    private Long id;
     /**
      * 公司名称
      */
@@ -26,5 +27,5 @@ public class EnterpriseInfoRequest {
     /**
      * 成立时间
      */
-    private String settled;
+    private Data settled;
 }
