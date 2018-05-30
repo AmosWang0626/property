@@ -2,6 +2,7 @@ package cn.zut.dao.entity;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -17,5 +18,5 @@ public class BusinessCarSetEntity {
 
     private String carNo;
 
-    private Double rent;
+    private BigDecimal rent;
 }
