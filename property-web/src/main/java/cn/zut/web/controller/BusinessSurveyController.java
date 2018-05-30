@@ -100,20 +100,16 @@ public class BusinessSurveyController {
      */
     @RequestMapping("del")
     public GenericResponse searchDel(@RequestBody BusinessSurveyEntity businessSurveyEntity) {
-        return businessSurveyService.delSurvey(businessSurveyEntity.getSurveyId())? GenericResponse.SUCCESS:GenericResponse.FAIL;
+        return businessSurveyService.delSurvey(businessSurveyEntity.getSurveyId()) ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 
-/*
-*
-* 获取
-*
-* */
     @RequestMapping("getQuestion")
     public GenericResponse searchGet(@RequestBody BusinessSurveyEntity businessSurveyEntity) {
-        return new GenericResponse<>(businessSurveyService.getSurvey(businessSurveyEntity.getSurveyId()));
+        if (businessSurveyEntity.getSurveyId() == null) {
+            return GenericResponse.ERROR_PARAM;
+        }
+        return businessSurveyService.surveyDataBySurveyId(businessSurveyEntity.getSurveyId());
     }
-
-
 
     private Long getMemberId(HttpServletRequest request) {
         return Long.valueOf((String) request.getAttribute(PropertyConstant.MEMBER_ID));
