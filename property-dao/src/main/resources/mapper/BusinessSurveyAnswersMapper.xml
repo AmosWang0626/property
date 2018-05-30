@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="cn.zut.dao.entity.BusinessSurveyAnswersEntity">
         <id column="ANSWER_ID" property="answerId"/>
         <id column="QUESTION_ID" property="questionId"/>
+        <id column="MEMBER_ID" property="memberId"/>
         <id column="CHOICE_TEXT" property="choiceText"/>
         <id column="POLL" property="poll"/>
     </resultMap>
@@ -17,17 +18,19 @@
     <sql id="columns">
         ANSWER_ID,
         QUESTION_ID,
+        MEMBER_ID,
         CHOICE_TEXT,
         POLL
     </sql>
 
     <!-- 找到关键词: where 简单说就是一些条件,因为很多条件是通用的,所以这里抽出来,写成通用的 -->
+    <!-- 如果search不为空,就在SQL后边缀上 WHERE -->
+    <!--  如果questionId不为空,就在SQL的 WHERE 后边缀上 AND QUESTION_ID = *  -->
     <sql id="condition">
-        /* 如果search不为空,就在SQL后边缀上 ---> WHERE */
         <if test="search != null">
             <where>
-                /* 如果questionId不为空,就在SQL的 WHERE 后边缀上 ---> AND QUESTION_ID = * */
                 <if test="search.questionId != null">AND QUESTION_ID = #{search.questionId}</if>
+                <if test="search.memberId != null">AND MEMBER_ID = #{search.memberId}</if>
             </where>
         </if>
     </sql>
@@ -78,6 +81,7 @@
         (
         #{answerId},
         #{questionId},
+        #{memberId},
         #{choiceText},
         #{poll}
         )
@@ -94,6 +98,9 @@
             </if>
             <if test="choiceText != null">
                 CHOICE_TEXT = #{choiceText},
+            </if>
+            <if test="memberId != null">
+                MEMBER_ID = #{memberId},
             </if>
             <if test="poll != null">
                 POLL = #{poll},

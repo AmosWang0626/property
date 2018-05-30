@@ -1,5 +1,8 @@
 package cn.zut.core.service.impl;
 
+import cn.zut.common.exception.ExceptionCode;
+import cn.zut.common.exception.ExceptionMessage;
+import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.service.BusinessSurveyService;
 import cn.zut.dao.entity.BusinessSurveyAnswersEntity;
 import cn.zut.dao.entity.BusinessSurveyDataEntity;
@@ -33,70 +36,45 @@ public class BusinessSurveyServiceImpl implements BusinessSurveyService {
     private BusinessSurveyAnswersMapper businessSurveyAnswersMapper;
 
     @Override
-    public List<BusinessSurveyEntity> findAll() {
+    public List<BusinessSurveyEntity> findAllSurvey() {
         return businessSurveyMapper.selectListByExample(null);
     }
 
     @Override
-    public BusinessSurveyEntity addSurvey() {
-        BusinessSurveyEntity businessSurveyEntity = new BusinessSurveyEntity();
-        businessSurveyMapper.insert(businessSurveyEntity);
-        return businessSurveyEntity;
+    public GenericResponse addSurvey(BusinessSurveyEntity businessSurveyEntity) {
+        int flag = businessSurveyMapper.insert(businessSurveyEntity);
+        return flag > 0 ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 
     @Override
-    public BusinessSurveyDataEntity addSurveyData(Integer surveyId) {
-        BusinessSurveyDataEntity businessSurveyDataEntity = new BusinessSurveyDataEntity();
-        businessSurveyDataEntity.setSurveyId(surveyId);
-        businessSurveyDataMapper.insert(businessSurveyDataEntity);
-        return businessSurveyDataEntity;
-    }
-
-    @Override
-    public BusinessSurveyAnswersEntity addSurveyAnswers(BusinessSurveyDataEntity businessSurveyDataEntity) {
-        businessSurveyDataEntity = businessSurveyDataMapper.selectByExample(businessSurveyDataEntity);
-        if (businessSurveyDataEntity == null) {
-            return null;
+    public GenericResponse addSurveyDate(BusinessSurveyDataEntity businessSurveyDataEntity) {
+        if (businessSurveyMapper.selectById(businessSurveyDataEntity.getSurveyId()) == null) {
+            return GenericResponse.ERROR_PARAM;
         }
 
-        BusinessSurveyAnswersEntity businessSurveyAnswersEntity = new BusinessSurveyAnswersEntity();
-        businessSurveyAnswersEntity.setQuestionId(businessSurveyDataEntity.getQuestionId());
-        businessSurveyAnswersMapper.insert(businessSurveyAnswersEntity);
-
-        return businessSurveyAnswersEntity;
-    }
-
-    /**
-     * 添加答案选项
-     */
-    @Override
-    public BusinessSurveyAnswersEntity adnSurveyAnswer(BusinessSurveyAnswersEntity businessSurveyAnswersEntity) {
-        businessSurveyAnswersMapper.update(businessSurveyAnswersEntity);
-
-        return businessSurveyAnswersMapper.selectById(businessSurveyAnswersEntity.getAnswerId());
+        int flag = businessSurveyDataMapper.insert(businessSurveyDataEntity);
+        return flag > 0 ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 
     @Override
-    public BusinessSurveyDataEntity addSurveyDate(BusinessSurveyDataEntity businessSurveyDataEntity) {
-        businessSurveyDataMapper.update(businessSurveyDataEntity);
+    public GenericResponse addSurveyAnswers(BusinessSurveyAnswersEntity businessSurveyAnswersEntity) {
+        if (businessSurveyDataMapper.selectById(businessSurveyAnswersEntity.getQuestionId()) == null) {
+            return GenericResponse.ERROR_PARAM;
+        }
+        BusinessSurveyAnswersEntity search = new BusinessSurveyAnswersEntity();
+        search.setMemberId(businessSurveyAnswersEntity.getMemberId());
+        search.setQuestionId(businessSurveyAnswersEntity.getQuestionId());
+        if (businessSurveyAnswersMapper.selectByExample(search) != null) {
+            return new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR));
+        }
 
-        return businessSurveyDataMapper.selectById(businessSurveyDataEntity.getQuestionId());
-    }
-
-    /**
-     * 添加调查
-     */
-    @Override
-    public BusinessSurveyEntity addSurveyName(BusinessSurveyEntity businessSurveyEntity) {
-        businessSurveyMapper.update(businessSurveyEntity);
-
-        return businessSurveyMapper.selectById(businessSurveyEntity.getSurveyId());
+        int flag = businessSurveyAnswersMapper.insert(businessSurveyAnswersEntity);
+        return flag > 0 ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean delSurvey(Integer surveyId) {
-
         BusinessSurveyDataEntity businessSurveyDataEntity = new BusinessSurveyDataEntity();
         businessSurveyDataEntity.setSurveyId(surveyId);
         List<BusinessSurveyDataEntity> list = businessSurveyDataMapper.selectListByExample(businessSurveyDataEntity);
@@ -110,7 +88,37 @@ public class BusinessSurveyServiceImpl implements BusinessSurveyService {
     }
 
     @Override
-    public Map<String, Object> selectService() {
+    public GenericResponse<List<SurveyAllVO>> allSurveyBaseData() {
+        List<SurveyAllVO> surveyAllVOS = new ArrayList<>();
+
+        List<BusinessSurveyEntity> businessSurveyEntities = businessSurveyMapper.selectListByExample(null);
+        businessSurveyEntities.forEach(businessSurveyEntity -> {
+            SurveyAllVO surveyAllVO = new SurveyAllVO();
+            surveyAllVO.setTitle(businessSurveyEntity.getTitle());
+            surveyAllVO.setDescription(businessSurveyEntity.getDescription());
+
+            List<SurveyDataVO> surveyDataVOS = new ArrayList<>();
+
+            BusinessSurveyDataEntity surveyDataSearch = new BusinessSurveyDataEntity();
+            surveyDataSearch.setSurveyId(businessSurveyEntity.getSurveyId());
+            List<BusinessSurveyDataEntity> businessSurveyDataEntities = businessSurveyDataMapper.selectListByExample(surveyDataSearch);
+            businessSurveyDataEntities.forEach(businessSurveyDataEntity -> {
+                SurveyDataVO surveyDataVO = new SurveyDataVO();
+                surveyDataVO.setAnswerType(businessSurveyDataEntity.getAnswerType());
+                surveyDataVO.setQuestion(businessSurveyDataEntity.getQuestion());
+
+                surveyDataVOS.add(surveyDataVO);
+            });
+
+            surveyAllVO.setSurveyDataList(surveyDataVOS);
+            surveyAllVOS.add(surveyAllVO);
+        });
+
+        return new GenericResponse<>(surveyAllVOS);
+    }
+
+    @Override
+    public GenericResponse<List<SurveyAllVO>> allSurveyData() {
         List<SurveyAllVO> surveyAllVOS = new ArrayList<>();
 
         List<BusinessSurveyEntity> businessSurveyEntities = businessSurveyMapper.selectListByExample(null);
@@ -138,6 +146,7 @@ public class BusinessSurveyServiceImpl implements BusinessSurveyService {
                     SurveyAnswerVO surveyAnswerVO = new SurveyAnswerVO();
                     surveyAnswerVO.setPoll(businessSurveyAnswersEntity.getPoll());
                     surveyAnswerVO.setChoiceText(businessSurveyAnswersEntity.getChoiceText());
+                    surveyAnswerVO.setMemberId(businessSurveyAnswersEntity.getMemberId());
 
                     surveyAnswerVOS.add(surveyAnswerVO);
                 });
@@ -150,8 +159,6 @@ public class BusinessSurveyServiceImpl implements BusinessSurveyService {
             surveyAllVOS.add(surveyAllVO);
         });
 
-        Map<String, Object> map = new HashMap<>(1);
-        map.put("surveyAll", surveyAllVOS);
-        return map;
+        return new GenericResponse<>(surveyAllVOS);
     }
 }

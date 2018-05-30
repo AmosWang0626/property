@@ -11,6 +11,8 @@ import lombok.Data;
 @Data
 public class BusinessSurveyAnswersEntity {
 
+    private Long memberId;
+
     private Integer answerId;
 
     private Integer questionId;

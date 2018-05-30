@@ -20,7 +20,7 @@ public class SurveyDataVO {
     /**
      * 回答类型
      */
-    private Boolean answerType;
+    private String answerType;
     /**
      * 回答列表
      */

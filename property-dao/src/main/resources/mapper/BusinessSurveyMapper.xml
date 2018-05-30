@@ -31,6 +31,15 @@
         from
         <include refid="tableName"/>
         <include refid="condition"/>
+        LIMIT 1
+    </select>
+
+    <select id="selectListByExample" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="tableName"/>
+        <include refid="condition"/>
     </select>
 
     <select id="selectById" resultMap="BaseResultMap">
