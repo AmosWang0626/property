@@ -60,13 +60,13 @@ public class BusinessServiceController {
     }
 
     @RequestMapping(value = "agree", method = RequestMethod.POST)
-    public boolean agreeService(@RequestBody BusinessServiceEntity businessServiceEntity) {
-        return businessService.agreeService(businessServiceEntity.getId());
+    public GenericResponse agreeService(@RequestBody BusinessServiceEntity businessServiceEntity) {
+        return businessService.agreeService(businessServiceEntity.getId()) ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 
     @RequestMapping(value = "disAgree", method = RequestMethod.POST)
-    public boolean disAgreeService(@RequestBody BusinessServiceEntity businessServiceEntity) {
-        return businessService.disAgreeService(businessServiceEntity.getId());
+    public GenericResponse disAgreeService(@RequestBody BusinessServiceEntity businessServiceEntity) {
+        return businessService.disAgreeService(businessServiceEntity) ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 
     private Long getMemberId(HttpServletRequest request) {

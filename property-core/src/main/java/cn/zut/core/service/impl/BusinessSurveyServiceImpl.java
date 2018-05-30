@@ -18,9 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author LiuBowen
@@ -88,6 +86,11 @@ public class BusinessSurveyServiceImpl implements BusinessSurveyService {
     }
 
     @Override
+    public boolean getSurvey(Integer surveyId) {
+        return false;
+    }
+
+    @Override
     public GenericResponse<List<SurveyAllVO>> allSurveyBaseData() {
         List<SurveyAllVO> surveyAllVOS = new ArrayList<>();
 
@@ -115,6 +118,32 @@ public class BusinessSurveyServiceImpl implements BusinessSurveyService {
         });
 
         return new GenericResponse<>(surveyAllVOS);
+    }
+
+    @Override
+    public GenericResponse<SurveyAllVO> surveyDataBySurveyId(Integer surveyId) {
+        BusinessSurveyEntity businessSurveyEntity = businessSurveyMapper.selectById(surveyId);
+
+        SurveyAllVO surveyAllVO = new SurveyAllVO();
+        surveyAllVO.setTitle(businessSurveyEntity.getTitle());
+        surveyAllVO.setDescription(businessSurveyEntity.getDescription());
+
+        List<SurveyDataVO> surveyDataVOS = new ArrayList<>();
+
+        BusinessSurveyDataEntity surveyDataSearch = new BusinessSurveyDataEntity();
+        surveyDataSearch.setSurveyId(businessSurveyEntity.getSurveyId());
+        List<BusinessSurveyDataEntity> businessSurveyDataEntities = businessSurveyDataMapper.selectListByExample(surveyDataSearch);
+        businessSurveyDataEntities.forEach(businessSurveyDataEntity -> {
+            SurveyDataVO surveyDataVO = new SurveyDataVO();
+            surveyDataVO.setAnswerType(businessSurveyDataEntity.getAnswerType());
+            surveyDataVO.setQuestion(businessSurveyDataEntity.getQuestion());
+
+            surveyDataVOS.add(surveyDataVO);
+        });
+
+        surveyAllVO.setSurveyDataList(surveyDataVOS);
+
+        return new GenericResponse<>(surveyAllVO);
     }
 
     @Override
