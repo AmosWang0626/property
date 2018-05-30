@@ -29,16 +29,15 @@ public class BusinessProposalController {
      * 保存建议
      */
     @RequestMapping("save")
-    public String saveProposal(BusinessProposalEntity businessProposalEntity, HttpServletRequest request) {
+    public GenericResponse saveProposal(@RequestBody BusinessProposalEntity businessProposalEntity, HttpServletRequest request) {
         businessProposalService.saveProposal(businessProposalEntity);
         request.setAttribute("businessProposalEntity", "意见提交成功！");
-        return "success";
+        return GenericResponse.SUCCESS;
     }
 
     /**
      * 查看所有建议
      */
-    @ResponseBody
     @RequestMapping("findAll")
     public Map<String, Object> findAll() {
         List<BusinessProposalEntity> list = businessProposalService.findAll();

@@ -81,14 +81,17 @@ public class BusinessServiceImpl implements BusinessService {
      * 不同意服务操作
      */
     @Override
-    public boolean disAgreeService(int serviceId) {
-        BusinessServiceEntity businessServiceEntity = businessServiceMapper.selectById(serviceId);
+    public boolean disAgreeService(BusinessServiceEntity businessServiceEntity) {
+        String evaluate = businessServiceEntity.getEvaluate();
+        businessServiceEntity = businessServiceMapper.selectById(businessServiceEntity.getId());
         if (businessServiceEntity == null) {
             return false;
         }
         if (ServiceSatus.IN_APPLY.name().equals(businessServiceEntity.getStatus())) {
             businessServiceEntity.setStatus(ServiceSatus.NO_CONSENT.getKey());
             businessServiceEntity.setDetailTime(new Date());
+            businessServiceEntity.setEndTime(new Date());
+            businessServiceEntity.setEvaluate(evaluate);
             int x = businessServiceMapper.update(businessServiceEntity);
 
             return x > 0;

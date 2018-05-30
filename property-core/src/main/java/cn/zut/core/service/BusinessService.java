@@ -27,5 +27,5 @@ public interface BusinessService {
     /**
      * 不同意服务操作
      */
-    boolean disAgreeService(int serviceId);
+    boolean disAgreeService(BusinessServiceEntity businessServiceEntity);
 }
