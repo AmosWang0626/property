@@ -15,8 +15,10 @@ import java.util.List;
 
 @Component("enterpriseBusiness")
 public class EnterpriseBusinessImpl implements EnterpriseBusiness {
+
     @Resource
     private ManageEnterpriseMapper manageEnterpriseMapper;
+
     @Override
     public SimplePageResult<ManageEnterpriseEntity> pageMemberByModel(PageModel<ManageEnterpriseEntity> pageModel) {
         List<ManageEnterpriseEntity> applyEntities = manageEnterpriseMapper.selectListPageByExample(pageModel);

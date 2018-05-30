@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.zut.dao.persistence.ManageEquipmentEntity">
+<mapper namespace="cn.zut.dao.persistence.ManageEquipmentMapper">
 
     <resultMap id="BaseResultMap" type="cn.zut.dao.entity.ManageEquipmentEntity">
         <result column="ID" property="id"/>
@@ -13,7 +13,7 @@
     <sql id="columns">
         ID,
         TYPES,
-        AMOUNT,
+        AMOUNT
     </sql>
 
     <sql id="condition">
