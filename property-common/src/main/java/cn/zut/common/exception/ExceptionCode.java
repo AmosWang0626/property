@@ -66,7 +66,9 @@ public enum ExceptionCode implements Message {
     PAYMENT_CASH_COUNTERFEIT_MONEY("TP0113", "[现金支付]交易失败, 失败原因[假币]"),
     PAYMENT_CASH_NOTCH("TP0114", "[现金支付]交易失败, 失败原因[缺角]"),
 
-    DEMO("0", "666"),;
+    DEMO("0", "666"),
+    FILE_UPLOAD_ERROR("O2000", "上传图片失败,请重试"),
+    ;
 
     private final String respCode;
     private final String respMsg;

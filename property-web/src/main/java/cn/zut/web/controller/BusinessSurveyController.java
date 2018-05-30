@@ -1,13 +1,13 @@
 package cn.zut.web.controller;
 
+import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.service.BusinessSurveyService;
 import cn.zut.dao.entity.BusinessSurveyAnswersEntity;
 import cn.zut.dao.entity.BusinessSurveyDataEntity;
 import cn.zut.dao.entity.BusinessSurveyEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * @author LiuBowen
  */
-@Controller
+@RestController
 @RequestMapping("survey")
 public class BusinessSurveyController {
 
@@ -26,14 +26,10 @@ public class BusinessSurveyController {
     private BusinessSurveyService businessSurveyService;
 
     @RequestMapping("list")
-    @ResponseBody
-    public Map<String, Object> searchList() {
+    public GenericResponse searchList() {
         List<BusinessSurveyEntity> list = businessSurveyService.findAll();
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("data", list);
-        resultMap.put("msg", "");
-        resultMap.put("code", "0");
-        return resultMap;
+
+        return GenericResponse.SUCCESS;
     }
 
     @RequestMapping("addSurvey")
