@@ -41,6 +41,10 @@ public class UserInfoRequest {
      * 客户婚姻状况
      */
     private MaritalEnum maritalStatus;
+    /**
+     * 用户权限编号
+     */
+    private Integer rolesId;
 
     public Long getMemberId() {
         return memberId;
@@ -106,5 +110,13 @@ public class UserInfoRequest {
 
     public void setMaritalStatus(MaritalEnum maritalStatus) {
         this.maritalStatus = maritalStatus;
+    }
+
+    public Integer getRolesId() {
+        return rolesId;
+    }
+
+    public void setRolesId(Integer rolesId) {
+        this.rolesId = rolesId;
     }
 }
