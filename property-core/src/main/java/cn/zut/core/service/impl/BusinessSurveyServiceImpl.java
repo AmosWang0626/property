@@ -1,7 +1,5 @@
 package cn.zut.core.service.impl;
 
-import cn.zut.common.exception.ExceptionCode;
-import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.service.BusinessSurveyService;
 import cn.zut.dao.entity.BusinessSurveyAnswersEntity;
@@ -12,6 +10,7 @@ import cn.zut.dao.persistence.BusinessSurveyDataMapper;
 import cn.zut.dao.persistence.BusinessSurveyMapper;
 import cn.zut.facade.response.SurveyAllVO;
 import cn.zut.facade.response.SurveyAnswerVO;
+import cn.zut.facade.response.SurveyDataSimpleVO;
 import cn.zut.facade.response.SurveyDataVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,11 +61,16 @@ public class BusinessSurveyServiceImpl implements BusinessSurveyService {
         BusinessSurveyAnswersEntity search = new BusinessSurveyAnswersEntity();
         search.setMemberId(businessSurveyAnswersEntity.getMemberId());
         search.setQuestionId(businessSurveyAnswersEntity.getQuestionId());
-        if (businessSurveyAnswersMapper.selectByExample(search) != null) {
-            return new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR));
+        BusinessSurveyAnswersEntity oldSurveyAnswersEntity = businessSurveyAnswersMapper.selectByExample(search);
+
+        int flag;
+        if (oldSurveyAnswersEntity != null) {
+            oldSurveyAnswersEntity.setChoiceText(businessSurveyAnswersEntity.getChoiceText());
+            flag = businessSurveyAnswersMapper.update(oldSurveyAnswersEntity);
+        } else {
+            flag = businessSurveyAnswersMapper.insert(businessSurveyAnswersEntity);
         }
 
-        int flag = businessSurveyAnswersMapper.insert(businessSurveyAnswersEntity);
         return flag > 0 ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 
@@ -83,11 +87,6 @@ public class BusinessSurveyServiceImpl implements BusinessSurveyService {
         businessSurveyMapper.deleteById(surveyId);
 
         return true;
-    }
-
-    @Override
-    public boolean getSurvey(Integer surveyId) {
-        return false;
     }
 
     @Override
@@ -147,47 +146,33 @@ public class BusinessSurveyServiceImpl implements BusinessSurveyService {
     }
 
     @Override
-    public GenericResponse<List<SurveyAllVO>> allSurveyData() {
-        List<SurveyAllVO> surveyAllVOS = new ArrayList<>();
+    public GenericResponse<List<SurveyDataSimpleVO>> allSurveyData(Integer surveyId, Long memberId) {
+        List<SurveyDataSimpleVO> surveyDataVOS = new ArrayList<>();
 
-        List<BusinessSurveyEntity> businessSurveyEntities = businessSurveyMapper.selectListByExample(null);
-        businessSurveyEntities.forEach(businessSurveyEntity -> {
-            SurveyAllVO surveyAllVO = new SurveyAllVO();
-            surveyAllVO.setTitle(businessSurveyEntity.getTitle());
-            surveyAllVO.setDescription(businessSurveyEntity.getDescription());
+        BusinessSurveyDataEntity surveyDataSearch = new BusinessSurveyDataEntity();
+        surveyDataSearch.setSurveyId(surveyId);
+        List<BusinessSurveyDataEntity> businessSurveyDataEntities = businessSurveyDataMapper.selectListByExample(surveyDataSearch);
+        businessSurveyDataEntities.forEach(businessSurveyDataEntity -> {
+            SurveyDataSimpleVO surveyDataVO = new SurveyDataSimpleVO();
+            surveyDataVO.setAnswerType(businessSurveyDataEntity.getAnswerType());
+            surveyDataVO.setQuestion(businessSurveyDataEntity.getQuestion());
+            surveyDataVO.setQuestionId(businessSurveyDataEntity.getQuestionId());
 
-            List<SurveyDataVO> surveyDataVOS = new ArrayList<>();
+            BusinessSurveyAnswersEntity surveyAnswersSearch = new BusinessSurveyAnswersEntity();
+            surveyAnswersSearch.setQuestionId(businessSurveyDataEntity.getQuestionId());
+            surveyAnswersSearch.setMemberId(memberId);
+            BusinessSurveyAnswersEntity businessSurveyAnswersEntity = businessSurveyAnswersMapper.selectByExample(surveyAnswersSearch);
+            if (businessSurveyAnswersEntity != null) {
+                SurveyAnswerVO surveyAnswerVO = new SurveyAnswerVO();
+                surveyAnswerVO.setPoll(businessSurveyAnswersEntity.getPoll());
+                surveyAnswerVO.setChoiceText(businessSurveyAnswersEntity.getChoiceText());
+                surveyAnswerVO.setMemberId(businessSurveyAnswersEntity.getMemberId());
 
-            BusinessSurveyDataEntity surveyDataSearch = new BusinessSurveyDataEntity();
-            surveyDataSearch.setSurveyId(businessSurveyEntity.getSurveyId());
-            List<BusinessSurveyDataEntity> businessSurveyDataEntities = businessSurveyDataMapper.selectListByExample(surveyDataSearch);
-            businessSurveyDataEntities.forEach(businessSurveyDataEntity -> {
-                SurveyDataVO surveyDataVO = new SurveyDataVO();
-                surveyDataVO.setAnswerType(businessSurveyDataEntity.getAnswerType());
-                surveyDataVO.setQuestion(businessSurveyDataEntity.getQuestion());
-
-                List<SurveyAnswerVO> surveyAnswerVOS = new ArrayList<>();
-
-                BusinessSurveyAnswersEntity surveyAnswersSearch = new BusinessSurveyAnswersEntity();
-                surveyAnswersSearch.setQuestionId(businessSurveyDataEntity.getQuestionId());
-                List<BusinessSurveyAnswersEntity> businessSurveyAnswersEntities = businessSurveyAnswersMapper.selectListByExample(surveyAnswersSearch);
-                businessSurveyAnswersEntities.forEach(businessSurveyAnswersEntity -> {
-                    SurveyAnswerVO surveyAnswerVO = new SurveyAnswerVO();
-                    surveyAnswerVO.setPoll(businessSurveyAnswersEntity.getPoll());
-                    surveyAnswerVO.setChoiceText(businessSurveyAnswersEntity.getChoiceText());
-                    surveyAnswerVO.setMemberId(businessSurveyAnswersEntity.getMemberId());
-
-                    surveyAnswerVOS.add(surveyAnswerVO);
-                });
-
-                surveyDataVO.setSurveyAnswerVOList(surveyAnswerVOS);
-                surveyDataVOS.add(surveyDataVO);
-            });
-
-            surveyAllVO.setSurveyDataList(surveyDataVOS);
-            surveyAllVOS.add(surveyAllVO);
+                surveyDataVO.setSurveyAnswer(surveyAnswerVO);
+            }
+            surveyDataVOS.add(surveyDataVO);
         });
 
-        return new GenericResponse<>(surveyAllVOS);
+        return new GenericResponse<>(surveyDataVOS);
     }
 }

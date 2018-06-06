@@ -6,6 +6,7 @@ import cn.zut.core.service.BusinessSurveyService;
 import cn.zut.dao.entity.BusinessSurveyAnswersEntity;
 import cn.zut.dao.entity.BusinessSurveyDataEntity;
 import cn.zut.dao.entity.BusinessSurveyEntity;
+import cn.zut.facade.response.SurveyAllVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,21 +76,10 @@ public class BusinessSurveyController {
     /**
      * 查询所有问卷数据
      *
-     * @param request HttpServletRequest
-     * @return GenericResponse
-     */
-    @RequestMapping("allSurveyData")
-    public List<BusinessSurveyEntity> allSurveyData(HttpServletRequest request) {
-        return businessSurveyService.findAllSurvey();
-    }
-
-    /**
-     * 查询所有问卷数据
-     *
      * @return GenericResponse
      */
     @RequestMapping("allSurveyBaseData")
-    public GenericResponse allSurveyBaseData() {
+    public GenericResponse<List<SurveyAllVO>> allSurveyBaseData() {
         return businessSurveyService.allSurveyBaseData();
     }
 
@@ -104,11 +94,19 @@ public class BusinessSurveyController {
     }
 
     @RequestMapping("getQuestion")
-    public GenericResponse searchGet(@RequestBody BusinessSurveyEntity businessSurveyEntity) {
+    public GenericResponse getQuestion(@RequestBody BusinessSurveyEntity businessSurveyEntity) {
         if (businessSurveyEntity.getSurveyId() == null) {
             return GenericResponse.ERROR_PARAM;
         }
         return businessSurveyService.surveyDataBySurveyId(businessSurveyEntity.getSurveyId());
+    }
+
+    @RequestMapping("getQueAnswers")
+    public GenericResponse getQueAnswers(@RequestBody BusinessSurveyEntity businessSurveyEntity, HttpServletRequest request) {
+        if (businessSurveyEntity.getSurveyId() == null) {
+            return GenericResponse.ERROR_PARAM;
+        }
+        return businessSurveyService.allSurveyData(businessSurveyEntity.getSurveyId(), getMemberId(request));
     }
 
     private Long getMemberId(HttpServletRequest request) {

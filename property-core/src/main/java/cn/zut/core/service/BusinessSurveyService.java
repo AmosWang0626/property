@@ -5,6 +5,7 @@ import cn.zut.dao.entity.BusinessSurveyAnswersEntity;
 import cn.zut.dao.entity.BusinessSurveyDataEntity;
 import cn.zut.dao.entity.BusinessSurveyEntity;
 import cn.zut.facade.response.SurveyAllVO;
+import cn.zut.facade.response.SurveyDataSimpleVO;
 
 import java.util.List;
 
@@ -51,7 +52,6 @@ public interface BusinessSurveyService {
      * @return 删除状态
      */
     boolean delSurvey(Integer surveyId);
-    boolean getSurvey(Integer surveyId);
 
     /**
      * 查看所有问卷 + 问题
@@ -63,14 +63,17 @@ public interface BusinessSurveyService {
     /**
      * 查看所有问卷 + 问题
      *
+     * @param surveyId 问卷id
      * @return 问卷以及问题以及回答
      */
     GenericResponse<SurveyAllVO> surveyDataBySurveyId(Integer surveyId);
 
     /**
-     * 查看所有问卷 + 问题( + 回答)
+     * 获取问题 + 回答
      *
-     * @return 问卷以及问题以及回答
+     * @param surveyId 问卷id
+     * @param memberId 用户编号
+     * @return 问题 + 回答
      */
-    GenericResponse<List<SurveyAllVO>> allSurveyData();
+    GenericResponse<List<SurveyDataSimpleVO>> allSurveyData(Integer surveyId, Long memberId);
 }
