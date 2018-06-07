@@ -13,11 +13,11 @@ import java.util.Date;
  */
 public class DateUtil {
 
-    public static final ThreadLocal<DateFormat> FORMAT_YEAR_2_DAY =
+    private static final ThreadLocal<DateFormat> FORMAT_YEAR_2_DAY =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
     private static final ThreadLocal<DateFormat> FORMAT_YEAR_2_DAY_SLOPE =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy/MM/dd"));
-    private static final ThreadLocal<DateFormat> FORMAT_YEAR_2_MONTH =
+    public static final ThreadLocal<DateFormat> FORMAT_YEAR_2_MONTH =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM"));
     private static final ThreadLocal<DateFormat> FORMAT_MONTH_2_DAY =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("MM/dd"));

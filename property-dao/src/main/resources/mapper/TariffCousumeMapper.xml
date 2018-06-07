@@ -84,6 +84,19 @@
         <include refid="condition"/>
     </select>
 
+    <select id="totalAmountByMonth" resultMap="baseResultMap">
+        SELECT
+        BUSINESS,
+        SUM(CONSUME_AMOUNT) CONSUME_AMOUNT
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        PAYMENT_STATUS = 'PAY_SUCCESS'
+        AND CREATE_TIME REGEXP #{month}
+        GROUP BY
+        BUSINESS
+    </select>
+
     <update id="update">
         UPDATE
         <include refid="tableName"/>

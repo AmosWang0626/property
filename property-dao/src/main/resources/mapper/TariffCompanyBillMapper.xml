@@ -77,6 +77,13 @@
         <include refid="condition"/>
     </select>
 
+    <select id="totalAmountByPaymentWay" resultMap="baseResultMap">
+        SELECT SUM(PAYMENT_AMOUNT) PAYMENT_AMOUNT, PAYMENT_WAY
+        FROM
+        <include refid="tableName"/>
+        WHERE PAYMENT_STATUS = 'PAY_SUCCESS' GROUP BY PAYMENT_WAY
+    </select>
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
         <include refid="tableName"/>

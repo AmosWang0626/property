@@ -1,11 +1,15 @@
 package cn.zut.test;
 
+import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.business.PropertyJobBusiness;
 import cn.zut.core.service.TariffCompanyService;
+import cn.zut.core.service.TariffStatisticsService;
 import cn.zut.dao.entity.*;
 import cn.zut.dao.persistence.*;
 import cn.zut.facade.enums.*;
 import cn.zut.facade.request.TariffCompanyBillRequest;
+import cn.zut.facade.response.PaymentSeriesDataVO;
+import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -41,6 +45,20 @@ public class PropertyTariffTest {
     private TariffStandardMapper tariffStandardMapper;
     @Resource
     private TariffConsumeMapper tariffConsumeMapper;
+    @Resource
+    private TariffStatisticsService tariffStatisticsService;
+
+    @Test
+    public void getPaymentWayData() {
+        GenericResponse<PaymentSeriesDataVO> paymentWayData = tariffStatisticsService.getPaymentWayData();
+        LOGGER.info("--------------> " + JSON.toJSONString(paymentWayData.getBody()));
+    }
+
+    @Test
+    public void getPaymentAmountData() {
+        GenericResponse billData = tariffStatisticsService.getBillData();
+        LOGGER.info("--------------> " + JSON.toJSONString(billData.getBody()));
+    }
 
     @Test
     public void tariffCompanyMapper() {
