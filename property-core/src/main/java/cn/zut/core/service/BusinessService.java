@@ -28,4 +28,6 @@ public interface BusinessService {
      * 不同意服务操作
      */
     boolean disAgreeService(BusinessServiceEntity businessServiceEntity);
+
+    boolean finService(BusinessServiceEntity businessServiceEntity);
 }

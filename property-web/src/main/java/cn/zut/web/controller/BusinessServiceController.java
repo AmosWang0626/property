@@ -69,6 +69,11 @@ public class BusinessServiceController {
         return businessService.disAgreeService(businessServiceEntity) ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
 
+    @RequestMapping(value = "finAgree", method = RequestMethod.POST)
+    public GenericResponse finService(@RequestBody BusinessServiceEntity businessServiceEntity) {
+        return businessService.finService(businessServiceEntity) ? GenericResponse.SUCCESS : GenericResponse.FAIL;
+    }
+
     private Long getMemberId(HttpServletRequest request) {
         return Long.valueOf((String) request.getAttribute(PropertyConstant.MEMBER_ID));
     }

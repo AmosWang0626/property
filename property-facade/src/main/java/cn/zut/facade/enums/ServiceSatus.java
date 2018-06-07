@@ -6,15 +6,13 @@ import org.apache.commons.lang3.StringUtils;
 public enum  ServiceSatus implements Mapping<String, String> {
 
     /**
-     * 支付方式
+     * 服务状态
      */
     IN_APPLY("申请中"),
     IN_ACCEPT("受理中"),
     NO_CONSENT("不同意处理"),
     CONSENT("同意处理"),
     IN_DEAL("处理中"),
-    SUCCESS("处理完成"),
-    TO_EVALUATE("待评价"),
     OVER("完成");
 
     private final String value;

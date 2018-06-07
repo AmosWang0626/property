@@ -99,4 +99,23 @@ public class BusinessServiceImpl implements BusinessService {
             return true;
         }
     }
+
+    @Override
+    public boolean finService(BusinessServiceEntity businessServiceEntity) {
+        String evaluate = businessServiceEntity.getEvaluate();
+        businessServiceEntity = businessServiceMapper.selectById(businessServiceEntity.getId());
+        if (businessServiceEntity == null) {
+            return false;
+        }
+        if (ServiceSatus.IN_DEAL.name().equals(businessServiceEntity.getStatus())) {
+            businessServiceEntity.setStatus(ServiceSatus.OVER.getKey());
+            businessServiceEntity.setDetailTime(new Date());
+            businessServiceEntity.setEndTime(new Date());
+            businessServiceEntity.setEvaluate(evaluate);
+            int x = businessServiceMapper.update(businessServiceEntity);
+            return x > 0;
+        } else {
+            return true;
+        }
+    }
 }
