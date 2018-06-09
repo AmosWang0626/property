@@ -2,6 +2,9 @@ package cn.zut.dao.persistence;
 
 import cn.zut.common.dao.*;
 import cn.zut.dao.entity.TariffBillEntity;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * PROJECT: property
@@ -19,4 +22,11 @@ public interface TariffBillMapper extends
         SelectListByExample<TariffBillEntity, TariffBillEntity>,
         SelectCountByExample<TariffBillEntity>,
         SelectListPageByExample<TariffBillEntity, TariffBillEntity> {
+
+    /**
+     * totalAmountByMonth
+     *
+     * @return List
+     */
+    List<TariffBillEntity> totalAmountByMonth(@Param("month") String month);
 }

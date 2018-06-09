@@ -6,9 +6,11 @@ import cn.zut.common.exception.ExceptionMessage;
 import cn.zut.common.generic.GenericResponse;
 import cn.zut.core.business.TariffBillBusiness;
 import cn.zut.core.constant.PropertyConstant;
+import cn.zut.core.service.TariffStatisticsService;
 import cn.zut.dao.entity.TariffBillEntity;
 import cn.zut.dao.entity.TariffBillPlanEntity;
 import cn.zut.facade.request.*;
+import cn.zut.facade.response.PaymentSeriesDataVO;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,9 @@ import java.util.List;
 @RestController
 @RequestMapping("bill")
 public class TariffBillController {
+
+    @Resource
+    private TariffStatisticsService tariffStatisticsService;
 
     @Resource
     private TariffBillBusiness tariffBillBusiness;
@@ -52,7 +57,7 @@ public class TariffBillController {
 
     @RequestMapping("monthConsumeConfirm")
     public GenericResponse monthConsumeConfirm(@RequestBody @Valid TariffMonthConsumeConfirmRequest monthConsumeConfirm,
-                                          BindingResult bindingResult, HttpServletRequest request) {
+                                               BindingResult bindingResult, HttpServletRequest request) {
         // 参数校验
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();
@@ -114,6 +119,16 @@ public class TariffBillController {
         pageModel.setPage(page);
         pageModel.setRows(size);
         return new GenericResponse<>(tariffBillBusiness.pageBillPlanByModel(pageModel));
+    }
+
+    @GetMapping("paymentWayData")
+    public GenericResponse<PaymentSeriesDataVO> getPaymentWayData() {
+        return tariffStatisticsService.getPaymentWayData();
+    }
+
+    @GetMapping("billData")
+    public GenericResponse getBillData() {
+        return tariffStatisticsService.getBillData();
     }
 
     private Long getMemberId(HttpServletRequest request) {

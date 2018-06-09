@@ -98,6 +98,18 @@
         <include refid="condition"/>
     </select>
 
+    <select id="totalAmountByMonth" resultMap="baseResultMap">
+        SELECT
+        BUSINESS,
+        SUM(BILL_AMOUNT) BILL_AMOUNT
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        BILL_MONTH = #{month}
+        GROUP BY
+        BUSINESS;
+    </select>
+
     <update id="update">
         UPDATE
         <include refid="tableName"/>
