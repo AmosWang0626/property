@@ -63,12 +63,24 @@
         <include refid="condition"/>
     </select>
 
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="tableName"/>
+        WHERE ID = #{id}
+    </delete>
+
     <update id="update">
         UPDATE
         <include refid="tableName"/>
         <set>
-            <if test="name != null">
-                NAME = #{name},
+            <if test="enterpriseName != null">
+                NAME = #{enterpriseName},
+            </if>
+            <if test="phone != null">
+                PHONE = #{phone},
+            </if>
+            <if test="leaderName != null">
+                LEADER_NAME = #{leaderName},
             </if>
         </set>
         WHERE ID = #{id}
@@ -87,7 +99,7 @@
         #{address},
         #{phone},
         #{leaderName},
-        #{settledTime},
+        #{settledTime}
         )
     </insert>
 

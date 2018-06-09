@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.zut.dao.persistence.ManageEquipmentMapper">
+<mapper namespace="cn.zut.dao.persistence.ManageLogMapper">
 
-    <resultMap id="BaseResultMap" type="cn.zut.dao.entity.ManageEquipmentEntity">
+    <resultMap id="memberEntityMap" type="cn.zut.dao.entity.ManageLogEntity">
         <result column="ID" property="id"/>
-        <result column="TYPES" property="types"/>
-        <result column="AMOUNT" property="amount"/>
+        <result column="MEMBER_ID" property="memberId"/>
+        <result column="NAME" property="name"/>
+        <result column="OPERATE" property="operate"/>
+        <result column="OPERATE_TIME" property="operateTime"/>
     </resultMap>
 
-    <sql id="tableName">manage_equipment</sql>
+    <sql id="tableName">manage_log</sql>
 
     <sql id="columns">
         ID,
-        TYPES,
-        AMOUNT
-    </sql>
-
-    <sql id="condition">
-        <if test="search != null">
-            <where>
-                <if test="search.equipmentName != null">AND NAME = #{search.equipmentName}</if>
-            </where>
-        </if>
+        MEMBER_ID,
+        NAME,
+        OPERATE,
+        OPERATE_TIME
     </sql>
 
     <select id="selectById" resultMap="BaseResultMap">
@@ -57,27 +53,7 @@
         <include refid="condition"/>
     </select>
 
-    <delete id="deleteById">
-        DELETE FROM
-        <include refid="tableName"/>
-        WHERE ID = #{id}
-    </delete>
-
-    <update id="update">
-        UPDATE
-        <include refid="tableName"/>
-        <set>
-            <if test="types != null">
-                TYPES = #{types},
-            </if>
-            <if test="amount != null">
-                AMOUNT = #{amount},
-            </if>
-        </set>
-        WHERE ID = #{id}
-    </update>
-
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="memberId">
         INSERT INTO
         <include refid="tableName"/>
         (
@@ -86,8 +62,10 @@
         VALUES
         (
         #{id},
-        #{types},
-        #{amount}
+        #{memberId},
+        #{name},
+        #{operate},
+        #{operateTime}
         )
     </insert>
 

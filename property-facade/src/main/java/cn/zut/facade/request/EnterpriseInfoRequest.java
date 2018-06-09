@@ -1,6 +1,9 @@
 package cn.zut.facade.request;
 
+
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @author YangShangYu
@@ -11,7 +14,7 @@ public class EnterpriseInfoRequest {
     /**
      * 公司名称
      */
-    private String name;
+    private String enterpriseName;
     /**
      * 公司地址
      */
@@ -27,5 +30,5 @@ public class EnterpriseInfoRequest {
     /**
      * 成立时间
      */
-    private Data settled;
+    private Date settledTime;
 }

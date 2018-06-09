@@ -9,7 +9,7 @@ import cn.zut.dao.entity.ManageEnterpriseEntity;
  *
  * @author yangshangyu
  */
-public interface ManageEnterpriseMapper extends Insert<ManageEnterpriseEntity>, Update<ManageEnterpriseEntity>,
+public interface ManageEnterpriseMapper extends Insert<ManageEnterpriseEntity>, Update<ManageEnterpriseEntity>, DeleteById<Long>,
         SelectById<ManageEnterpriseEntity, Long>, SelectByExample<ManageEnterpriseEntity, ManageEnterpriseEntity>,
         SelectListByExample<ManageEnterpriseEntity, ManageEnterpriseEntity>,
         SelectCountByExample<ManageEnterpriseEntity>, SelectListPageByExample<ManageEnterpriseEntity, ManageEnterpriseEntity> {

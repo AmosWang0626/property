@@ -10,7 +10,7 @@ import cn.zut.dao.entity.ManageEquipmentEntity;
  *
  * @author yangshangyu
  */
-public interface ManageEquipmentMapper extends Insert<ManageEquipmentEntity>, Update<ManageEquipmentEntity>,
+public interface ManageEquipmentMapper extends Insert<ManageEquipmentEntity>, Update<ManageEquipmentEntity>, DeleteById<Long>,
         SelectById<ManageEquipmentEntity, Long>, SelectByExample<ManageEquipmentEntity, ManageEquipmentEntity>,
         SelectListByExample<ManageEquipmentEntity, ManageEquipmentEntity>,
         SelectCountByExample<ManageEquipmentEntity>, SelectListPageByExample<ManageEquipmentEntity, ManageEquipmentEntity> {

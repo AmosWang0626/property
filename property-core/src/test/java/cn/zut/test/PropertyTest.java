@@ -5,6 +5,7 @@ import cn.zut.common.enums.BankEnum;
 import cn.zut.common.redis.RedisComponent;
 import cn.zut.common.util.GenericIdUtil;
 import cn.zut.core.business.HttpBusiness;
+import cn.zut.core.service.ManageLogService;
 import cn.zut.dao.entity.ManageEnterpriseEntity;
 import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.persistence.ManageEnterpriseMapper;
@@ -41,6 +42,14 @@ public class PropertyTest {
     private RedisComponent redisComponent;
     @Resource
     private ManageEnterpriseMapper manageEnterpriseMapper;
+    @Resource
+    private ManageLogService manageLogService;
+
+    @Test
+    public void logAdd(){
+        boolean b = manageLogService.addLog(1000L, "YUAN", "注册成功");
+        LOGGER.info("插入日志: " + b);
+    }
 
     @Test
     public void manageEnterpriseMapper() {

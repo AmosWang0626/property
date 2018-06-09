@@ -32,7 +32,7 @@ public class ManageEnterpriseController {
      */
 
     @RequestMapping("addEnterprise")
-    public GenericResponse comeIn(@RequestBody ManageEnterpriseEntity manageEnterpriseEntity) {
+    public GenericResponse addEnterprise(@RequestBody ManageEnterpriseEntity manageEnterpriseEntity) {
 
         return manageEnterpriseService.addEnterprise(manageEnterpriseEntity) ? GenericResponse.SUCCESS : GenericResponse.FAIL;
     }
@@ -49,7 +49,7 @@ public class ManageEnterpriseController {
             return new GenericResponse(new ExceptionMessage(ExceptionCode.PARAM_ERROR, list.get(0).getDefaultMessage()));
         }
 
-        if (enterpriseInfoRequest.getName() == null) {
+        if (enterpriseInfoRequest.getEnterpriseName() == null) {
             return GenericResponse.ERROR_PARAM;
         }
 
@@ -60,7 +60,7 @@ public class ManageEnterpriseController {
      * 删除企业
      */
     @RequestMapping(value = "deleteEnterprise", method = RequestMethod.POST)
-    public GenericResponse deleteUser(@RequestBody @Valid EnterpriseInfoRequest enterpriseInfoRequest, BindingResult bindingResult) {
+    public GenericResponse deleteEnterprise(@RequestBody @Valid EnterpriseInfoRequest enterpriseInfoRequest, BindingResult bindingResult) {
         // 参数校验
         if (bindingResult.hasErrors()) {
             List<ObjectError> list = bindingResult.getAllErrors();

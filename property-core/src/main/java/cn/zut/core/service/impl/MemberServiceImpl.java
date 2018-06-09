@@ -4,6 +4,7 @@ import cn.zut.common.generic.GenericResponse;
 import cn.zut.common.security.EncryptionUtil;
 import cn.zut.common.util.RandomUtil;
 import cn.zut.core.constant.PropertyConstant;
+import cn.zut.core.service.ManageLogService;
 import cn.zut.core.service.MemberService;
 import cn.zut.dao.entity.BusinessRolesEntity;
 import cn.zut.dao.entity.LoginInfoEntity;
@@ -36,6 +37,9 @@ public class MemberServiceImpl implements MemberService {
     @Resource
     private BusinessRolesMapper businessRolesMapper;
 
+    @Resource
+    private ManageLogService manageLogService;
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public GenericResponse<MemberEntity> save(RegisterRequest registerRequest) {
@@ -52,6 +56,8 @@ public class MemberServiceImpl implements MemberService {
             memberEntity.setRolesId(businessRolesEntity.getRolesId());
         }
         memberMapper.insert(memberEntity);
+
+        manageLogService.addLog(memberEntity.getMemberId(), memberEntity.getNickName(), "用户注册");
 
         LoginInfoEntity loginInfoEntity = new LoginInfoEntity();
         loginInfoEntity.init();

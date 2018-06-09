@@ -8,6 +8,7 @@ import cn.zut.dao.entity.ManageEnterpriseEntity;
 import cn.zut.dao.entity.MemberEntity;
 import cn.zut.dao.persistence.ManageEnterpriseMapper;
 import cn.zut.facade.request.EnterpriseInfoRequest;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -34,11 +35,16 @@ public class EnterpriseBusinessImpl implements EnterpriseBusiness {
 
     @Override
     public GenericResponse enterpriseInfo(EnterpriseInfoRequest enterpriseInfoRequest) {
-        return null;
+        ManageEnterpriseEntity manageEnterpriseEntity = new ManageEnterpriseEntity();
+        BeanUtils.copyProperties(enterpriseInfoRequest, manageEnterpriseEntity);
+        manageEnterpriseMapper.update(manageEnterpriseEntity);
+        return GenericResponse.SUCCESS;
     }
 
     @Override
     public GenericResponse deleteEnterprise(EnterpriseInfoRequest enterpriseInfoRequest) {
-        return null;
+        manageEnterpriseMapper.deleteById(enterpriseInfoRequest.getId());
+
+        return GenericResponse.SUCCESS;
     }
 }

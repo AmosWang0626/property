@@ -74,7 +74,7 @@
         <include refid="condition"/>
     </select>
 
-    <delete id="delete">
+    <delete id="deleteById">
         DELETE FROM
         <include refid="tableName"/>
         WHERE MEMBER_ID = #{memberId}

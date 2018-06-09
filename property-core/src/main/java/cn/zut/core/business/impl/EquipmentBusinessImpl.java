@@ -11,6 +11,7 @@ import cn.zut.dao.persistence.ManageEnterpriseMapper;
 import cn.zut.dao.persistence.ManageEquipmentMapper;
 import cn.zut.facade.request.EnterpriseInfoRequest;
 import cn.zut.facade.request.EquipmentInfoRequest;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -35,11 +36,16 @@ public class EquipmentBusinessImpl implements EquipmentBusiness {
 
     @Override
     public GenericResponse equipmentInfo(EquipmentInfoRequest equipmentInfoRequest) {
-        return null;
+        ManageEquipmentEntity manageEquipmentEntity = new ManageEquipmentEntity();
+        BeanUtils.copyProperties(equipmentInfoRequest, manageEquipmentEntity);
+        manageEquipmentMapper.update(manageEquipmentEntity);
+        return GenericResponse.SUCCESS;
     }
 
     @Override
     public GenericResponse deleteEquipment(EquipmentInfoRequest equipmentInfoRequest) {
-        return null;
+        manageEquipmentMapper.deleteById(equipmentInfoRequest.getId());
+
+        return GenericResponse.SUCCESS;
     }
 }
