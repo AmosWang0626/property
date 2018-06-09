@@ -22,7 +22,6 @@ public class LogBusinessImpl implements LogBusiness {
     @Resource
     private ManageLogMapper manageLogMapper;
 
-
     @Override
     public SimplePageResult<ManageLogEntity> pageMemberByModel(PageModel<ManageLogEntity> pageModel) {
         List<ManageLogEntity> applyEntities = manageLogMapper.selectListPageByExample(pageModel);

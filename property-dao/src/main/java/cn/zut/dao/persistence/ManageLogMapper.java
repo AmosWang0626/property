@@ -11,7 +11,7 @@ import cn.zut.dao.entity.ManageLogEntity;
  *
  * @author yangshangyu
  */
-public interface ManageLogMapper extends Insert<ManageLogEntity>, 
+public interface ManageLogMapper extends Insert<ManageLogEntity>,
         SelectCountByExample<ManageLogEntity>,
         SelectListPageByExample<ManageLogEntity, ManageLogEntity> {
-        }
+}
